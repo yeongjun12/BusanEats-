@@ -4,5 +4,75 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd">
 	
 	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+	<!-- 
+		* root-context.xml
+		서버 구동과 동시에 web.xml파일을 거쳐서 바로 로딩되는 문서 == preloading
+		=> 서버구동과 동시에 바로셋팅(bean등록) 해야하는 내용들을 작성
+		주로 DB정보, 트랜잭션처리, 내외부모듈연결 등등..
+	            
+	 -->
+	 
+	  <!-- DB연결 설정 3단계  -->
+	 <!-- 1단계. DB연결을 위한 도구를 설정 -->
+	<bean class = "org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method ="close">
+		<!-- 어떤 DB에 접속할건지 정보 작성 -->
+		<property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe" />
+		<property name="username" value="BUSANEATS" />
+		<property name="password" value="BUSANEATS" />
+	</bean>
+	
+	 <!-- 2단계. Mybatis Spring에서 제공하는 SQL명령어 실행을 위한 도구 등록 -->
+	 <bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory">
+	 	<!-- MyBatis설정파일의 위치를 설정(src/main/resources)하여 설정값들 가져와야함 -->
+	 	<property name="configLocation" value="classpath:mybatis-config.xml" />
+	 	<!-- 어떤 디비에 연결할건지 연결을 위한 도구 참조 설정 -->
+	 	<property name="dataSource" ref="dataSource" />
+	 
+	 </bean>
+	 
+	  <!-- 
+	 	객체가 필요할 때 마다 내부적으로 이코드가 실행됨
+	 	SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
+	 	sqlSessionFactory.setConfigLocation("classpath:mybatis-config.xml");
+	 	sqlsessionFactory.setDataSource(dataSource);
+	 	
+	 
+	  -->
+	  
+	   <!-- 3단계. SQL 구문 실행을 위한 템플릿을 제공하는 도구 등록 -->
+	 	<bean class="org.mybatis.spring.SqlSessionTemplate" id="sqlSession">
+	 		<!-- SQL 명령어 실행을 위한 도구에 대한 참조를 설정 -->
+	 		<constructor-arg ref="sqlSessionFactory" />
+	 		
+	 		
+	 	</bean>
+	 	
+	 	<!-- 
+	 		객체가 필요할 때 마다 내부적으로 이 코드가 실행됨
+	 		SqlSessionTemplate sqlSession = new SqlSessionTemplate(sqlSessionFactory);
+	 	
+	 	 -->
+	 	 
+	 	 <!-- 
+	 	 
+	 	 	property : setter주입
+	 	 	constructor-arg: 생성자주입
+	 	
+	 	  -->
+	 	  
+	 	  
+	 	  <!-- 파일 업로드 관련 빈 등록 -->
+	 	  
+	 	  <bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" id="multipartResolver">
+	 	  	<property name="maxUploadSize" value="100000000" />
+	 	  	<property name = "maxInMemorySize" value="10000000" />
+	 	  </bean>
+	 	  
+	 	  
+	 	  
+	 	  
+	 	  
 		
 </beans>

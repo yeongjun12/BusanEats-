@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="storeMapper">
+
+
+	<resultMap id="storeResultSet" type="store">
+	
+		
+	</resultMap>
+	
+	
+	<insert id="saveToDataBase" parameterType="store">
+		INSERT
+			INTO
+				STORE
+				(
+				  UC_SEQ
+				  ,MAIN_TITLE
+				  ,GUGUN_NM
+				  ,ADDR1
+				  ,CNTCT_TEL
+				  ,USAGE_DAY_WEEK_AND_TIME
+				  ,RPRSNTV_MENU
+				  ,MAIN_IMG_NORMAL
+				  ,MAIN_IMG_THUMB
+				  ,ITEMCNTNTS
+				  ,LAT
+				  ,LNG
+				)
+		VALUES
+				(
+				#{ucSeq}
+				,#{mainTitle}
+				,#{gugunNm}
+				,#{addr1}
+				,#{cntctTel}
+				,#{usageDayWeekAndTime}
+				,#{reprsntvMenu}
+				,#{mainImgNormal}
+				,#{mainImgThumb}
+				,#{itemCntnts}
+				,#{lat}
+				,#{lng}
+				)
+		
+	</insert>
+
+</mapper>

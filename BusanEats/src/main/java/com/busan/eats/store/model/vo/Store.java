@@ -1,9 +1,10 @@
 package com.busan.eats.store.model.vo;
 
-import java.util.List;
-
+import jdk.nashorn.internal.objects.annotations.Getter;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
+@AllArgsConstructor
 @Data
 public class Store {
 	
@@ -20,6 +21,7 @@ public class Store {
 	    private double lat;
 	    private double lng;
 	    
-	
+	 
+	    
 
 }
