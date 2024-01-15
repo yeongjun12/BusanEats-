@@ -7,7 +7,11 @@
 	<!-- 서버 구동과 동시에 곧바로 읽어낼 문서인 root-context.xml(최상위 설정파일)의 경로를 등록한 부분 -->
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
-		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+		<param-value>
+		/WEB-INF/spring/root-context.xml
+		/WEB-INF/spring/spring-security.xml
+		</param-value>
+		
 	</context-param>
 	
 	<!-- Creates the Spring Container shared by all Servlets and Filters -->
