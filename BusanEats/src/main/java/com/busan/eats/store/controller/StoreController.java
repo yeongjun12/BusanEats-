@@ -65,12 +65,15 @@ public class StoreController {
 	@ResponseBody
     @RequestMapping(value = "taste.do", produces = "application/json; charset=UTF-8")
     public String busanFood(@RequestParam int page) throws IOException, org.json.simple.parser.ParseException {
+		//API 요청을 위한 URL 생성
         String url = "http://apis.data.go.kr/6260000/FoodService/getFoodKr";
         url += "?serviceKey=" + servicekey;
         url += "&numOfRows=" + 1000;
         url += "&resultType=json";
         url += "&pageNo=" + page;
 
+        
+        // URL에 연결하여 데이터를 읽어오기 위한 HTTPURLConnection 설정
         URL requestUrl = new URL(url);
         HttpURLConnection urlConnection = (HttpURLConnection) requestUrl.openConnection();
         urlConnection.setRequestMethod("GET");
@@ -83,14 +86,14 @@ public class StoreController {
             }
             String responseText = responseTextBuilder.toString();
 
-            // Parse JSON response
+            // JSON 응답을 파싱
             JSONParser parser = new JSONParser();
             try {
                 JSONObject jsonResponse = (JSONObject) parser.parse(responseText);
                 JSONObject getFoodKr = (JSONObject) jsonResponse.get("getFoodKr");
                 JSONArray itemList = (JSONArray) getFoodKr.get("item");
 
-                // Process and store the extracted data in the database
+                // 추출한 데이터를 처리하고 데이터베이스에 저장
                 for (Object item : itemList) {
                     JSONObject foodItem = (JSONObject) item;
                     String mainTitle = foodItem.get("MAIN_TITLE").toString();
@@ -99,7 +102,7 @@ public class StoreController {
                      
                     
                    
-                    //JSON객체를 JAVA객체로 변환
+                     // JSON 객체를 Store 객체로 변환
                     Store s = new Store(
                     		  Integer.valueOf(foodItem.get("UC_SEQ").toString())
                     		,foodItem.get("MAIN_TITLE").toString()
