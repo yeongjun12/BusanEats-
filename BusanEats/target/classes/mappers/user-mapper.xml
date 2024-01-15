@@ -3,4 +3,47 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="userMapper">
 
+	<resultMap id="userResultSet" type="user">
+		<result column="USER_NO" property="userNo" />
+		<result column="USER_ID" property="userId" />
+		<result column="USER_PWD" property="userPwd" />
+		<result column="USER_NAME" property="userName" />
+		<result column="USER_PHONE" property="userPhone" />
+		<result column="USER_BIRTH" property="userBirth" />
+		<result column="USER_EMAIL" property="userEmail" />
+		<result column="USER_STATUS" property="userStatus" />
+	</resultMap>
+	
+	
+	<!-- 회원 가입용 쿼리 -->
+	<!-- parameterType은 MyBatis에서 SQL 문을 실행할 때 SQL 쿼리에 전달되는 파라미터의 타입을 나타냅니다.
+	 즉, SQL 문에서 사용되는 매개변수의 자료형을 명시하는 역할을 합니다. -->
+	<insert id="insertUser" parameterType="user">
+	INSERT
+		INTO
+			USERS
+			(
+			  USER_NO
+			 ,USER_ID
+			 ,USER_PWD
+			 ,USER_NAME
+			 ,USER_PHONE
+			 ,USER_BIRTH
+			 ,USER_EMAIL
+			)
+	VALUES
+			(
+			 SEQ_UNO.NEXTVAL
+			,#{userId}
+			,#{userPwd}
+			,#{userName}
+			,#{userPhone}
+			,#{userBirth}
+			,#{userEmail}
+			
+			)
+			
+	
+	</insert>
+
 </mapper>
