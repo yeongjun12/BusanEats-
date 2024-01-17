@@ -76,4 +76,12 @@ public class UserController {
 		
 		return mv;
 	}
+	
+	@RequestMapping("logout.do")
+	public String logoutUser(HttpSession session) {
+		
+		session.invalidate();
+		return "redirect:/";
+	}
+	
 }

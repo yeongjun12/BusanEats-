@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+ <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,8 +81,25 @@
         <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
     </div>
     <div class="login-signup">
-        <a href="loginForm">Login</a>
-        <a href="joinEnrollForm">Signup</a>
+    
+    	<c:choose>
+    	 <c:when test="${empty loginUser }" >
+    	 	<a href="loginForm">로그인</a>
+       		<a href="joinEnrollForm">회원가입</a>
+    	 </c:when>
+    	 <c:otherwise>
+    	 	<lable>${loginUser.userName }님 환영합니다</label> &nbsp;&nbsp;
+            <a href="myPage.me">마이페이지</a>
+            <a href="logout.do">로그아웃</a>
+    	 </c:otherwise>
+    	
+    	</c:choose>
+    
+        
+        
+        
+        
+        
     </div>
 </header>
 
