@@ -15,6 +15,40 @@
 	</resultMap>
 	
 	
+	<!-- 로그인용 쿼리문 -->
+	<select id="loginUser" parameterType="user" resultMap="userResultSet">
+	
+	SELECT
+		     USER_NO
+		    ,USER_ID
+		    ,USER_PWD
+		    ,USER_NAME
+		    ,USER_PHONE
+		    ,USER_BIRTH
+		    ,USER_EMAIL
+		    ,USER_STATUS
+	FROM
+	   		USERS
+	WHERE
+			USER_ID = #{userId}
+	  AND
+	 		USER_STATUS ='Y'
+	</select>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	<!-- 회원 가입용 쿼리 -->
 	<!-- parameterType은 MyBatis에서 SQL 문을 실행할 때 SQL 쿼리에 전달되는 파라미터의 타입을 나타냅니다.
 	 즉, SQL 문에서 사용되는 매개변수의 자료형을 명시하는 역할을 합니다. -->

@@ -80,7 +80,7 @@
         <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
     </div>
     <div class="login-signup">
-        <a href="#">Login</a>
+        <a href="loginForm">Login</a>
         <a href="joinEnrollForm">Signup</a>
     </div>
 </header>

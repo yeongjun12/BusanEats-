@@ -1,10 +1,13 @@
 package com.busan.eats.user.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.busan.eats.user.model.service.UserServiceImpl;
 import com.busan.eats.user.model.vo.User;
@@ -52,5 +55,25 @@ public class UserController {
 	@RequestMapping("loginForm")
 	public String loginForm() {
 		return "user/loginForm";
+	}
+	
+	@RequestMapping("login.do")
+	public ModelAndView login(User user, ModelAndView mv,  HttpSession session) {
+		
+		
+		User loginUser = userService.loginUser(user);
+		
+		if(loginUser != null && bcryptPasswordEncoder.matches(user.getUserPwd(),loginUser.getUserPwd())) {
+			session.setAttribute("loginUser",loginUser);
+		    mv.setViewName("redirect:/");
+			  
+	    } else {
+		 // model.addAttribute("키","밸류");
+		 mv.addObject("errorMsg","응 안돼!");
+	     mv.setViewName("common/errorPage");
+	    }
+		
+		
+		return mv;
 	}
 }

@@ -8,6 +8,11 @@ import com.busan.eats.user.model.vo.User;
 @Repository
 public class UserDao {
 	
+	
+	public User loginUser(SqlSessionTemplate sqlSession, User user) {
+		return sqlSession.selectOne("userMapper.loginUser",user);
+	}
+	
 	public int insertUser(SqlSessionTemplate sqlSession, User user) {
 		
 		return sqlSession.insert("userMapper.insertUser", user);

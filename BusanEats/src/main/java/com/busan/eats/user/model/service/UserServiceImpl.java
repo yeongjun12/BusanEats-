@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User loginUser(User user) {
-		return null;
+		return userDao.loginUser(sqlSession,user);
 	}
 
 	@Override
