@@ -72,11 +72,6 @@
 <div class="restaurant-info">
     <div class="restaurant-details">
         <h1>${s.mainTitle }</h1>
-		 <div>
-            <h2>주소 : ${s.addr1 }</h2>
-        </div>
-
-
         <div>
             <h2>메뉴 : ${s.reprsntvMenu }</h2>
         </div>
@@ -97,6 +92,10 @@
             <p>${s.cntctTel }</p>
         </div>
         
+         <div>
+            <h2>주소 : ${s.addr1 }</h2>
+        </div>
+        
         <input type="hidden" id="lat" value="${s.lat}">
 		<input type="hidden" id="lng" value="${s.lng}">
         
@@ -113,18 +112,29 @@
 		
 		var mapOption = {
 		    center: new kakao.maps.LatLng(lat, lng), // 지도의 중심좌표
-		    level: 3 // 지도의 확대 레벨
+		    level: 1 // 지도의 확대 레벨
 		};
 		
 		// 지도를 표시할 div와 지도 옵션으로 지도를 생성합니다
 		var map = new kakao.maps.Map(mapContainer, mapOption);
+		
+		// 마커가 표시될 위치입니다 
+		var markerPosition  = new kakao.maps.LatLng(lat, lng); 
+
+		// 마커를 생성합니다
+		var marker = new kakao.maps.Marker({
+		    position: markerPosition
+		});
+
+		// 마커가 지도 위에 표시되도록 설정합니다
+		marker.setMap(map);
 </script>
         
 
       <hr>
     </div>
     <div>
-        <h2>식당 대표 사진</h2>
+    <br><br><br>
         <img src="${s.mainImgThumb }" alt="대표 사진">
     </div>
     
