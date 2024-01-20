@@ -1,5 +1,7 @@
 package com.busan.eats.store.model.service;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,14 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public int saveToDataBase(Store s) {
 		return storeDao.saveToDataBase(sqlSession,s);
+	}
+
+
+	@Override
+	public ArrayList<Store> selectStoreList(String gugunNm) {
+		
+		System.out.println("Service: "+gugunNm);
+		return storeDao.selectStoreList(sqlSession,gugunNm);
 	}
 
 }

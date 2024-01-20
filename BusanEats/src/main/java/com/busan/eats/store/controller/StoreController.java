@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -15,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.busan.eats.store.model.service.StoreService;
 import com.busan.eats.store.model.vo.Store;
@@ -139,9 +141,6 @@ public class StoreController {
 	
 	
 	
-	
-	
-	
 	@RequestMapping("map.do")
 	public String map(String LAT,String LNG, Model model) {
 		
@@ -151,5 +150,25 @@ public class StoreController {
 		return "map";
 	}
 	
+	
+	@RequestMapping("storeList.do")
+	public String storeList() {
+		
+		return "store/storeList";
+	}
+	
+	@RequestMapping("selectStoreList.do")
+	public ModelAndView selectStoreList(ModelAndView mv, String gugunNm) {
+		
+		System.out.println("controller: " + gugunNm);
+		ArrayList<Store> list = storeService.selectStoreList(gugunNm);
+		
+		mv.addObject("list",list).setViewName("store/storeList");
+		
+		System.out.println(list);
+		
+		return mv;
+		
+	}
 
 }

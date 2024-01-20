@@ -5,8 +5,18 @@
 
 
 	<resultMap id="storeResultSet" type="store">
-	
-		
+		<result column="UC_SEQ"  property="ucSeq"/>
+		<result column="MAIN_TITLE" property="mainTitle"/>
+		<result column="GUGUN_NM"        property="gugunNm"/>
+		<result column="ADDR1"  property="addr1"/>
+		<result column="CNTCT_TEL"  property="cntctTel"/>
+		<result column="USAGE_DAY_WEEK_AND_TIME"  property="usageDayWeekAndTime"/>
+		<result column="RPRSNTV_MENU"  property="reprsntvMenu"/>
+		<result column="MAIN_IMG_NORMAL"  property="mainImgNormal"/>
+		<result column="MAIN_IMG_THUMB"  property="mainImgThumb"/>
+		<result column="ITEMCNTNTS"  property="itemCntnts"/>
+		<result column="LAT"  property="lat"/>
+		<result column="LNG"  property="lng"/>
 	</resultMap>
 	
 	
@@ -45,5 +55,14 @@
 				)
 		
 	</insert>
+	
+	<select id="selectStoreList" resultMap="storeResultSet" parameterType="String" >
+		SELECT
+				*
+		FROM
+			STORE
+		WHERE 
+			GUGUN_NM= #{gugunNm}
+	</select>
 
 </mapper>
