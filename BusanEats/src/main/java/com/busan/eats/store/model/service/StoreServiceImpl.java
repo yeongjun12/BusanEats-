@@ -29,7 +29,6 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public ArrayList<Store> selectStoreList(String gugunNm) {
 		
-		System.out.println("Service: "+gugunNm);
 		return storeDao.selectStoreList(sqlSession,gugunNm);
 	}
 

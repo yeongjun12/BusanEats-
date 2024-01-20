@@ -207,13 +207,14 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 </head>
 <body>
+
+	<jsp:include page="../common/header.jsp" />
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 
 	<div  class="outer">
 		<div align="center" id="header">
 			<br>
 			
-			<h2 id="resultText">에 대한 검색 결과</h2>
 		
 			<div align="right" id="orderby" >
 				
@@ -235,8 +236,8 @@
 			
 				<div class="result">
 					<div class="title">
-						 <h3 align="center" id="resturantTitle">식당</h3>
-						 <h3 align="right" style="padding-right:50px;">총 건의 검색 결과</h3>
+						
+						 <h3 align="center" id="resturantTitle"> <c:out value="${gugunNm }" /> 식당</h3>
 						
 					</div>
 					

@@ -160,12 +160,10 @@ public class StoreController {
 	@RequestMapping("selectStoreList.do")
 	public ModelAndView selectStoreList(ModelAndView mv, String gugunNm) {
 		
-		System.out.println("controller: " + gugunNm);
 		ArrayList<Store> list = storeService.selectStoreList(gugunNm);
 		
-		mv.addObject("list",list).setViewName("store/storeList");
+		mv.addObject("list",list).addObject("gugunNm",gugunNm).setViewName("store/storeList");
 		
-		System.out.println(list);
 		
 		return mv;
 		

@@ -16,14 +16,7 @@ public class StoreDao {
 	
 	
 	public ArrayList<Store> selectStoreList(SqlSessionTemplate sqlSession,String gugunNm) {
-		
-		System.out.println("dao" + gugunNm);
-		
-		
-		
 		return (ArrayList)sqlSession.selectList("storeMapper.selectStoreList",gugunNm);
-		
-		
 	}
 
 }
