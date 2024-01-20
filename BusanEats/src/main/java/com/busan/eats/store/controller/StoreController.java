@@ -164,9 +164,24 @@ public class StoreController {
 		
 		mv.addObject("list",list).addObject("gugunNm",gugunNm).setViewName("store/storeList");
 		
-		
 		return mv;
 		
+	}
+	
+	@RequestMapping("detail.do")
+	public String detail(){
+		return "store/storeDetailView";
+		
+	}
+	
+	@RequestMapping("selectStoreDetail.do")
+	public ModelAndView selectStoreDetail(ModelAndView mv, int ucSeq) {
+		
+		 Store s = storeService.selectStoreDetail(ucSeq);
+		 
+		 mv.addObject("s",s).setViewName("store/storeDetailView");
+		
+		return mv;
 	}
 
 }

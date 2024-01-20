@@ -32,4 +32,10 @@ public class StoreServiceImpl implements StoreService {
 		return storeDao.selectStoreList(sqlSession,gugunNm);
 	}
 
+
+	@Override
+	public Store selectStoreDetail(int unSeq) {
+		return storeDao.selectStoreDetail(sqlSession,unSeq);
+	}
+
 }

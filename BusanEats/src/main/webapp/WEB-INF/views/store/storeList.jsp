@@ -249,8 +249,8 @@
 						
 							<li>
 								<div class="thumbnail">
-									<input type="hidden" name="placeNo" value="${s.ucSeq }"/>
-										<img src="${s.mainImgThumb }" alt="" width="100%">
+									<input type="hidden" name="ucSeq" value="${s.ucSeq }"/>
+										<img src="${s.mainImgThumb }"  alt="" width="100%">
 									<img src="">
 								</div>
 									
@@ -260,7 +260,7 @@
 									
 									
 									
-									<span class="placeName">${s.mainTitle }</span>
+									<span class="placeName" id="mainTitle" >${s.mainTitle }</span>
 									<div class="location">${ s.addr1 }</div> 
 									
 								</div>
@@ -271,9 +271,27 @@
 				</div>	
 			<script>
 			
+			 $(function(){
+				  $(document).on('click','.thumbnail',function(){
+				   
+					 var ucSeq = $(this).find('input[name="ucSeq"]').val();
+				    
+				    console.log(ucSeq);
+				    
+				    
+				    location.href = "selectStoreDetail.do?ucSeq="+ucSeq
+				  
+				  })
+				 
+				 });
 				
 				
 			</script>
+			
+			
+		
+			
+			
 				
 			<!-- 지도 -->
 			<div id="rightContent">

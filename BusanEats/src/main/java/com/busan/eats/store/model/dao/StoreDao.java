@@ -18,5 +18,9 @@ public class StoreDao {
 	public ArrayList<Store> selectStoreList(SqlSessionTemplate sqlSession,String gugunNm) {
 		return (ArrayList)sqlSession.selectList("storeMapper.selectStoreList",gugunNm);
 	}
+	
+	public Store selectStoreDetail(SqlSessionTemplate sqlSession, int unSeq) {
+		return sqlSession.selectOne("storeMapper.selectStoreDetail",unSeq);
+	}
 
 }

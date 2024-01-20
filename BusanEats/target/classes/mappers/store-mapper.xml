@@ -64,5 +64,15 @@
 		WHERE 
 			GUGUN_NM= #{gugunNm}
 	</select>
+	
+	<select id="selectStoreDetail" resultMap="storeResultSet" parameterType="_int">
+		SELECT
+				 *
+   		 FROM
+				STORE
+    	WHERE 
+    			UC_SEQ = #{ucSeq}
+	
+	</select>
 
 </mapper>
