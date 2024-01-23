@@ -89,7 +89,7 @@
     	 </c:when>
     	 <c:otherwise>
     	 	<lable>${loginUser.userName }님 환영합니다</label> &nbsp;&nbsp;
-            <a href="myPage.me">마이페이지</a>
+            <a href="myPage.do">마이페이지</a>
             <a href="logout.do">로그아웃</a>
     	 </c:otherwise>
     	

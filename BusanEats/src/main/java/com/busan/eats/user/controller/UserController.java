@@ -84,4 +84,9 @@ public class UserController {
 		return "redirect:/";
 	}
 	
+	@RequestMapping("myPage.do")
+	public String MyPage() {
+		return "user/myPage";
+	}
+	
 }

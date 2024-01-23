@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="reservationMapper">
+
+
+	<resultMap id="reservationResultSet" type="reservation">
+		<result column="RERVATION_NO"  property="reservation_no"/>
+		<result column="USER_NO"  property="user_no"/>
+		<result column="UC_SEQ"  property="ucSeq"/>
+		<result column="RESERVATION_DATE"  property="reservation_date"/>
+		<result column="RESERVATION_TIME"  property="reservation_time"/>
+		<result column="NUMBER_OF_GUESTS"  property="number_of_guest"/>
+	</resultMap>
+
+
+    <insert id="insertReservation" parameterType="reservation">
+		INSERT
+		    INTO
+		        RESERVATION
+		 	   (
+			    RESERVATION_NO
+			    ,USER_NO
+			    ,UC_SEQ
+			    ,RESERVATION_DATE
+			    ,RESERVATION_TIME
+			    ,NUMBER_OF_GUESTS
+			    ,CREATE_AT
+		   		 )
+				VALUES
+		  	  (
+		        SEQ_RESER.NEXTVAL
+		        ,#{user_no}
+		        ,#{ucSeq}
+		        ,#{reservation_date}
+		        ,#{reservation_time}
+		        ,#{number_of_guest}
+		        ,SYSDATE
+		       )    
+    </insert>
+</mapper>
