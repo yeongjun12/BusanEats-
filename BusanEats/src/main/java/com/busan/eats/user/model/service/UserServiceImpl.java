@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int updateUser(User user) {
-		return 0;
+		return userDao.updateUser(sqlSession,user);
 	}
 
 	@Override

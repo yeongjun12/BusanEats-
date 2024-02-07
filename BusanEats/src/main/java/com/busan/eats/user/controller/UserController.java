@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.busan.eats.user.model.service.UserServiceImpl;
@@ -89,4 +90,38 @@ public class UserController {
 		return "user/myPage";
 	}
 	
+	@RequestMapping("update.do")
+	public String updateUser(String newPwd,User user ) {
+		
+		
+		 String encPwd = bcryptPasswordEncoder.encode(newPwd);
+			
+		 user.setUserPwd(encPwd);
+		
+		userService.updateUser(user);
+		
+		return "redirect:myPage.do";
+	}
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value="pwdCheck.do", produces="text/html; charset=UTF-8")
+	public String pwdCheck(String userId, String userPwd, HttpSession session) {
+		
+		 // 세션에 저장된 사용자 아이디와 비밀번호 가져오기
+		User loginUser = (User) session.getAttribute("loginUser");
+        String storedUserId = loginUser.getUserId();
+        String storedUserPwd = loginUser.getUserPwd();
+        
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        
+        // 입력한 아이디와 비밀번호가 세션에 저장된 값과 일치하는지 확인
+        if (userId.equals(storedUserId) && encoder.matches(userPwd, storedUserPwd)) {
+        	return "success"; // 아이디와 비밀번호 모두 일치
+        } else {
+            return "failure"; // 아이디 또는 비밀번호가 일치하지 않음
+        }
+		
+	}
 }

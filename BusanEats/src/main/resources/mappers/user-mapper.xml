@@ -24,7 +24,7 @@
 		    ,USER_PWD
 		    ,USER_NAME
 		    ,USER_PHONE
-		    ,USER_BIRTH
+		    ,TO_CHAR(USER_BIRTH, 'YYYY-MM-DD') AS USER_BIRTH
 		    ,USER_EMAIL
 		    ,USER_STATUS
 	FROM
@@ -34,20 +34,6 @@
 	  AND
 	 		USER_STATUS ='Y'
 	</select>
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	<!-- 회원 가입용 쿼리 -->
 	<!-- parameterType은 MyBatis에서 SQL 문을 실행할 때 SQL 쿼리에 전달되는 파라미터의 타입을 나타냅니다.
@@ -79,5 +65,22 @@
 			
 	
 	</insert>
+	
+	
+	<!-- 회원정보 수정 쿼리 -->
+	
+	<update id="updateUser" parameterType="user">
+		UPDATE
+				USERS
+		   SET
+				 USER_PWD = #{userPwd}
+				,USER_PHONE = #{userPhone}
+				,USER_EMAIL = #{userEmail}
+				,USER_BIRTH = #{userBirth}	
+		
+		WHERE
+		
+				 USER_NO = #{userNo}	
+	</update>
 
 </mapper>
