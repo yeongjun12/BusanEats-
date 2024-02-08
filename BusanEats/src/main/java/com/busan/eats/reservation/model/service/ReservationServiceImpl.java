@@ -1,5 +1,7 @@
 package com.busan.eats.reservation.model.service;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,9 +18,12 @@ public class ReservationServiceImpl implements ReservationService {
 	
 	@Override
 	public int insertReservation(Reservation r) {
-		
-		System.out.println("service "  + r);
 		return reservationDao.insertReservation(r,sqlSession);
+	}
+
+	@Override
+	public ArrayList<Reservation> selectReservation(int userNo) {
+		return (ArrayList)reservationDao.selectReservation(userNo,sqlSession);
 	}
 
 }

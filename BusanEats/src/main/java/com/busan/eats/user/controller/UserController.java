@@ -103,8 +103,6 @@ public class UserController {
 		return "redirect:myPage.do";
 	}
 	
-	
-	
 	@ResponseBody
 	@RequestMapping(value="pwdCheck.do", produces="text/html; charset=UTF-8")
 	public String pwdCheck(String userId, String userPwd, HttpSession session) {
@@ -122,6 +120,8 @@ public class UserController {
         } else {
             return "failure"; // 아이디 또는 비밀번호가 일치하지 않음
         }
-		
 	}
+	
+	
+	
 }

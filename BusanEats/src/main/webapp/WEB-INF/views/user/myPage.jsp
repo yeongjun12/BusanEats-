@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -162,26 +163,18 @@
     <div class="content" id="ordersTab" style="display:none;">
       <!-- 주문 내역 내용 -->
       <h2>예약 내역</h2>
-     	<div class="reservation">
-            <a class="reservation-date">2022년 1월 1일</a>
-		    <img src="사진_경로.jpg" alt="식당 사진" width="200" height="150">
-		    <div class="reservation-details">
-		        <p>예약 일시: 2022년 1월 1일 오전 10시</p>
-		        <p>예약자: 홍길동</p>
-		        <p>인원 수: 4명</p>
-		        <p>연락처: 010-1234-5678</p>
-		        
-		    </div>
-		    <div class="cancelArea">
-		     <button onclick="cancelReservation()">예약 취소</button>
-		    </div>
-           
-        </div>
+      
+         
+      
+  
+      
       
     </div>
  
 
   <script>
+  
+  
     function showTab(tabId) {
       // 모든 탭 숨기기
       document.querySelectorAll('.content').forEach(tab => {
@@ -190,6 +183,50 @@
 
       // 선택한 탭 보이기
       document.getElementById(tabId + 'Tab').style.display = 'block';
+      
+      if(tabId == 'orders') {
+    	  
+    	  var userNo = "${loginUser.userNo}";
+    	  
+    	  
+    	  $.ajax({
+    		    url: 'selectReservation.do',
+    	        method: 'GET',
+    	        data: { userNo: userNo },
+    	        success: function(list) {
+    	            // 서버 응답에 따른 동작 수행
+    	            console.log(list);
+    	            
+    	            list.forEach(function(item) {
+                        let reservationHtml =
+                            '<div class="reservation">' +
+                            '<a class="reservation-date">' + item.reservation_date + '</a>' +
+                            '<img src="' + item.mainImgThumb + '" alt="식당 사진" width="200" height="150">' +
+                            '<div class="reservation-details">' +
+                            '<p>예약 일시: ' + item.reservation_date + '</p>' +
+                            '<p>인원 수: ' + item.number_of_guest + ' 명</p>' +
+                            '</div>' +
+                            '<div class="cancelArea">' +
+                            '<button onclick="cancelReservation()">예약 취소</button>' +
+                            '</div>' +
+                            '</div>';
+
+                        $('#ordersTab').append(reservationHtml);
+                    });
+    	            
+    	            
+    	            
+    	        },
+    	        error: function(xhr, status, error) {
+    	            console.error('AJAX 요청 실패:', error);
+    	        }
+    	  });
+    	  
+    	  
+      }
+      
+      
+      
     }
     
     

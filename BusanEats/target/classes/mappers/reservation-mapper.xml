@@ -11,6 +11,37 @@
 		<result column="RESERVATION_DATE"  property="reservation_date"/>
 		<result column="RESERVATION_TIME"  property="reservation_time"/>
 		<result column="NUMBER_OF_GUESTS"  property="number_of_guest"/>
+		
+		<result column="UC_SEQ"  property="ucSeq"/>
+		<result column="MAIN_TITLE" property="mainTitle"/>
+		<result column="GUGUN_NM"        property="gugunNm"/>
+		<result column="ADDR1"  property="addr1"/>
+		<result column="CNTCT_TEL"  property="cntctTel"/>
+		<result column="USAGE_DAY_WEEK_AND_TIME"  property="usageDayWeekAndTime"/>
+		<result column="RPRSNTV_MENU"  property="reprsntvMenu"/>
+		<result column="MAIN_IMG_NORMAL"  property="mainImgNormal"/>
+		<result column="MAIN_IMG_THUMB"  property="mainImgThumb"/>
+		<result column="ITEMCNTNTS"  property="itemCntnts"/>
+		<result column="LAT"  property="lat"/>
+		<result column="LNG"  property="lng"/>
+		
+		<!-- 상점 정보에 대한 결과 매핑 -->
+	</resultMap>
+	
+	
+	<resultMap id="storeResultSet" type="store">
+		<result column="UC_SEQ"  property="ucSeq"/>
+		<result column="MAIN_TITLE" property="mainTitle"/>
+		<result column="GUGUN_NM"        property="gugunNm"/>
+		<result column="ADDR1"  property="addr1"/>
+		<result column="CNTCT_TEL"  property="cntctTel"/>
+		<result column="USAGE_DAY_WEEK_AND_TIME"  property="usageDayWeekAndTime"/>
+		<result column="RPRSNTV_MENU"  property="reprsntvMenu"/>
+		<result column="MAIN_IMG_NORMAL"  property="mainImgNormal"/>
+		<result column="MAIN_IMG_THUMB"  property="mainImgThumb"/>
+		<result column="ITEMCNTNTS"  property="itemCntnts"/>
+		<result column="LAT"  property="lat"/>
+		<result column="LNG"  property="lng"/>
 	</resultMap>
 
 
@@ -38,4 +69,23 @@
 		        ,SYSDATE
 		       )    
     </insert>
+    
+    <select id="selectReservation" resultMap="reservationResultSet">
+    	SELECT 
+    	
+			*
+			
+		FROM RESERVATION R
+		
+		JOIN STORE S ON R.UC_SEQ = S.UC_SEQ
+		
+		WHERE R.USER_NO = #{userNo}
+    
+    </select>
+    
+    
+    
+    
+    
+    
 </mapper>
