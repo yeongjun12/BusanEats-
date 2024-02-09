@@ -10,5 +10,8 @@ public interface ReservationService {
 	int insertReservation(Reservation r);
 	
 	ArrayList<Reservation> selectReservation(int userNo);
+	
+	//예약취소 update
+	int cancelReservation(int reservation_no);
 
 }

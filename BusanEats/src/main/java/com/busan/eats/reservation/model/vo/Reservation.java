@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Data
 public class Reservation {
 	
-	private Store store; 
 	
 	int reservation_no;
 	int user_no;
@@ -31,13 +30,8 @@ public class Reservation {
     private String itemCntnts;
     private double lat;
     private double lng;
-    
-    public Store getStore() {
-        return store;
-    }
+  
 
-    public void setStore(Store store) {
-        this.store = store;
-    }
+ 
 
 }

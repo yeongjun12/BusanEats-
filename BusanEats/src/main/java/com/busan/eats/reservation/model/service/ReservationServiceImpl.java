@@ -26,4 +26,9 @@ public class ReservationServiceImpl implements ReservationService {
 		return (ArrayList)reservationDao.selectReservation(userNo,sqlSession);
 	}
 
+	@Override
+	public int cancelReservation(int reservation_no) {
+		return reservationDao.cancelReservation(reservation_no,sqlSession);
+	}
+
 }

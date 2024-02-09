@@ -125,7 +125,7 @@
 	</div>
 	 <form action="update.do" method="post">
 	 <div id="hiddenPage" style="display: none;">
-	 		<input value="${loginUser.userNo }" name="userNo">
+	 		<input type="hidden" value="${loginUser.userNo }" name="userNo">
 		   <label for="newPwd">새 비밀번호</label><br>
 		    <input type="password" id="newPwd" name="newPwd" placeholder="새 비밀번호를 입력해주세요" ><br>
 		     <label for="PwdCheck">새 비밀번호 확인</label><br>
@@ -196,25 +196,47 @@
     	        success: function(list) {
     	            // 서버 응답에 따른 동작 수행
     	            console.log(list);
+    	            $('#ordersTab').empty();
+    	            
+    	         // 현재 날짜 생성
+    	            var currentDate = new Date();
     	            
     	            list.forEach(function(item) {
-                        let reservationHtml =
+    	            	
+    	            	 // 예약 일자와 시간을 하이픈(-)으로 구분하여 합침
+    	                var reservationDateTime = item.reservation_date + ' ' + item.reservation_time;
+    	                // 예약 일시를 Date 객체로 변환
+    	                var reservationDate = new Date(reservationDateTime);
+
+    	                // 현재 날짜와 예약 일시를 비교하여 버튼 생성
+    	                var buttonHtml = '';
+    	                if (reservationDate.getTime() < currentDate.getTime()) {
+    	                    // 예약 일시가 과거 날짜인 경우
+    	                    buttonHtml = '<button onclick="writeReview()">리뷰 작성</button>';
+    	                } else {
+    	                    // 아직 지나지 않은 날짜인 경우
+    	                    buttonHtml = '<button onclick="cancelReservation('+item.reservation_no+')">예약 취소</button>';
+    	                }
+
+    	            	
+    	            	
+                        var reservationHtml =
                             '<div class="reservation">' +
-                            '<a class="reservation-date">' + item.reservation_date + '</a>' +
                             '<img src="' + item.mainImgThumb + '" alt="식당 사진" width="200" height="150">' +
+                            
                             '<div class="reservation-details">' +
-                            '<p>예약 일시: ' + item.reservation_date + '</p>' +
+                            '<a>'+ item.mainTitle +'</a>' +
+                            '<p>예약 일시: ' + item.reservation_date +'-' +item.reservation_time +'</p>' +
+                            '<p>매장 번호: ' + item.cntctTel +'</p>' +
                             '<p>인원 수: ' + item.number_of_guest + ' 명</p>' +
                             '</div>' +
                             '<div class="cancelArea">' +
-                            '<button onclick="cancelReservation()">예약 취소</button>' +
+                            '<div class="cancelArea">' + buttonHtml + '</div>' +
                             '</div>' +
                             '</div>';
 
                         $('#ordersTab').append(reservationHtml);
                     });
-    	            
-    	            
     	            
     	        },
     	        error: function(xhr, status, error) {
@@ -222,10 +244,7 @@
     	        }
     	  });
     	  
-    	  
       }
-      
-      
       
     }
     
@@ -291,7 +310,25 @@
     	}
     	
     })
- 
+    
+    <!----------- 예약 취소 함수 ------------------>
+	function cancelReservation(reservation_no) {
+		$.ajax({
+			url: 'cancelReservation.do',
+			method: 'POST',
+			data: {reservation_no : reservation_no },
+			success: function(result){
+				
+				alert('예약이 취소되었습니다.');
+				showTab('orders'); // 취소하고 화면 새로 생성할 수 있도록 호출
+			},
+			error: function(){
+				console.log(reservation_no);
+				console.log('통신실패');
+			}
+		});
+		
+	}
   </script>
 
 </body>

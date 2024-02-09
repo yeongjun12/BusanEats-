@@ -17,4 +17,8 @@ public class ReservationDao {
 	public ArrayList<Reservation> selectReservation(int userNo, SqlSessionTemplate sqlSession) {
 		return (ArrayList)sqlSession.selectList("reservationMapper.selectReservation", userNo);
 	}
+	
+	public int cancelReservation(int reservation_no, SqlSessionTemplate sqlSession) {
+		return sqlSession.update("reservationMapper.cancelReservation", reservation_no);
+	}
 }

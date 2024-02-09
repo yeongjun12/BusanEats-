@@ -14,7 +14,7 @@ import com.busan.eats.reservation.model.vo.Reservation;
 import com.google.gson.Gson;
 
 @Controller
-public class reservationController {
+public class ReservationController {
 
 	@Autowired
 	private ReservationService reservationService;
@@ -33,18 +33,27 @@ public class reservationController {
 		return mv;
 	}
 	
+	//예약 정보 select
 	@ResponseBody
 	@RequestMapping(value="selectReservation.do" , produces="application/json; charset=UTF-8" )
 	public String selectReservation(int userNo) {
-		
-		
-		System.out.println(reservationService.selectReservation(userNo));
 		ArrayList<Reservation> list = new ArrayList();
+		
 		
 		list = reservationService.selectReservation(userNo);
 		
+		System.out.println(list);
 		return new Gson().toJson(list);
 	}
 	
+	@ResponseBody
+	@RequestMapping("cancelReservation.do")
+	public String cancelReservation(int reservation_no) {
+		
+		System.out.println(reservation_no);
+		reservationService.cancelReservation(reservation_no);
+		
+		return "success";
+	}
 	
 }

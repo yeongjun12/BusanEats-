@@ -5,7 +5,7 @@
 
 
 	<resultMap id="reservationResultSet" type="reservation">
-		<result column="RERVATION_NO"  property="reservation_no"/>
+		<result column="RESERVATION_NO"  property="reservation_no"/>
 		<result column="USER_NO"  property="user_no"/>
 		<result column="UC_SEQ"  property="ucSeq"/>
 		<result column="RESERVATION_DATE"  property="reservation_date"/>
@@ -73,15 +73,38 @@
     <select id="selectReservation" resultMap="reservationResultSet">
     	SELECT 
     	
-			*
-			
+			RESERVATION_NO
+		    ,USER_NO
+			,S.UC_SEQ
+			,TO_CHAR(RESERVATION_DATE, 'YYYY-MM-DD') AS RESERVATION_DATE
+			,NUMBER_OF_GUESTS
+			,RESERVATION_STATUS
+			,RESERVATION_TIME
+			,MAIN_TITLE
+			,GUGUN_NM
+			,ADDR1
+			,CNTCT_TEL
+			,MAIN_IMG_THUMB
+			,RESERVATION_STATUS
+						
 		FROM RESERVATION R
 		
 		JOIN STORE S ON R.UC_SEQ = S.UC_SEQ
 		
 		WHERE R.USER_NO = #{userNo}
+		AND 
+		RESERVATION_STATUS = '예약완료'		
     
     </select>
+    
+    <update id="cancelReservation" parameterType="int">
+     UPDATE
+     		RESERVATION
+     	SET
+     		RESERVATION_STATUS = '예약취소'
+     WHERE
+     		RESERVATION_NO = #{reservation_no}
+    </update>
     
     
     
