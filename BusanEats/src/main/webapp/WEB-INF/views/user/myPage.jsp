@@ -8,6 +8,10 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+ 
+ 
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <style>
     body {
       margin: 0;
@@ -91,6 +95,118 @@
         text-align: center;
         }
 
+      <!-- 리뷰-->
+       #review-write-area, #store-report-area{
+        position: fixed;
+        width: 600px;
+        height:900px;
+        background-color: rgb(253, 219, 219);
+        border-radius: 20px;
+        /* position: fixed; */
+        left: 50%;
+        top: 50%;
+        /* -webkit-transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+        -o-transform: translate(-50%, -50%); */
+        transform: translate(-50%, -50%);
+        display: none;
+        z-index: 1000;
+    }
+
+    #review-write-area .close, #store-report-area .close{
+        font-size: 40px;
+        background-color:rgba(95, 152, 124, 0);
+        border: 1px solid rgba(245, 245, 220, 0);
+        cursor: pointer;
+        color:rgb(0, 0, 0);
+        padding-left: 560px;
+    }
+
+    #review-write-area .modal-title{
+        text-align: center;
+    }
+
+    .modal-content p {
+        margin-left: 25px;
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    #review-write-area .modal-title h2{
+        /* margin-left: 20px; */
+        font-size: 30px;
+        font-weight: 900;
+        color: black;
+    }
+    
+    
+
+    #checked-meal-type {
+        width: 600px;
+        height:120px;
+    }
+
+    #checked-meal-type img{
+        margin-bottom: 10px;
+        margin-left: 10px;
+    }
+
+    #checked-meal-type input[name=menu-type] {
+        display: none;
+    }
+
+    #checked-meal-type label{
+        width:80px;
+        height:60px;
+        display: inline-block;
+        text-align: center;
+        margin: auto;
+        font-weight: 800;
+        margin: 0 10px;
+    }
+
+    #modal-footer {
+        width: 600px;
+        height: 50px;
+        text-align: center;
+    }
+
+    #modal-footer input {
+        width:100px;
+        height: 50px;
+        font-size: 17px;
+        font-weight: 900;
+        border-style: none;
+        background-color: rgba(209, 231, 157, 0.755);
+        cursor: pointer;
+        margin-left: 14px;
+        margin-top:10px;
+    }
+
+    #modal-footer input:hover{
+        background-color: rgba(67, 70, 62, 0.755);
+        color: aliceblue;
+    }
+
+    #star-area img{
+        margin: 0 25px;
+    }
+
+    #star-area label{
+        display: inline-block;
+    }
+
+    #star-area input[name=reviewStar] {
+        display: none;
+    }
+
+    #pt-insert-table span{
+        border: 1px solid black;
+        display: inline-block;
+
+    }
       
     
   </style>
@@ -170,6 +286,120 @@
       
       
     </div>
+    
+    
+    <!-- 리뷰 -->
+    <div id="review-write-area">
+            <div class="modal fade" id="mymodal1">
+                <div class="modal-dialog">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <br>
+                        <div class="modal-title"><h2>리뷰쓰기📝</h2></div>
+                    </div>
+
+                    <form action="#" method="post" enctype="multipart/form-data">
+                        <!-- 여기 나중에 수정해야 함  -->
+                  
+                  		<input type="hidden" name="memNo" value="">
+					
+                    <input type="hidden" name="placeNo" value=""> 
+                        <div class="modal-content">
+                            <p>● 별점을 메겨주세요</p>
+                            <div id="star-area">
+
+                                <label for="rate1">
+                                    <input type="radio" name="reviewStar" value="1" id="rate1" checked>
+                                    <img src="resources/images/star1.png" width="50" height="50" alt="">
+                                </label>
+
+                                <label for="rate2">
+                                    <input type="radio" name="reviewStar" value="2" id="rate2">
+                                    <img src="resources/images/star2.png" width="50" height="50" alt="">
+                                </label>
+
+                                <label for="rate3">
+                                    <input type="radio" name="reviewStar" value="3" id="rate3">
+                                    <img src="resources/images/star2.png" width="50" height="50" alt="">
+                                </label>
+
+                                <label for="rate4">
+                                    <input type="radio" name="reviewStar" value="4" id="rate4">
+                                    <img src="resources/images/star2.png" width="50" height="50" alt="">
+                                </label>
+                                
+                                <label for="rate5">
+                                    <input type="radio" name="reviewStar" value="5" id="rate5">
+                                    <img src="resources/images/star2.png" width="50" height="50" alt="">
+                                </label>
+
+                            </div>
+
+                            <br>
+                          
+                            </div>
+
+                            <p>● 식당에 대해서 평가해주세용😏</p>
+                            <div id="write-textarea">
+                                <textarea name="content" rows="500" style="width:500px; height:120px; resize:none;" placeholder="10자 이상 입력해주세요!" required></textarea>
+                            </div>
+
+                            <br>
+                            <p>● 사진 등록하기📷</p>
+                            <div id="photo-insert-area">
+                                <div id="pt-insert-table">
+                                        <span><img width="120" height="120" id="photo-insert1" class="1" src="resources/images/plus.png"></span>
+                                        <span><img width="120" height="120" id="photo-insert2" class="2" src="resources/images/plus.png"></span>
+                                        <span><img width="120" height="120" id="photo-insert3" class="3" src="resources/images/plus.png"></span>
+                                        <span><img width="120" height="120" id="photo-insert4" class="4" src="resources/images/plus.png"></span>
+                                </div>
+                            </div>
+
+                            <div id="file-insert">
+                                <input type="file" name="file1" id="file1" class="1">
+                                <input type="file" name="file2" id="file2" class="2">
+                                <input type="file" name="file3" id="file3" class="3">
+                                <input type="file" name="file4" id="file4" class="4">
+                            </div>
+                       
+                            <br>
+                            <!-- 나중에 완성  -->
+                            <p>● 태그 골라용</p>
+                            <div id="tag-area">
+                                <select name="tag" class="tag-opt"> <!--style="display:none;"-->
+                                    <option>플레이팅이 멋져요</option>
+                                    <option>매장이 청결해요</option>
+                                    <option>직원이 상냥해요</option>
+                                    <option>화장실이 깨끗해요</option>
+                                    <option>특별한 날 가기 좋아요</option>
+                                    <option>주차하기 편해요</option>
+                                    <option>양이 많아요</option>
+                                    <option>음식이 맛있어요</option>
+                                    <option>재료가 신선해요</option>
+                                    <option>가성비가 좋아요</option>
+                                    <option>매장이 넓어요</option>
+                                    <option>뷰가 좋아요</option>
+                                    <option>모임하기 좋아요</option>
+                                    <option>인테리어가 멋져요</option>
+                                    <option>혼밥하기 좋아요</option>
+                                    <option>사장님이 다정해요</option>
+                                    <option>반려동물과 함께해요</option>
+                                    <option>접근성이 좋아요</option>
+                                </select>
+                                <span id="tag-zone"></span>
+                                <a id="tag-add" style="cursor:pointer;"> + </a>
+                                <a id="tag-minus" style="cursor:pointer;"> - </a>
+                            </div>
+                        </div>
+
+                        <div id="modal-footer">
+                            <input type="submit" value="등록하기" disabled/>
+                            <input type="reset" value="다시쓰기"/>
+                        </div>
+                    </form>
+                </div><!-- class="modal-dialog" -->
+            </div><!-- class="modal fade" id="mymodal1" -->
+        </div> <!-- #review-write-area-->
  
 
   <script>
@@ -212,7 +442,7 @@
     	                var buttonHtml = '';
     	                if (reservationDate.getTime() < currentDate.getTime()) {
     	                    // 예약 일시가 과거 날짜인 경우
-    	                    buttonHtml = '<button onclick="writeReview()">리뷰 작성</button>';
+    	                    buttonHtml = '<button onclick="writeReview()class="btn btn-danger" data-toggle="modal" data-target="#mymodal1">리뷰 작성</button>';
     	                } else {
     	                    // 아직 지나지 않은 날짜인 경우
     	                    buttonHtml = '<button onclick="cancelReservation('+item.reservation_no+')">예약 취소</button>';
@@ -329,6 +559,13 @@
 		});
 		
 	}
+	<!------------- 리뷰 작성 모달 ------------------>
+	
+
+	
+	
+	
+	
   </script>
 
 </body>

@@ -39,10 +39,7 @@ public class ReservationController {
 	public String selectReservation(int userNo) {
 		ArrayList<Reservation> list = new ArrayList();
 		
-		
 		list = reservationService.selectReservation(userNo);
-		
-		System.out.println(list);
 		return new Gson().toJson(list);
 	}
 	
@@ -50,7 +47,6 @@ public class ReservationController {
 	@RequestMapping("cancelReservation.do")
 	public String cancelReservation(int reservation_no) {
 		
-		System.out.println(reservation_no);
 		reservationService.cancelReservation(reservation_no);
 		
 		return "success";
