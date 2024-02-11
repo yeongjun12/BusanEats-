@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="reviewMapper">
+
+	<resultMap id="reviewResultSet" type="review">
+		<result column="USER_NO" property="userNo"/>
+		<result column="UC_SEQ" property="ucSeq"/>
+		<result column="REVIEW_RATING" property="rating"/>
+		<result column="REVIEW_COMMENT" property="reviewComment"/>
+		<result column="REVIEW_CREATE_DATE" property="reviewCreateDate"/>
+		<result column="FILE_PATH" property="filePath"/>
+		<result column="CHANGE_NAME" property="changeName"/>
+	</resultMap>
+
+
+	<insert id="insertReview" parameterType="review">
+		INSERT
+				INTO
+					REVIEW
+					(
+						REVIEW_NO
+						,USER_NO
+						,UC_SEQ
+						,REVIEW_RATING
+						,REVIEW_COMMENT
+						,REVIEW_CREATE_DATE
+						,FILE_PATH
+						,CHANGE_NAME
+						,REVIEW_STATUS
+					)
+			values
+					(
+						SEQ_REVIEW.NEXTVAL
+						,#{userNo}
+						,#{ucSeq}
+						,#{rating}
+						,#{reviewComment}
+						,SYSDATE
+						,#{filePath}
+						,#{changeName}
+						,'Y'
+					) 
+	</insert>
+
+
+
+</mapper>

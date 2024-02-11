@@ -96,117 +96,70 @@
         }
 
       <!-- 리뷰-->
-       #review-write-area, #store-report-area{
-        position: fixed;
-        width: 600px;
-        height:900px;
-        background-color: rgb(253, 219, 219);
-        border-radius: 20px;
-        /* position: fixed; */
-        left: 50%;
-        top: 50%;
-        /* -webkit-transform: translate(-50%, -50%);
-        -ms-transform: translate(-50%, -50%);
-        -moz-transform: translate(-50%, -50%);
-        -o-transform: translate(-50%, -50%); */
-        transform: translate(-50%, -50%);
-        display: none;
-        z-index: 1000;
-    }
+        #my_modal {
+                display: none;
+                width: 500px;
+                padding: 20px 60px;
+                background-color: #fefefe;
+                border: 1px solid #888;
+                border-radius: 3px;
+            }
 
-    #review-write-area .close, #store-report-area .close{
-        font-size: 40px;
-        background-color:rgba(95, 152, 124, 0);
-        border: 1px solid rgba(245, 245, 220, 0);
-        cursor: pointer;
-        color:rgb(0, 0, 0);
-        padding-left: 560px;
-    }
+            #my_modal .modal_close_btn {
+                position: absolute;
+                top: 10px;
+                right: 10px; }
 
-    #review-write-area .modal-title{
-        text-align: center;
-    }
+             /* 수정 모달 시작 */
+             #my_modal2 {
+                display: none;
+                width: 500px;
+                padding: 20px 60px;
+                background-color: #fefefe;
+                border: 1px solid #888;
+                border-radius: 3px;
+            }
 
-    .modal-content p {
-        margin-left: 25px;
-        font-size: 20px;
-        font-weight: 700;
-        margin-bottom: 5px;
-    }
+            #my_modal2 .modal_close_btn {
+                position: absolute;
+                top: 10px;
+                right: 10px; }
 
-    #review-write-area .modal-title h2{
-        /* margin-left: 20px; */
-        font-size: 30px;
-        font-weight: 900;
-        color: black;
-    }
-    
-    
+          
 
-    #checked-meal-type {
-        width: 600px;
-        height:120px;
-    }
+         /* 별점 스타일 */
 
-    #checked-meal-type img{
-        margin-bottom: 10px;
-        margin-left: 10px;
-    }
-
-    #checked-meal-type input[name=menu-type] {
-        display: none;
-    }
-
-    #checked-meal-type label{
-        width:80px;
-        height:60px;
-        display: inline-block;
-        text-align: center;
-        margin: auto;
-        font-weight: 800;
-        margin: 0 10px;
-    }
-
-    #modal-footer {
-        width: 600px;
-        height: 50px;
-        text-align: center;
-    }
-
-    #modal-footer input {
-        width:100px;
-        height: 50px;
-        font-size: 17px;
-        font-weight: 900;
-        border-style: none;
-        background-color: rgba(209, 231, 157, 0.755);
-        cursor: pointer;
-        margin-left: 14px;
-        margin-top:10px;
-    }
-
-    #modal-footer input:hover{
-        background-color: rgba(67, 70, 62, 0.755);
-        color: aliceblue;
-    }
-
-    #star-area img{
-        margin: 0 25px;
-    }
-
-    #star-area label{
-        display: inline-block;
-    }
-
-    #star-area input[name=reviewStar] {
-        display: none;
-    }
-
-    #pt-insert-table span{
-        border: 1px solid black;
-        display: inline-block;
-
-    }
+             .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            justify-content: space-around;
+            padding: 0 0.2em;
+            text-align: center;
+            width: 5em;
+            }
+            
+            .star-rating input {
+            display: none;
+            }
+            
+            .star-rating label {
+            -webkit-text-fill-color: transparent; 
+            -webkit-text-stroke-width: 2.3px;
+            -webkit-text-stroke-color: #2b2a29;
+            cursor: pointer;
+            }
+            
+             .star-rating :checked ~ label {
+            -webkit-text-fill-color: gold;
+            } 
+            
+            .star-rating label:hover,
+            .star-rating label:hover ~ label {
+            -webkit-text-fill-color: #fff58c;
+            } 
+       
       
     
   </style>
@@ -289,117 +242,62 @@
     
     
     <!-- 리뷰 -->
-    <div id="review-write-area">
-            <div class="modal fade" id="mymodal1">
-                <div class="modal-dialog">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        <br>
-                        <div class="modal-title"><h2>리뷰쓰기📝</h2></div>
-                    </div>
+    
+     <div class="modal fade" id="my_modal">
 
-                    <form action="#" method="post" enctype="multipart/form-data">
-                        <!-- 여기 나중에 수정해야 함  -->
-                  
-                  		<input type="hidden" name="memNo" value="">
-					
-                    <input type="hidden" name="placeNo" value=""> 
-                        <div class="modal-content">
-                            <p>● 별점을 메겨주세요</p>
-                            <div id="star-area">
-
-                                <label for="rate1">
-                                    <input type="radio" name="reviewStar" value="1" id="rate1" checked>
-                                    <img src="resources/images/star1.png" width="50" height="50" alt="">
-                                </label>
-
-                                <label for="rate2">
-                                    <input type="radio" name="reviewStar" value="2" id="rate2">
-                                    <img src="resources/images/star2.png" width="50" height="50" alt="">
-                                </label>
-
-                                <label for="rate3">
-                                    <input type="radio" name="reviewStar" value="3" id="rate3">
-                                    <img src="resources/images/star2.png" width="50" height="50" alt="">
-                                </label>
-
-                                <label for="rate4">
-                                    <input type="radio" name="reviewStar" value="4" id="rate4">
-                                    <img src="resources/images/star2.png" width="50" height="50" alt="">
-                                </label>
-                                
-                                <label for="rate5">
-                                    <input type="radio" name="reviewStar" value="5" id="rate5">
-                                    <img src="resources/images/star2.png" width="50" height="50" alt="">
-                                </label>
-
-                            </div>
-
-                            <br>
-                          
-                            </div>
-
-                            <p>● 식당에 대해서 평가해주세용😏</p>
-                            <div id="write-textarea">
-                                <textarea name="content" rows="500" style="width:500px; height:120px; resize:none;" placeholder="10자 이상 입력해주세요!" required></textarea>
-                            </div>
-
-                            <br>
-                            <p>● 사진 등록하기📷</p>
-                            <div id="photo-insert-area">
-                                <div id="pt-insert-table">
-                                        <span><img width="120" height="120" id="photo-insert1" class="1" src="resources/images/plus.png"></span>
-                                        <span><img width="120" height="120" id="photo-insert2" class="2" src="resources/images/plus.png"></span>
-                                        <span><img width="120" height="120" id="photo-insert3" class="3" src="resources/images/plus.png"></span>
-                                        <span><img width="120" height="120" id="photo-insert4" class="4" src="resources/images/plus.png"></span>
-                                </div>
-                            </div>
-
-                            <div id="file-insert">
-                                <input type="file" name="file1" id="file1" class="1">
-                                <input type="file" name="file2" id="file2" class="2">
-                                <input type="file" name="file3" id="file3" class="3">
-                                <input type="file" name="file4" id="file4" class="4">
-                            </div>
+                <form action="reviewInsert.re" method="post" enctype="multipart/form-data">
+                    <h2 align="center">후기작성</h2>
+                    <table style="width: 400px; height:200px;">
+                        <tr>
+                           <td><input class="storeName" type="text" value=""></td>
+                            
+                            <td><input name="ucSeq"  class="storeNo" type="text" value="" ></td>
+                            <td><input name="userNo"  class="userNo" type="text" value="" ></td>
+                         
+                        </tr>
+                        <tr>
+                            <td><input type="text" name="reviewComment"style="width: 400px; height: 100px;"></td>
+                            
+                        </tr><br>
                        
-                            <br>
-                            <!-- 나중에 완성  -->
-                            <p>● 태그 골라용</p>
-                            <div id="tag-area">
-                                <select name="tag" class="tag-opt"> <!--style="display:none;"-->
-                                    <option>플레이팅이 멋져요</option>
-                                    <option>매장이 청결해요</option>
-                                    <option>직원이 상냥해요</option>
-                                    <option>화장실이 깨끗해요</option>
-                                    <option>특별한 날 가기 좋아요</option>
-                                    <option>주차하기 편해요</option>
-                                    <option>양이 많아요</option>
-                                    <option>음식이 맛있어요</option>
-                                    <option>재료가 신선해요</option>
-                                    <option>가성비가 좋아요</option>
-                                    <option>매장이 넓어요</option>
-                                    <option>뷰가 좋아요</option>
-                                    <option>모임하기 좋아요</option>
-                                    <option>인테리어가 멋져요</option>
-                                    <option>혼밥하기 좋아요</option>
-                                    <option>사장님이 다정해요</option>
-                                    <option>반려동물과 함께해요</option>
-                                    <option>접근성이 좋아요</option>
-                                </select>
-                                <span id="tag-zone"></span>
-                                <a id="tag-add" style="cursor:pointer;"> + </a>
-                                <a id="tag-minus" style="cursor:pointer;"> - </a>
-                            </div>
-                        </div>
-
-                        <div id="modal-footer">
-                            <input type="submit" value="등록하기" disabled/>
-                            <input type="reset" value="다시쓰기"/>
-                        </div>
-                    </form>
-                </div><!-- class="modal-dialog" -->
-            </div><!-- class="modal fade" id="mymodal1" -->
-        </div> <!-- #review-write-area-->
+                        <tr>
+                          
+                            <td><input type="file" name="upfile"></td>
+                        </tr><br>
+                    </table>
+    
+                    <!-- 별점 -->
+                    <div class="star-rating space-x-4 mx-auto">
+                        <input type="radio" id="5-stars" name="rating" value="5" v-model="ratings"/>
+                        <label for="5-stars" class="star pr-4">★</label>
+    
+    
+                        <input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
+                        <label for="4-stars" class="star">★</label>
+    
+    
+                        <input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
+                        <label for="3-stars" class="star">★</label>
+    
+    
+                        <input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
+                        <label for="2-stars" class="star">★</label>
+    
+    
+                        <input type="radio" id="1-star" name="rating" value="1" v-model="ratings" />
+                        <label for="1-star" class="star">★</label>
+                    </div>
+            
+                    <a class="modal_close_btn">  <img  src="resources/images/close.png" style="width: 30px; height: 30px;"></a>
+                    <br>
+                    <div align="center">
+                        
+                        <button type="submit">작성</button>
+    
+                    </div>
+                </form>
+             
+            </div>
  
 
   <script>
@@ -442,7 +340,7 @@
     	                var buttonHtml = '';
     	                if (reservationDate.getTime() < currentDate.getTime()) {
     	                    // 예약 일시가 과거 날짜인 경우
-    	                    buttonHtml = '<button onclick="writeReview()class="btn btn-danger" data-toggle="modal" data-target="#mymodal1">리뷰 작성</button>';
+    	                    buttonHtml = '<button type="button" class="btn btn-danger" onclick="modal(\'my_modal\', \''+item.mainTitle +'\',' +item.ucSeq+ ',' + item.user_no + ')" data-toggle="modal" data-target="#my_modal">리뷰 작성</button>';
     	                } else {
     	                    // 아직 지나지 않은 날짜인 경우
     	                    buttonHtml = '<button onclick="cancelReservation('+item.reservation_no+')">예약 취소</button>';
@@ -561,6 +459,56 @@
 	}
 	<!------------- 리뷰 작성 모달 ------------------>
 	
+	
+	  function modal(id, storeName,storeNo,userNo) {
+	      
+			$('#test3').val(''); //모달창 reviewContent영역 공백으로
+
+	        $('.storeName').val(storeName);
+	        $('.userNo').val(userNo);
+	        $('.storeNo').val(storeNo);
+	        var zIndex = 9999;
+	        var modal = document.getElementById(id);
+
+	        // 모달 div 뒤에 희끄무레한 레이어
+	        var bg = document.createElement('div');
+	        bg.setStyle({
+	            position: 'fixed',
+	            zIndex: zIndex,
+	            left: '0px',
+	            top: '0px',
+	            width: '100%',
+	            height: '100%',
+	            overflow: 'auto',
+	            // 레이어 색갈은 여기서 바꾸면 됨
+	            backgroundColor: 'rgba(0,0,0,0.4)'
+	        });
+	        document.body.append(bg);
+
+	        // 닫기 버튼 처리, 시꺼먼 레이어와 모달 div 지우기
+	        modal.querySelector('.modal_close_btn').addEventListener('click', function() {
+	            
+	          
+	            bg.remove();
+	            modal.style.display = 'none';
+	        });
+
+	        modal.setStyle({
+	            position: 'fixed',
+	            display: 'block',
+	            boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+
+	            // 시꺼먼 레이어 보다 한칸 위에 보이기
+	            zIndex: zIndex + 1,
+
+	            // div center 정렬
+	            top: '50%',
+	            left: '50%',
+	            transform: 'translate(-50%, -50%)',
+	            msTransform: 'translate(-50%, -50%)',
+	            webkitTransform: 'translate(-50%, -50%)'
+	        });
+	    }
 
 	
 	
