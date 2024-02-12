@@ -165,6 +165,10 @@
   </style>
 </head>
 <body>
+
+<script>
+        alert("${sessionScope.alertMsg}");
+    </script>
 <div class="container">
     <div class="sidebar">
       <ul>
@@ -245,8 +249,8 @@
     
      <div class="modal fade" id="my_modal">
 
-                <form action="reviewInsert.re" method="post" enctype="multipart/form-data">
-                    <h2 align="center">후기작성</h2>
+                 <form action="reviewInsert.do" method="post" enctype="multipart/form-data">
+                    <h2 align="center">리뷰작성</h2>
                     <table style="width: 400px; height:200px;">
                         <tr>
                            <td><input class="storeName" type="text" value=""></td>
@@ -256,35 +260,35 @@
                          
                         </tr>
                         <tr>
-                            <td><input type="text" name="reviewComment"style="width: 400px; height: 100px;"></td>
+                            <td><input type="text" class="reviewComment" name="reviewComment"style="width: 400px; height: 100px;"></td>
                             
                         </tr><br>
                        
                         <tr>
                           
-                            <td><input type="file" name="upfile"></td>
+                            <td><input type="file" class="upfile" name="upfile"></td>
                         </tr><br>
                     </table>
     
                     <!-- 별점 -->
                     <div class="star-rating space-x-4 mx-auto">
-                        <input type="radio" id="5-stars" name="rating" value="5" v-model="ratings"/>
+                        <input type="radio" id="5-stars"  class="rating" name="rating" value="5" v-model="ratings"/>
                         <label for="5-stars" class="star pr-4">★</label>
     
     
-                        <input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
+                        <input type="radio" id="4-stars" class="rating"  name="rating" value="4" v-model="ratings"/>
                         <label for="4-stars" class="star">★</label>
     
     
-                        <input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
+                        <input type="radio" id="3-stars" class="rating"  name="rating" value="3" v-model="ratings"/>
                         <label for="3-stars" class="star">★</label>
     
     
-                        <input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
+                        <input type="radio" id="2-stars" class="rating"  name="rating" value="2" v-model="ratings"/>
                         <label for="2-stars" class="star">★</label>
     
     
-                        <input type="radio" id="1-star" name="rating" value="1" v-model="ratings" />
+                        <input type="radio" id="1-star" class="rating"  name="rating" value="1" v-model="ratings" />
                         <label for="1-star" class="star">★</label>
                     </div>
             
@@ -292,10 +296,10 @@
                     <br>
                     <div align="center">
                         
-                        <button type="submit">작성</button>
+                        <button type="button" onclick="insertReview()">작성</button>
     
                     </div>
-                </form>
+                </form> 
              
             </div>
  
@@ -509,8 +513,43 @@
 	            webkitTransform: 'translate(-50%, -50%)'
 	        });
 	    }
-
+	  
 	
+
+	  function insertReview() {
+		    var fileInput = $('.upfile')[0];
+		    var formData = new FormData();
+
+		    // 파일이 선택되었는지 확인하고 FormData에 파일 추가
+		    if (fileInput.files.length > 0) {
+		        formData.append("upfile", fileInput.files[0]);
+		    }
+
+		    // 다른 필드들도 FormData에 추가
+		    formData.append("mainTitle", $('.storeName').val());
+		    formData.append("userNo", $('.userNo').val());
+		    formData.append("ucSeq", $('.storeNo').val());
+		    formData.append("rating", $('.rating').val());
+		    formData.append("reviewComment", $('.reviewComment').val());
+
+		    $.ajax({
+		        url: 'reviewInsert.do',
+		        method: "post",
+		        data: formData,
+		        enctype: 'multipart/form-data',
+		        processData: false,
+		        contentType: false,
+		        success: function(result) {
+		            alert('리뷰가 작성되었습니다.');
+		            // 필요에 따라 적절한 후속 동작 수행
+		        },
+		        error: function() {
+		            console.log('실패');
+		        }
+		    });
+		}
+
+
 	
 	
 	

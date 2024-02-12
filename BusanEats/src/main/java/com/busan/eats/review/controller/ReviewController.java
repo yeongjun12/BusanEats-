@@ -11,26 +11,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.busan.eats.review.model.service.ReviewService;
 import com.busan.eats.review.model.vo.Review;
-import com.busan.eats.user.model.vo.User;
 @Controller
 public class ReviewController {
 	
 	@Autowired
 	private ReviewService reviewService;
 	
-	
-	@RequestMapping("reviewInsert.re")
+	@ResponseBody
+	@RequestMapping("reviewInsert.do")
 	public String reviewInsert(Review r, MultipartFile upfile, HttpSession session, Model model) {
 			
 		//int userNo = ((User)session.getAttribute("loginUser")).getUserNo();
 		
 		//r.setUserNo(userNo);
+		System.out.println(r);
+		System.out.println(upfile);
 		
-		if(!upfile.getOriginalFilename().equals("")) {
+		if(upfile != null && !upfile.getOriginalFilename().isEmpty()) {
 			
 			String originName = upfile.getOriginalFilename();
 			
@@ -52,18 +54,16 @@ public class ReviewController {
 			r.setFilePath(upfile.getOriginalFilename()); //원본명
 			r.setChangeName("resources/uploadFiles/" + saveFile(upfile, session));
 			
-		}
+		} 
 		
 		
 		if(reviewService.insertReview(r)> 0) { //성공 => 게시글 리스트 페이지
 			
-			session.setAttribute("alertMsg", "리뷰가 등록 되었습니다.");
-			return "redirect:selectReservation.do";
+			return "success";
 			
 			
 		} else {
-			model.addAttribute("errorMsg", "리뷰 작성을 실패하였습니다.");
-			return "common/errorPage";
+			return "error";
 		}
 	}
 	
