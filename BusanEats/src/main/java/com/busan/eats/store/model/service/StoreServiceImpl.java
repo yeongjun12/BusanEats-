@@ -38,4 +38,7 @@ public class StoreServiceImpl implements StoreService {
 		return storeDao.selectStoreDetail(sqlSession,unSeq);
 	}
 
+
+	
+
 }

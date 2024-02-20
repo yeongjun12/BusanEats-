@@ -22,5 +22,7 @@ public class StoreDao {
 	public Store selectStoreDetail(SqlSessionTemplate sqlSession, int unSeq) {
 		return sqlSession.selectOne("storeMapper.selectStoreDetail",unSeq);
 	}
+	
+
 
 }

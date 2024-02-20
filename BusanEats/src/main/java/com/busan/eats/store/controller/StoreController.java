@@ -7,6 +7,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 
+import javax.servlet.http.HttpSession;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -20,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.busan.eats.store.model.service.StoreService;
 import com.busan.eats.store.model.vo.Store;
+import com.busan.eats.user.model.vo.User;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 @Controller
@@ -183,5 +186,7 @@ public class StoreController {
 		
 		return mv;
 	}
+	
+
 
 }

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-	 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 	
 <!DOCTYPE html>
 <html>
@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=dd7467174bce94b954b035b41a5bccf5&libraries=services"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.slim.min.js"></script>
+
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 <title>'검색어'에 대한 검색 결과</title>
 <style>
@@ -247,9 +247,13 @@
 						
 						<ul class="resturantList">
 						
-							<li>
+							<li style="list-style:none;">
+								<div>
+								<img class="like"  src="resources/images/deleteheart.png" width="20" height="20">2
+								<img class="reviewImg"  src="resources/images/review.png" width="20" height="20">1
+								</div>
 								<div class="thumbnail">
-									<input type="hidden" name="ucSeq" value="${s.ucSeq }"/>
+									<input type="hidden" class="ucSeq" name="ucSeq" value="${s.ucSeq }"/>
 										<img src="${s.mainImgThumb }"  alt="" width="100%">
 									<img src="">
 								</div>
@@ -271,19 +275,53 @@
 				</div>	
 			<script>
 			
-			 $(function(){
-				  $(document).on('click','.thumbnail',function(){
-				   
-					 var ucSeq = $(this).find('input[name="ucSeq"]').val();
-				    
-				    console.log(ucSeq);
-				    
-				    
-				    location.href = "selectStoreDetail.do?ucSeq="+ucSeq
-				  
-				  })
-				 
-				 });
+			$(function() {
+			    $(document).on('click', '.thumbnail', function() {
+			        // 식당 detail정보 보기
+			        var ucSeq = $(this).find('input[name="ucSeq"]').val();
+			        location.href = "selectStoreDetail.do?ucSeq=" + ucSeq;
+			    });
+			    
+			    // 하트 좋아요 / 해제
+			    $('.like').click(function() {
+			        var clickedElement = $(this); // 클릭된 요소를 변수에 저장
+			        var imgPath = $(this).attr('src'); // 클릭된 요소의 src 속성 값을 가져옴
+
+			        // 클릭된 요소의 가장 가까운 부모 <li> 요소에서 ucSeq 값을 가져옴
+			        var ucSeq = $(this).closest('li').find('.ucSeq').val();
+			        
+			        // 만약 클릭된 이미지가 'resources/images/deleteheart.png'라면
+			        if (imgPath == 'resources/images/deleteheart.png') {
+			            // AJAX 요청을 보냄
+			            $.ajax({
+			                url: 'insertLike.do', // 요청을 보낼 URL
+			                method: 'POST', // HTTP 메서드는 POST
+			                data: {
+			                    ucSeq: ucSeq // 서버로 전송할 데이터
+			                },
+			                success: function(response) { // 요청이 성공했을 때의 처리
+			                    if (response === 'success') { // 서버로부터의 응답이 성공적인지 확인
+			                        clickedElement.attr('src', 'resources/images/heart.png'); // 클릭된 요소의 src 속성을 'resources/images/heart.png'로 변경하여 찬 하트로 교체
+			                    } else{
+			                    	cosole.log('실패');
+			                    }
+			                },
+			                error: function(xhr, status, error) { // 요청이 실패했을 때의 처리
+			                    console.error('AJAX 요청이 실패했습니다:', error); // 콘솔에 에러 메시지 출력
+			                }
+			            });
+			        }
+			    });
+
+				
+
+			   
+
+			});
+			
+			
+
+			 
 				
 				
 			</script>

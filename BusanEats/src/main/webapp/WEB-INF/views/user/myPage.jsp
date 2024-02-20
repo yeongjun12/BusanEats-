@@ -8,10 +8,13 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
  
- 
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+ 
+
+  
 <style>
     body {
       margin: 0;
@@ -95,7 +98,7 @@
         text-align: center;
         }
 
-      <!-- 리뷰-->
+      
         #my_modal {
                 display: none;
                 width: 500px;
@@ -105,26 +108,13 @@
                 border-radius: 3px;
             }
 
-            #my_modal .modal_close_btn {
+             .modal_close_btn {
                 position: absolute;
                 top: 10px;
-                right: 10px; }
+                right: 10px;
+                 z-index: 1001; }
 
-             /* 수정 모달 시작 */
-             #my_modal2 {
-                display: none;
-                width: 500px;
-                padding: 20px 60px;
-                background-color: #fefefe;
-                border: 1px solid #888;
-                border-radius: 3px;
-            }
-
-            #my_modal2 .modal_close_btn {
-                position: absolute;
-                top: 10px;
-                right: 10px; }
-
+     
           
 
          /* 별점 스타일 */
@@ -166,9 +156,6 @@
 </head>
 <body>
 
-<script>
-        alert("${sessionScope.alertMsg}");
-    </script>
 <div class="container">
     <div class="sidebar">
       <ul>
@@ -247,16 +234,20 @@
     
     <!-- 리뷰 -->
     
-     <div class="modal fade" id="my_modal">
+     <div id="my_modal" class="modal fade" >
+     
+    		<div>
+    		</div>
 
                  <form action="reviewInsert.do" method="post" enctype="multipart/form-data">
+    		<a><img class="modal_close_btn"  src="resources/images/close.png" style="width: 30px; height: 30px;"></a> 
                     <h2 align="center">리뷰작성</h2>
                     <table style="width: 400px; height:200px;">
                         <tr>
                            <td><input class="storeName" type="text" value=""></td>
                             
-                            <td><input name="ucSeq"  class="storeNo" type="text" value="" ></td>
-                            <td><input name="userNo"  class="userNo" type="text" value="" ></td>
+                            <td><input name="ucSeq"  class="storeNo" type="hidden" value="" ></td>
+                            <td><input name="userNo"  class="userNo" type="hidden" value="" ></td>
                          
                         </tr>
                         <tr>
@@ -292,7 +283,7 @@
                         <label for="1-star" class="star">★</label>
                     </div>
             
-                    <a class="modal_close_btn">  <img  src="resources/images/close.png" style="width: 30px; height: 30px;"></a>
+                   
                     <br>
                     <div align="center">
                         
@@ -344,7 +335,7 @@
     	                var buttonHtml = '';
     	                if (reservationDate.getTime() < currentDate.getTime()) {
     	                    // 예약 일시가 과거 날짜인 경우
-    	                    buttonHtml = '<button type="button" class="btn btn-danger" onclick="modal(\'my_modal\', \''+item.mainTitle +'\',' +item.ucSeq+ ',' + item.user_no + ')" data-toggle="modal" data-target="#my_modal">리뷰 작성</button>';
+    	                    buttonHtml = '<button type="button" class="btn btn-danger" onclick="modal(\'my_modal\', \''+item.mainTitle +'\',' +item.ucSeq+ ',' + item.user_no + ');"data-toggle="modal" data-target="#my_modal">리뷰 작성</button>';
     	                } else {
     	                    // 아직 지나지 않은 날짜인 경우
     	                    buttonHtml = '<button onclick="cancelReservation('+item.reservation_no+')">예약 취소</button>';
@@ -462,11 +453,50 @@
 		
 	}
 	<!------------- 리뷰 작성 모달 ------------------>
-	
-	
+	// 모달을 닫는 함수
+	function closeModal() {
+	    var modal = document.getElementById('my_modal');
+	    if (modal) {
+	        modal.style.display = 'none';
+	        var backdrop = document.querySelector('.modal-backdrop');
+	        if (backdrop) {
+	            backdrop.remove();
+	        }
+	    }
+	}
+
+	// 모달을 표시하는 함수
+	function showModal() {
+	    var modal = document.getElementById('my_modal');
+	    if (modal) {
+	        modal.style.display = 'block';
+	    }
+	}
+
+	// 모달 닫기 버튼에 이벤트 리스너 추가
+	var closeButton = document.querySelector('.modal_close_btn');
+	if (closeButton) {
+	    closeButton.addEventListener('click', function() {
+	        console.log('모달 닫기 버튼 클릭됨');
+	        closeModal(); // 모달 닫기
+	    });
+	} else {
+	    console.error('모달 닫기 버튼이 찾을 수 없습니다.');
+	}
+
+	// 모달을 다시 열고자 할 때 호출할 함수
+	function openModal() {
+	    showModal(); // 모달 열기
+	}
+
+	// 이후 필요한 곳에서 openModal() 함수를 호출하여 모달을 다시 열 수 있습니다.
+
+
+
 	  function modal(id, storeName,storeNo,userNo) {
 	      
-			$('#test3').val(''); //모달창 reviewContent영역 공백으로
+			$('#test3').val(''); 
+			//모달창 reviewContent영역 공백으로
 
 	        $('.storeName').val(storeName);
 	        $('.userNo').val(userNo);
@@ -475,43 +505,21 @@
 	        var modal = document.getElementById(id);
 
 	        // 모달 div 뒤에 희끄무레한 레이어
-	        var bg = document.createElement('div');
-	        bg.setStyle({
-	            position: 'fixed',
-	            zIndex: zIndex,
-	            left: '0px',
-	            top: '0px',
-	            width: '100%',
-	            height: '100%',
-	            overflow: 'auto',
-	            // 레이어 색갈은 여기서 바꾸면 됨
-	            backgroundColor: 'rgba(0,0,0,0.4)'
-	        });
-	        document.body.append(bg);
+	      
 
 	        // 닫기 버튼 처리, 시꺼먼 레이어와 모달 div 지우기
+	        /*
 	        modal.querySelector('.modal_close_btn').addEventListener('click', function() {
 	            
+	        	console.log("ㅎㅇ");
 	          
 	            bg.remove();
 	            modal.style.display = 'none';
-	        });
+	        }); 
+	        */
+	       
 
-	        modal.setStyle({
-	            position: 'fixed',
-	            display: 'block',
-	            boxShadow: '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
-
-	            // 시꺼먼 레이어 보다 한칸 위에 보이기
-	            zIndex: zIndex + 1,
-
-	            // div center 정렬
-	            top: '50%',
-	            left: '50%',
-	            transform: 'translate(-50%, -50%)',
-	            msTransform: 'translate(-50%, -50%)',
-	            webkitTransform: 'translate(-50%, -50%)'
-	        });
+	      
 	    }
 	  
 	
@@ -542,6 +550,8 @@
 		        success: function(result) {
 		            alert('리뷰가 작성되었습니다.');
 		            // 필요에 따라 적절한 후속 동작 수행
+		             window.location.href = 'myPage.do';
+    				 
 		        },
 		        error: function() {
 		            console.log('실패');
