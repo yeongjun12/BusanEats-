@@ -23,6 +23,9 @@ public class StoreDao {
 		return sqlSession.selectOne("storeMapper.selectStoreDetail",unSeq);
 	}
 	
+	public ArrayList selectLikeList(SqlSessionTemplate sqlSession, int userNo) {
+		return (ArrayList)sqlSession.selectList("storeMapper.selectLikeList", userNo);
+	}
 
 
 }

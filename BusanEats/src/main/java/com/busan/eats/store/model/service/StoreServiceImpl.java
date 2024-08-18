@@ -39,6 +39,12 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 
+	@Override
+	public ArrayList selectLikeList(int userNo) {
+		return storeDao.selectLikeList(sqlSession, userNo);
+	}
+
+
 	
 
 }

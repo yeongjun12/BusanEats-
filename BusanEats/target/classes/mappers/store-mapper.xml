@@ -19,6 +19,11 @@
 		<result column="LNG"  property="lng"/>
 	</resultMap>
 	
+	<resultMap id="likeResultSet" type="like">
+		<result column="USER_NO" property="userNo"/>
+		<result column="UC_SEQ" property="ucSeq"/>
+	</resultMap>
+	
 	
 	<insert id="saveToDataBase" parameterType="store">
 		INSERT
@@ -72,7 +77,16 @@
 				STORE
     	WHERE 
     			UC_SEQ = #{ucSeq}
+	</select>
 	
+	<select id="selectLikeList"  resultMap="likeResultSet" parameterType="_int">
+		SELECT
+				UC_SEQ,
+				USER_NO
+		FROM
+				STORE_LIKE
+		WHERE
+				USER_NO = #{userNo}
 	</select>
 
 </mapper>

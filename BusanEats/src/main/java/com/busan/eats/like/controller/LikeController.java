@@ -19,8 +19,7 @@ public class LikeController {
 	
 	@ResponseBody
 	@RequestMapping("insertLike.do")
-	public String insertLike(int ucSeq,HttpSession session) {
-		System.out.println(ucSeq);
+	public String insertLike(int ucSeq, HttpSession session) {
 		
 		int userNo = ((User)session.getAttribute("loginUser")).getUserNo();
 		
@@ -35,5 +34,19 @@ public class LikeController {
 	        return "failure"; // 실패 시 failure 문자열 반환
 	    }
 	}
-
+	
+	@ResponseBody
+	@RequestMapping("deleteLike.do")
+	public String deleteLike(int ucSeq, HttpSession session) {
+		int userNo = ((User)(session.getAttribute("loginUser"))).getUserNo();
+		
+		Like like = new Like(userNo,ucSeq);
+		int result = likeService.deleteLike(like);
+		
+		 if (result > 0) {
+		     return "success"; // 성공 시 success 문자열 반환
+		 } else {
+		     return "failure"; // 실패 시 failure 문자열 반환
+		 }
+	}
 }

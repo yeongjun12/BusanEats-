@@ -143,7 +143,6 @@ public class StoreController {
 
 	
 	
-	
 	@RequestMapping("map.do")
 	public String map(String LAT,String LNG, Model model) {
 		
@@ -161,9 +160,19 @@ public class StoreController {
 	}
 	
 	@RequestMapping("selectStoreList.do")
-	public ModelAndView selectStoreList(ModelAndView mv, String gugunNm) {
+	public ModelAndView selectStoreList(ModelAndView mv, String gugunNm , HttpSession session) {
 		
 		ArrayList<Store> list = storeService.selectStoreList(gugunNm);
+		
+	    if(session.getAttribute("loginUser") != null) {
+	    	int userNo = ((User)session.getAttribute("loginUser")).getUserNo(); //먼저 현재 userNo로 좋아요 누른 식당 번호를 조회해와서 화면에 뿌려줌.
+	    	
+	    	if(storeService.selectLikeList(userNo) != null) {
+	    		
+	    		mv.addObject("likeNoList",storeService.selectLikeList(userNo));
+	    	}
+	    	
+	    }
 		
 		mv.addObject("list",list).addObject("gugunNm",gugunNm).setViewName("store/storeList");
 		
@@ -186,6 +195,7 @@ public class StoreController {
 		
 		return mv;
 	}
+	
 	
 
 

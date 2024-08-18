@@ -90,6 +90,12 @@ public class UserController {
 		return "user/myPage";
 	}
 	
+	@RequestMapping("test.do")
+	public String Test() {
+		return "user/NewFile";
+	}
+	
+	
 	@RequestMapping("update.do")
 	public String updateUser(String newPwd,User user ) {
 		

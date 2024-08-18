@@ -15,6 +15,6 @@ public interface StoreService {
 	//가게 상세 정보 select
 	Store selectStoreDetail(int unSeq);
 	
-	
+	ArrayList selectLikeList(int userNo);
 
 }

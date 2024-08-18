@@ -20,4 +20,9 @@ public class LikeServiceImpl implements LikeService{
 		return likeDao.insertLike(sqlSession,like);
 	}
 
+	@Override
+	public int deleteLike(Like like) {
+		return likeDao.deleteLike(sqlSession,like);
+	}
+
 }

@@ -17,4 +17,12 @@
 
 </insert>
 
+<delete id="deleteLike">
+	DELETE 
+    	FROM STORE_LIKE
+	WHERE USER_NO = #{userNo}
+	AND UC_SEQ = #{ucSeq}
+
+</delete>
+
 </mapper>
