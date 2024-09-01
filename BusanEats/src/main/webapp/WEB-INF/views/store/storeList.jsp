@@ -156,13 +156,13 @@
         	<input type="hidden" class="ucSeq" name="ucSeq" value="${s.ucSeq }"/>
             <img src="${s.mainImgThumb }" alt="">
             <div class="info">
-                <div class="rating">4.0</div>
+                <div class="rating">${averageRatingMap[s.ucSeq]}</div>
                 <div class="title">${s.mainTitle }</div>
                 <div class="description">${s.reprsntvMenu }</div>
                 <div class="stats">
-                    <span>조회수: 127990</span>
+                    <span>조회수: ${s.count}</span>
                     <span>즐겨찾기: 270</span>
-                    <span>리뷰: 252</span>
+                    <span>리뷰: ${reviewCountMap[s.ucSeq]}</span>
                 </div>
             </div>
             <div class="bookmark"><img class="like"  alt="${s.ucSeq }" src="resources/images/deleteheart.png" width="20" height="20">2</div>
@@ -203,8 +203,6 @@
                         $(this).attr("src", "resources/images/deleteheart.png");
                     }
 				});
-				
-				
 				
 				
 				

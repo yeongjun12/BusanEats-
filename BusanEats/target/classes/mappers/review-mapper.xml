@@ -4,6 +4,7 @@
 <mapper namespace="reviewMapper">
 
 	<resultMap id="reviewResultSet" type="review">
+	
 		<result column="USER_NO" property="userNo"/>
 		<result column="UC_SEQ" property="ucSeq"/>
 		<result column="REVIEW_RATING" property="rating"/>
@@ -11,6 +12,8 @@
 		<result column="REVIEW_CREATE_DATE" property="reviewCreateDate"/>
 		<result column="FILE_PATH" property="filePath"/>
 		<result column="CHANGE_NAME" property="changeName"/>
+		<result column="REVIEW_STATUS" property="reviewStatus"/>
+		<result column="USER_ID" property="reviewerId"/>
 	</resultMap>
 
 
@@ -42,6 +45,40 @@
 						,'Y'
 					) 
 	</insert>
+	
+	
+	<select id ="selectReview" resultMap="reviewResultSet">
+		SELECT
+		    R.USER_NO,
+		    U.USER_ID,
+		    R.UC_SEQ,
+		    R.REVIEW_RATING,
+		    R.REVIEW_COMMENT,
+		    R.REVIEW_CREATE_DATE,
+		    R.FILE_PATH,
+		    R.CHANGE_NAME,
+		    R.REVIEW_STATUS
+		FROM
+		    REVIEW R
+		    JOIN USERS U ON R.USER_NO = U.USER_NO
+		WHERE
+		    R.REVIEW_STATUS = 'Y'
+		    AND R.UC_SEQ = #{ucSeq}
+	</select>
+	
+	
+	<select id="reviewCount" resultType="_int">
+		SELECT
+				COUNT(*)
+		FROM
+				REVIEW
+		WHERE
+				REVIEW_STATUS = 'Y'
+		AND
+				UC_SEQ = #{ucSeq}
+	
+	</select>
+	
 
 
 

@@ -3,6 +3,7 @@ package com.busan.eats.review.controller;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.servlet.http.HttpSession;
@@ -24,13 +25,9 @@ public class ReviewController {
 	
 	@ResponseBody
 	@RequestMapping("reviewInsert.do")
-	public String reviewInsert(Review r, MultipartFile upfile, HttpSession session, Model model) {
+	public String reviewInsert( Review r, MultipartFile upfile, HttpSession session, Model model) {
 			
-		//int userNo = ((User)session.getAttribute("loginUser")).getUserNo();
 		
-		//r.setUserNo(userNo);
-		System.out.println(r);
-		System.out.println(upfile);
 		
 		if(upfile != null && !upfile.getOriginalFilename().isEmpty()) {
 			
@@ -57,15 +54,14 @@ public class ReviewController {
 		} 
 		
 		
-		if(reviewService.insertReview(r)> 0) { //성공 => 게시글 리스트 페이지
-			
+		if(reviewService.insertReview(r)> 0) { //성공 => 해당 식당 정보 페이지
 			return "success";
-			
 			
 		} else {
 			return "error";
 		}
 	}
+	
 	
 	//파일 첨부 관련 메소드
 	public String saveFile(MultipartFile upfile, HttpSession session) { // 실제 넘어온 파일의 이름을 변경해서 서버에 업로드

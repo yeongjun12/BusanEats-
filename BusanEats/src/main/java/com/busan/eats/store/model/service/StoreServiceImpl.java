@@ -45,6 +45,30 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 
+	@Override
+	public int increaseCount(int ucSeq) {
+		return storeDao.increaseCount(sqlSession, ucSeq);
+	}
+
+
+	@Override
+	public int selectStoreLike(int ucSeq) {
+		return storeDao.selectStoreLike(sqlSession, ucSeq);
+	}
+
+
+	@Override
+	public double selectAvgRating(int ucSeq) {
+		return storeDao.selectAvgRating(sqlSession, ucSeq);
+	}
+
+
+	@Override
+	public int selectReviewCount(int ucSeq) {
+		return storeDao.selectReviewCount(sqlSession,ucSeq);
+	}
+
+
 	
 
 }

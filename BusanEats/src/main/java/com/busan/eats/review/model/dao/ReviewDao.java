@@ -1,16 +1,41 @@
 package com.busan.eats.review.model.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.busan.eats.common.model.PageInfo;
 import com.busan.eats.review.model.vo.Review;
 
 @Repository
 public class ReviewDao {
 	
 	public int insertReview(Review r, SqlSessionTemplate sqlSession) {
-		System.out.println("reviewDao"+ r);
 		return sqlSession.insert("reviewMapper.insertReview", r);
+	}
+	
+	public List<Review> selectReview(int ucSeq, PageInfo pi,SqlSessionTemplate sqlSession){
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset,pi.getBoardLimit());
+		return (List)sqlSession.selectList("reviewMapper.selectReview", ucSeq, rowBounds);
+	}
+	
+	public int reviewCount(int ucSeq, SqlSessionTemplate sqlSession) {
+		return sqlSession.selectOne("reviewMapper.reviewCount", ucSeq);
+	}
+	
+	public ArrayList<Review> selectList(int ucSeq, PageInfo pi, SqlSessionTemplate sqlSession){
+		
+		int offset = (pi.getCurrentPage()-1) * pi.getBoardLimit();
+		
+		RowBounds rowBounds = new RowBounds(offset,pi.getBoardLimit());
+		
+		return (ArrayList)sqlSession.selectList("reviewMapper.selectList", ucSeq, rowBounds);
+		
 	}
 	
 }

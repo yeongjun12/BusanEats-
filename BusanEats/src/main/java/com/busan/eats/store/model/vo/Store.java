@@ -20,6 +20,8 @@ public class Store {
 	    private String itemCntnts;
 	    private double lat;
 	    private double lng;
+	    private int count;
+	    //private double averageRating; // 가게 평점 평균
 	    
 	 
 	    

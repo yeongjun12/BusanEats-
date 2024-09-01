@@ -17,6 +17,7 @@
 		<result column="ITEMCNTNTS"  property="itemCntnts"/>
 		<result column="LAT"  property="lat"/>
 		<result column="LNG"  property="lng"/>
+		<result column="COUNT"  property="count"/>
 	</resultMap>
 	
 	<resultMap id="likeResultSet" type="like">
@@ -70,6 +71,26 @@
 			GUGUN_NM= #{gugunNm}
 	</select>
 	
+	<select id="selectStoreLike" parameterType="_int" resultType="int">
+		SELECT
+        		COUNT(*)
+		FROM 
+        		STORE_LIKE
+        WHERE
+        		UC_SEQ = #{ucSeq}
+	</select>
+	
+	
+	
+	<update id="increaseCount">
+		UPDATE
+				STORE
+		SET
+				COUNT = COUNT + 1
+		WHERE
+				UC_SEQ = #{ucSeq}
+	</update>
+	
 	<select id="selectStoreDetail" resultMap="storeResultSet" parameterType="_int">
 		SELECT
 				 *
@@ -87,6 +108,28 @@
 				STORE_LIKE
 		WHERE
 				USER_NO = #{userNo}
+	</select>
+	
+	<!-- 식당 리뷰 평좀 평균 조회 쿼리 -->
+	<select id="selectAvgRating" parameterType="_int" resultType="double"> <!-- null일 경우 0.0으로 -->
+		SELECT
+		    COALESCE(TRUNC(AVG(REVIEW_RATING), 1), 0.0) AS average_rating
+		FROM 
+		    REVIEW
+		WHERE 
+		    uc_seq = #{ucSeq}
+	</select>
+	
+	<!-- 식당 리뷰 숫자 카운트 쿼리 -->
+	<select id="selectReviewCount" parameterType="_int" resultType="int">
+		SELECT
+				COUNT(*)
+		FROM
+				REVIEW
+		WHERE
+				UC_SEQ = #{ucSeq}
+		AND
+				REVIEW_STATUS = 'Y'
 	</select>
 
 </mapper>

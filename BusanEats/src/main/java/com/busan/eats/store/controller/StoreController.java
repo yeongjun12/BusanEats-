@@ -6,6 +6,9 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -20,6 +23,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.busan.eats.common.model.PageInfo;
+import com.busan.eats.common.template.Pagination;
+import com.busan.eats.review.model.service.ReviewService;
+import com.busan.eats.review.model.vo.Review;
 import com.busan.eats.store.model.service.StoreService;
 import com.busan.eats.store.model.vo.Store;
 import com.busan.eats.user.model.vo.User;
@@ -32,6 +39,8 @@ public class StoreController {
 	
 	@Autowired //전제조건? 빈등록을 해야 한다?
 	private StoreService storeService;
+	@Autowired
+	private ReviewService reviewService;
 	
 	/*
 	@ResponseBody
@@ -121,7 +130,7 @@ public class StoreController {
                     		,foodItem.get("ITEMCNTNTS").toString()
                     		,Double.parseDouble(foodItem.get("LAT").toString())
                     		,Double.parseDouble(foodItem.get("LNG").toString())
-                    		
+                    		,0
                     		);
                    int result =  storeService.saveToDataBase(s);
                    if(result>0) {
@@ -164,6 +173,21 @@ public class StoreController {
 		
 		ArrayList<Store> list = storeService.selectStoreList(gugunNm);
 		
+	    // Store의 ucSeq와 평균 평점을 매핑하기 위한 Map을 생성합니다.
+	    Map<Integer, Double> averageRatingMap = new HashMap<>();
+	    Map<Integer, Integer> reviewCountMap = new HashMap<>();
+
+		
+	    // 각 Store 객체에 대해 평균 평점을 조회
+		for(Store store : list) {
+			int ucSeq = store.getUcSeq();
+			double average_rating = storeService.selectAvgRating(ucSeq); //리스트에서 뽑은 ucSeq로 평점 평균 조회
+			int reviewCount = storeService.selectReviewCount(ucSeq);
+			averageRatingMap.put(ucSeq,average_rating); // key:식당번호, value: 리뷰 평균으로 담음
+			reviewCountMap.put(ucSeq,reviewCount);
+		}
+		
+		
 	    if(session.getAttribute("loginUser") != null) {
 	    	int userNo = ((User)session.getAttribute("loginUser")).getUserNo(); //먼저 현재 userNo로 좋아요 누른 식당 번호를 조회해와서 화면에 뿌려줌.
 	    	
@@ -174,7 +198,11 @@ public class StoreController {
 	    	
 	    }
 		
-		mv.addObject("list",list).addObject("gugunNm",gugunNm).setViewName("store/storeList");
+		mv.addObject("list",list)
+		.addObject("averageRatingMap",averageRatingMap)
+		.addObject("reviewCountMap",reviewCountMap)
+		.addObject("gugunNm",gugunNm)
+		.setViewName("store/storeList");
 		
 		return mv;
 		
@@ -187,14 +215,46 @@ public class StoreController {
 	}
 	
 	@RequestMapping("selectStoreDetail.do")
-	public ModelAndView selectStoreDetail(ModelAndView mv, int ucSeq) {
-		
-		 Store s = storeService.selectStoreDetail(ucSeq);
-		 
-		 mv.addObject("s",s).setViewName("store/storeDetailView");
-		
-		return mv;
+	public ModelAndView selectStoreDetail(@RequestParam(value="ucSeq") int ucSeq, @RequestParam(value="cpage",defaultValue="1") int currentPage, HttpSession session) {
+	    ModelAndView mv = new ModelAndView();
+	    
+	    
+	    
+	    if(session.getAttribute("loginUser") != null) {
+	    	int userNo = ((User)session.getAttribute("loginUser")).getUserNo(); //먼저 현재 userNo로 좋아요 누른 식당 번호를 조회해와서 화면에 뿌려줌.
+	    	
+	    	if(storeService.selectLikeList(userNo) != null) {
+	    		
+	    		mv.addObject("likeNoList",storeService.selectLikeList(userNo));
+	    	}
+	    	
+	    }
+	    
+	    
+	    if(storeService.increaseCount(ucSeq) > 0) { //조회수 증가 성공하면
+	    	
+	    	Store s = storeService.selectStoreDetail(ucSeq); //식당번호로 해당 식당 정보 조회 해서 객체에 담음
+	    	PageInfo pi = Pagination.getPageInfo(reviewService.reviewCount(ucSeq), currentPage , 10 , 5);
+	 	    List<Review> reviewList = reviewService.selectReview(ucSeq, pi);
+	 	    
+	 	    int likeCount = storeService.selectStoreLike(ucSeq);
+	 	    double average_rating = storeService.selectAvgRating(ucSeq);
+	 	    
+	 	    // ModelAndView에 객체와 뷰 이름을 설정
+	 	    mv.addObject("s", s)
+	 	      .addObject("pi",pi)
+	 	      .addObject("reviewList", reviewList)
+	 	      .addObject("likeCount", likeCount)
+	 	      .addObject("average_rating",average_rating)
+	 	      .setViewName("store/storeDetailView");
+	    	
+	    }else {
+			mv.addObject("errorMsg", "게시글 조회 실패").setViewName("common/errorPage");
+		}
+
+	    return mv;
 	}
+
 	
 	
 

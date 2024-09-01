@@ -8,6 +8,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurant Details</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <!-- Bootstrap JavaScript 로드 -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -181,12 +185,83 @@
             font-weight: bold;
             margin-top: 20px;
         }
+           .review-form img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+        
+        /* 별점 스타일 */
+
+             .star-rating {
+            display: flex;
+            flex-direction: row-reverse;
+            font-size: 2.25rem;
+            line-height: 2.5rem;
+            justify-content: space-around;
+            padding: 0 0.2em;
+            text-align: center;
+            width: 5em;
+            }
+            
+            .star-rating input {
+            display: none;
+            }
+            
+            .star-rating label {
+            -webkit-text-fill-color: transparent; 
+            -webkit-text-stroke-width: 2.3px;
+            -webkit-text-stroke-color: #2b2a29;
+            cursor: pointer;
+            }
+            
+             .star-rating :checked ~ label {
+            -webkit-text-fill-color: gold;
+            } 
+            
+            .star-rating label:hover,
+            .star-rating label:hover ~ label {
+            -webkit-text-fill-color: #fff58c;
+            } 
+        #pagingArea {width:fit-content; margin:auto;}
+        
+        /*내비게이션 바*/
+        .toast_good_on, .toast_good_off {
+		    opacity: 0;
+		    transition: opacity 0.5s ease-in-out;
+		    position: absolute;
+		    top: 50%;
+		    left: 50%;
+		    transform: translate(-50%, -50%);
+		    background: rgba(0, 0, 0, 0.7);
+		    padding: 20px;
+		    border-radius: 10px;
+		    color: white;
+		    z-index: 10;
+		}
+		
+		.toast_good_on.show, .toast_good_off.show {
+		    display: block;
+		    opacity: 1;
+		}
+        
+        /* 숨기기 위한 CSS */
+		#toggle_good {
+		    display: none; /* 체크박스를 화면에서 숨깁니다 */
+		}
+			
+        
+      
     </style>
 </head>
 <body>
 <jsp:include page="../common/header.jsp" />
 
 <div class="container">
+	
+
+
+
     <div class="header">
         <div class="header-left">
             <img src="${requestScope.s.mainImgThumb }" alt="Restaurant Logo" width="80" height="80">
@@ -194,23 +269,43 @@
         <div>
             <div class="title-container">
                 <div class="title">${requestScope.s.mainTitle }</div>
-                <div class="rating">4.4</div>
+                <div class="rating">${requestScope.average_rating }</div>
                 <div class="tag" style="background-color: #ff6600;">HOT</div>
             </div>
             <div class="stats">
-                <span><img src="resources/images/bg_ico_s_click.png">&nbsp 78914</span>
-                <span><img src="resources/images/bg_ico_s_like.png">&nbsp 200</span>
+                <span><img src="resources/images/bg_ico_s_click.png">&nbsp ${requestScope.s.count }</span>
+                <span><img src="resources/images/bg_ico_s_like.png">&nbsp ${requestScope.likeCount}</span>
                 <span><img src="resources/images/bg_icon_bookmark2.png" width="11">&nbsp 84</span>
             </div>
         </div>
     </div>
-
-    <div class="navigation">
-        <a href="#">홈으로</a>
-        <a href="#">메뉴 보기</a>
-        <a href="#">리뷰 쓰기</a>
-        <a href="#">즐겨찾기</a>
-    </div>
+    
+    <c:set var="isLiked" value="false" />
+	<c:forEach items="${likeNoList}" var="like">
+	    <c:if test="${like.ucSeq == s.ucSeq}">
+	        <c:set var="isLiked" value="true" />
+	    </c:if>
+	</c:forEach>
+	
+	<div class="navigation" id="navigation">
+	    <a href="#">홈으로</a>
+	    <a href="#" id="reserveLink" data-toggle="modal" data-target="#reservationModal">예약하기</a>
+	    <a href="#" id="writeReviewLink">리뷰쓰기</a>
+	    
+	    
+	    <label for="toggle_good" data-like-yn="${isLiked ? 'Y' : 'N'}">
+	        <a>좋아요</a>
+	        <input type="checkbox" id="toggle_good" value="on" <c:if test="${isLiked}">checked</c:if>>
+	    </label>
+	    <div class="toast_good_on" id="toastGoodOn" style="display: none;">
+	        <span>
+	            <img src="" alt="좋아요 활성">
+	        </span>
+	    </div>
+	    <div class="toast_good_off" id="toastGoodOff" style="display: none;">
+	        <span>좋아요를 취소하였습니다.</span>
+	    </div>
+	</div>
 
     <div class="content">
         <h2>매장소개</h2>
@@ -260,30 +355,135 @@
         </div>
 
         <div class="review-section">
-            <div class="review-toggle" onclick="toggleReviewForm()">리뷰 작성 ^</div>
+            <div class="review-toggle"  id="reviewToggle" onclick="toggleReviewForm()">리뷰 작성 ^</div>
             <div class="review-form" id="reviewForm">
-                <h3>이 가게를 추천하시겠어요?</h3>
-                <div class="rating">★★★☆☆ 3.5</div>
-                <textarea rows="5" placeholder="매장에 대한 리뷰를 작성해주세요. (필수)"></textarea>
-                <button class="submit-btn">등록</button>
+                <h3>이 가게를 추천하시겠어요? </h3>
+                <!-- 별점 -->
+                <div class="star-rating space-x-4 mx-auto">
+                
+                		<td><input name="ucSeq"  class="storeNo" type="hidden" value="${requestScope.s.ucSeq }" ></td>
+                        <td><input name="userNo"  class="userNo" type="hidden" value="${sessionScope.loginUser.userNo }" ></td>
+                        <input type="radio" id="5-stars" name="rating" value="5" v-model="ratings"/>
+                        <label for="5-stars" class="star pr-4">★</label>
+    
+    
+                        <input type="radio" id="4-stars" name="rating" value="4" v-model="ratings"/>
+                        <label for="4-stars" class="star">★</label>
+    
+    
+                        <input type="radio" id="3-stars" name="rating" value="3" v-model="ratings"/>
+                        <label for="3-stars" class="star">★</label>
+    
+    
+                        <input type="radio" id="2-stars" name="rating" value="2" v-model="ratings"/>
+                        <label for="2-stars" class="star">★</label>
+    
+    
+                        <input type="radio" id="1-star" name="rating" value="1" v-model="ratings" />
+                        <label for="1-star" class="star">★</label>
+                 </div>
+                <textarea rows="5" name="reviewComment" placeholder="매장에 대한 리뷰를 작성해주세요. (필수)"></textarea>
+                 <input type="file" class="upfile" name="upfile" id="imageInput" accept="image/*" />
+                <button type="button" onclick="insertReview()">등록</button>
             </div>
+            
+            <!-- 리뷰 리스트 -->
             <div class="review-list">
-                <div class="review-item">
-                    <p><strong>빈아리퍼펙트</strong></p>
-                    <p class="rating">★★★★☆ 4.0</p>
-                    <p>이 곳에서 정말 멋진 시간을 보냈어요. 음식이 정말 훌륭하고 서비스도 굉장히 좋았습니다.</p>
-                </div>
-                <div class="review-item">
-                    <p><strong>고구마슈타이거</strong></p>
-                    <p class="rating">★★★☆☆ 3.5</p>
-                    <p>음식은 좋았지만, 가격이 조금 비싸다고 생각합니다. 위치는 좋습니다만, 다시 방문할지는 잘 모르겠어요.</p>
-                </div>
+            
+            	<c:forEach items="${ requestScope.reviewList }" var="r">
+	            	<div class="review-item" style="display: flex; align-items: flex-start; margin-bottom: 20px;">
+				        <!-- 리뷰 내용 영역 -->
+				        <div style="flex: 1; margin-right: 10px;">
+				            <p><strong>${r.reviewerId}</strong></p>
+				            <p class="rating">★★★★☆ ${r.rating}</p>
+				            <p>${r.reviewComment}</p>
+				        </div>
+				
+				        <!-- 이미지 영역 -->
+				        <c:if test="${not empty r.changeName}">
+				            <div style="flex: 1; max-width: 200px;">
+				                <img src="${r.changeName}" alt="Review Image" style="max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" />
+				            </div>
+				        </c:if>
+				    </div>
+	                
+	                
+            	</c:forEach>
+            
+            	<div id="pagingArea">
+				    <ul class="pagination">
+				        <c:choose>
+				            <c:when test="${pi.currentPage eq 1}">
+				                <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+				            </c:when>
+				            <c:otherwise>
+				                <li class="page-item"><a class="page-link" href="#" onclick="loadReviews(${pi.currentPage - 1}); return false;">Previous</a></li>
+				            </c:otherwise>
+				        </c:choose>
+				
+				        <c:forEach begin="${pi.startPage}" end="${pi.endPage}" var="p">
+				            <li class="page-item"><a class="page-link" href="#" onclick="loadReviews(${p}); return false;">${p}</a></li>
+				        </c:forEach>
+				
+				        <c:choose>
+				            <c:when test="${pi.currentPage eq pi.maxPage}">
+				                <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+				            </c:when>
+				            <c:otherwise>
+				                <li class="page-item"><a class="page-link" href="#" onclick="loadReviews(${pi.currentPage + 1}); return false;">Next</a></li>
+				            </c:otherwise>
+				        </c:choose>
+				    </ul>
+				</div>
+				
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Reservation Modal -->
+<div class="modal fade" id="reservationModal" tabindex="-1" role="dialog" aria-labelledby="reservationModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reservationModalLabel">예약 정보 입력</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="insertReservation.do" method="post">
+                    <input type="hidden" name="user_no" value="${loginUser.userNo}">
+                    <input type="hidden" name="ucSeq" value="${s.ucSeq}">
+                    
+                    <div class="form-group">
+                        <label for="guestCount">손님 수:</label>
+                        <input type="number" id="guestCount" name="number_of_guest" class="form-control" min="1" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reservationDate">날짜:</label>
+                        <input type="date" id="reservationDate" name="reservation_date" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reservationTime">시간:</label>
+                        <input type="time" id="reservationTime" name="reservation_time" class="form-control" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">예약 완료</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+
     function toggleReviewForm() {
         var form = document.getElementById('reviewForm');
         if (form.style.display === "none" || form.style.display === "") {
@@ -301,6 +501,153 @@
         };
         var map = new naver.maps.Map('map', mapOptions);
     }
+    
+    function insertReview() {
+	    var fileInput = $('.upfile')[0];
+	    var formData = new FormData();
+	    
+	    //별점 가져오기
+	    var StringRating = $("input[name='rating']:checked").val(); 
+	    var IntegerRating = parseInt(StringRating, 10); // 10진수로 변환
+	    
+		 console.log(StringRating);
+		 console.log(IntegerRating);
+	    // 파일이 선택되었는지 확인하고 FormData에 파일 추가
+	    if (fileInput.files.length > 0) {
+	        formData.append("upfile", fileInput.files[0]);
+	    }
+
+	    // 다른 필드들도 FormData에 추가
+	    formData.append("mainTitle", $('.storeName').val());
+	    formData.append("userNo", $('.userNo').val());
+	    formData.append("ucSeq", $('.storeNo').val());
+	    formData.append("rating", IntegerRating );
+	    formData.append("reviewComment",  $('textarea[name="reviewComment"]').val());
+	    $.ajax({
+	        url: 'reviewInsert.do',
+	        method: "post",
+	        data: formData,
+	        enctype: 'multipart/form-data',
+	        processData: false,
+	        contentType: false,
+	        success: function(result) {
+	            alert('리뷰가 작성되었습니다.');
+	             window.location.href = 'selectStoreDetail.do?ucSeq='+${requestScope.s.ucSeq};
+				 
+	        },
+	        error: function(xhr, status, error) {
+	            console.error('실패:', xhr.responseText); // 자세한 오류 메시지 출력
+	            console.error('상태:', status);
+	            console.error('에러:', error);
+	        }
+	    });
+	}
+    
+    function loadReviews(page) {
+        $.ajax({
+            url: 'selectStoreDetail.do',
+            method: 'GET',
+            data: {
+                ucSeq: ${requestScope.s.ucSeq},
+                cpage: page
+            },
+            success: function(response) {
+                // 서버에서 받은 데이터로 리뷰 리스트 영역만 업데이트
+                var newReviewList = $(response).find('.review-list').html();
+                $('.review-list').html(newReviewList);
+
+                // 페이징 영역도 업데이트 필요시 업데이트
+                var newPagingArea = $(response).find('#pagingArea').html();
+                $('#pagingArea').html(newPagingArea);
+            },
+            error: function() {
+                console.log('리뷰 로딩 실패');
+            }
+        });
+    }
+    
+    $(document).ready(function () {
+    	 // "리뷰 쓰기" 링크를 클릭했을 때 리뷰 폼으로 부드럽게 스크롤
+        $('#writeReviewLink').on('click', function (e) {
+            e.preventDefault(); // 기본 링크 동작을 막음
+            $('html, body').animate({
+                scrollTop: $('#reviewToggle').offset().top - 20 // 리뷰 작성 영역 바로 위로 스크롤 (위치 조정)
+            }, 800); // 스크롤 애니메이션 시간 (800ms로 부드럽게)
+            toggleReviewForm(); // 스크롤 후 리뷰 작성 폼 열기
+        });
+    	
+    	
+        const $toggleGood = $('#toggle_good');
+        const $toastGoodOn = $('#toastGoodOn');
+        const $toastGoodOff = $('#toastGoodOff');
+        const $label = $('label[for="toggle_good"]');
+
+        // 초기 상태 설정
+        if ($toggleGood.is(':checked')) {
+            $label.attr('data-like-yn', 'Y');
+            $toastGoodOn.hide();
+            $toastGoodOff.hide();
+        } else {
+            $label.attr('data-like-yn', 'N');
+            $toastGoodOn.hide();
+            $toastGoodOff.hide();
+        }
+
+        $toggleGood.on('change', function () {
+            if ($toggleGood.is(':checked')) {
+                // 좋아요를 눌렀을 때
+                $label.attr('data-like-yn', 'Y');
+                $toastGoodOff.hide();
+                $toastGoodOn.show().addClass('show');
+
+                // AJAX 요청으로 좋아요 추가
+                $.ajax({
+                    url: 'insertLike.do',  // 서버에서 좋아요를 추가하는 URL
+                    method: 'POST',
+                    data: {
+                        ucSeq: '${requestScope.s.ucSeq}'  // 해당 가게의 고유 번호
+                    },
+                    success: function(response) {
+                        // 성공 시 처리 (예: 성공 메시지 표시)
+                        console.log('좋아요가 추가되었습니다.');
+                    },
+                    error: function() {
+                        console.log('좋아요 추가 실패');
+                    }
+                });
+
+                setTimeout(() => {
+                    $toastGoodOn.removeClass('show');
+                }, 2000); // 하트 이미지가 2초 동안 표시됨
+            } else {
+                // 좋아요를 취소했을 때
+                $label.attr('data-like-yn', 'N');
+                $toastGoodOn.hide();
+                $toastGoodOff.show().addClass('show');
+
+                // AJAX 요청으로 좋아요 취소
+                $.ajax({
+                    url: 'deleteLike.do',  // 서버에서 좋아요를 취소하는 URL
+                    method: 'POST',
+                    data: {
+                        ucSeq: '${requestScope.s.ucSeq}'  // 해당 가게의 고유 번호
+                    },
+                    success: function(response) {
+                        // 성공 시 처리 (예: 성공 메시지 표시)
+                        console.log('좋아요가 취소되었습니다.');
+                    },
+                    error: function() {
+                        console.log('좋아요 취소 실패');
+                    }
+                });
+
+                setTimeout(() => {
+                    $toastGoodOff.removeClass('show');
+                }, 2000); // 취소 메시지가 2초 동안 표시됨
+            }
+        });
+    });
+
 </script>
 
 <!-- FontAwesome 사용을 위한 링크 추가 -->

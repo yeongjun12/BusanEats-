@@ -22,17 +22,11 @@ public class ReservationController {
 	private ReservationService reservationService;
 	
 	@RequestMapping("insertReservation.do")
-	public ModelAndView insertReservation(ModelAndView mv, Reservation r) {
+	public String insertReservation(Reservation r) {
 		
-		int result = reservationService.insertReservation(r);	
+		reservationService.insertReservation(r);	
 		
-		if(result > 0) {
-			System.out.println("성공!");
-		} else {
-			System.out.println("실패!");
-		}
-		
-		return mv;
+		return "redirect:/selectStoreDetail.do?ucSeq=" + r.getUcSeq(); //예약하고 다시 해당 식당 상세 정보 페이지로 리다이렉트
 	}
 	
 	//예약 정보 select

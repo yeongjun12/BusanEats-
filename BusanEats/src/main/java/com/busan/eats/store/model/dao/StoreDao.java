@@ -26,6 +26,21 @@ public class StoreDao {
 	public ArrayList selectLikeList(SqlSessionTemplate sqlSession, int userNo) {
 		return (ArrayList)sqlSession.selectList("storeMapper.selectLikeList", userNo);
 	}
+	
+	public int increaseCount(SqlSessionTemplate sqlSession, int ucSeq) {
+		return sqlSession.update("storeMapper.increaseCount", ucSeq);
+	}
+	
+	public int selectStoreLike(SqlSessionTemplate sqlSession, int ucSeq) {
+		return sqlSession.selectOne("storeMapper.selectStoreLike", ucSeq);
+	}
+	
+	public double selectAvgRating(SqlSessionTemplate sqlSession, int ucSeq) {
+		return sqlSession.selectOne("storeMapper.selectAvgRating", ucSeq);
+	}
+	public int selectReviewCount(SqlSessionTemplate sqlSession, int ucSeq) {
+		return sqlSession.selectOne("storeMapper.selectReviewCount", ucSeq);
+	}
 
 
 }

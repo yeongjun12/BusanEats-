@@ -13,8 +13,21 @@ public interface StoreService {
 	ArrayList<Store> selectStoreList(String gugunNm);
 	
 	//가게 상세 정보 select
-	Store selectStoreDetail(int unSeq);
+	Store selectStoreDetail(int ucSeq);
 	
 	ArrayList selectLikeList(int userNo);
+	
+	//조회수 증가
+	int increaseCount(int ucSeq);
+	
+	//식당 좋아요 조회
+	int selectStoreLike(int ucSeq);
+	
+	//식당 평점 평균
+	double selectAvgRating(int ucSeq);
+	
+	//식당 리뷰 숫자 count
+	int selectReviewCount(int ucSeq);
+	
 
 }
