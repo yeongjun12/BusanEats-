@@ -168,6 +168,7 @@ public class StoreController {
 		return "store/storeList";
 	}
 	
+	
 	@RequestMapping("selectStoreList.do")
 	public ModelAndView selectStoreList(ModelAndView mv, String gugunNm , HttpSession session) {
 		
@@ -254,7 +255,7 @@ public class StoreController {
 
 	    return mv;
 	}
-
+	
 	
 	
 

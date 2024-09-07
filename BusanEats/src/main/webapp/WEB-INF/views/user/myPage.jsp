@@ -2,123 +2,149 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-
-<meta charset="UTF-8">
-<title>Insert title here</title>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
  
-
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
- 
-
-  
-<style>
-    body {
-      margin: 0;
-      font-family: 'Arial', sans-serif;
-    }
-
-    .container {
-      display: flex;
-    }
-
-    .sidebar {
-      width: 250px; /* Increased width */
-      height:500px;
-      background-color: #2c3e50; /* Darker color */
-      padding: 20px;
-      box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
-      color: #ecf0f1; /* Light text color */
-    }
-
-    .sidebar ul {
-      list-style: none;
-      padding: 0;
-    }
-
-    .sidebar li {
-      margin-bottom: 10px;
-    }
-
-    .sidebar a {
-      text-decoration: none;
-      color: #ecf0f1;
-      font-weight: bold;
-      display: block;
-      padding: 10px;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-    }
-
-    .sidebar a:hover {
-      background-color: #34495e; /* Darker color on hover */
-    }
-
-    .content {
-      padding: 20px;
-      flex: 1;
-    }
-
-    /* Additional styling for better aesthetics */
-    h2 {
-      color: #2c3e50;
-    }
-
-    p {
-      color: #34495e;
-    }
-    
-    .userLogin {
-	  text-align: center;
-	}
-	
-	 /* 예약 내역 스타일 */
-        .reservation {
-            margin-bottom: 20px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            padding: 10px;
-            display: flex;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 20px;
         }
-
-       /* 예약 정보 스타일 */
-        .reservation-date {
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .profile-header img {
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            margin-right: 20px;
+        }
+        .profile-info {
+            flex-grow: 1;
+        }
+        .profile-info h2 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        .profile-info p {
+            margin: 5px 0;
+            color: #777;
+        }
+        .profile-edit {
+            text-align: right;
+        }
+        .profile-edit a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 14px;
+        }
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+        }
+        .tabs div {
+            text-align: center;
+            color: #555;
             font-weight: bold;
+            flex: 1;
+            padding: 10px;
+        }
+        .tabs div.active {
+            color: #ff6600; 
+            border-bottom: 2px solid #ff6600; 
+        }
+        .content-section {
+            display: none;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .likes, .reviews, .reservations {
+            display: none;
+        }
+        .likes-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .likes-item img {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+        .add-folder {
+            text-align: right;
+        }
+        .add-folder button {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #ff6600; 
+            color: #fff;
+            cursor: pointer;
+        }
+        .reservation, .grid-item, .review-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding: 10px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        .reservation img, .review-item img {
+            border-radius: 8px;
+            margin-right: 15px;
+        }
+        .reservation-details, .review-details {
+            flex: 1;
+        }
+        .cancelArea {
+            text-align: right;
+        }
+        .btn-orange {
+            background-color: #ff6600;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        .btn-green {
+            background-color: green; 
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
             cursor: pointer;
         }
         
-        .reservation-details {
-			width : 500px;     
-        }
-        
-        .cancelArea {
-        text-align: center;
-        }
-
-      
-        #my_modal {
-                display: none;
-                width: 500px;
-                padding: 20px 60px;
-                background-color: #fefefe;
-                border: 1px solid #888;
-                border-radius: 3px;
-            }
-
-             .modal_close_btn {
-                position: absolute;
-                top: 10px;
-                right: 10px;
-                 z-index: 1001; }
-
-     
-          
-
-         /* 별점 스타일 */
-
+        /* 별점 스타일 */
              .star-rating {
             display: flex;
             flex-direction: row-reverse;
@@ -149,421 +175,447 @@
             .star-rating label:hover ~ label {
             -webkit-text-fill-color: #fff58c;
             } 
-       
-      
-    
-  </style>
+        
+        
+        .bookmark {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            color: white;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        
+        .btn-red {
+		    background-color: red;
+		    border-color: red; /* 버튼 테두리 색상도 설정할 수 있음 */
+		    color: white; /* 버튼 텍스트 색상 */
+		}
+		
+		.btn-primary {
+		    background-color: #ff6600;
+		    border-color: #ff6600; /* 버튼 테두리 색상도 설정할 수 있음 */
+		    color: white; /* 버튼 텍스트 색상 */
+		}
+    </style>
 </head>
 <body>
+<jsp:include page="../common/header.jsp" />
 
-<div class="container">
-    <div class="sidebar">
-      <ul>
-        <li><a href="#" onclick="showTab('profile')">프로필</a></li>
-        <li><a href="#" onclick="showTab('settings')">개인 정보 수정</a></li>
-        <li><a href="#" onclick="showTab('orders')">예약 내역</a></li>
-      </ul>
+<div class="profile-header">
+    <img src="profile-placeholder.png" alt="Profile Picture">
+    <div class="profile-info">
+        <h2>${sessionScope.loginUser.getUserId() }</h2>
     </div>
-    <div class="content" id="profileTab">
-      <!-- 프로필 내용 -->
-      <h2>개인 정보 수정</h2>
-      <h3>비밀번호 재확인</h3>
-      <p>회원님의 정보를 안전하게 보호하기 위해 비밀번호를 다시 한번 확인해주세요.</p>
-      <hr>
-      	
-      <div class="userLogin" style="display: show;">
-		  
-		  
-		    <label for="userId">아이디</label><br>
-		    <input type="text" id="userId" name="userId" ><br>
-		    
-		    <label for="userPwd">비밀번호</label><br>
-		    <input type="password" id="userPwd" name="userPwd"  ><br>
-		    
-		    <button onclick="pwdCheck();">확인</button>
-		 
-	</div>
-	 <form action="update.do" method="post">
-	 <div id="hiddenPage" style="display: none;">
-	 		<input type="hidden" value="${loginUser.userNo }" name="userNo">
-		   <label for="newPwd">새 비밀번호</label><br>
-		    <input type="password" id="newPwd" name="newPwd" placeholder="새 비밀번호를 입력해주세요" ><br>
-		     <label for="PwdCheck">새 비밀번호 확인</label><br>
-		    <input type="password" id="pwdCheck" name="pwdCheck" placeholder="새 비밀번호를 다시 입력해주세요" >
-		    <button type="button" onclick="newPwdCheck();">비밀번호 확인</button><br>
-		    
-		    <label for="userPhone">전화번호</label><br>
-		    <input type="text" id="userPhone" value="${loginUser.userPhone }" name="userPhone" ><br>
-		    
-		     <label for="userEmail">이메일</label><br>
-		    <input type="text" id="userEmail" value="${loginUser.userEmail }" name="userEmail" >
-		    <div id="checkResult" style="font-size:0.7em; display:none;"></div><br>
-		    
-		     <label for="userBirth">생년월일</label><br>
-		    <input type="text" id="userBirth" value="${loginUser.userBirth }" name="userBirth" ><br>
-	
-	
-			<button >탈퇴하기</button>
-			<button type="submit" id="updateButton" disabled>회원정보 수정</button>
-		 </div>
-      </form>
-		
-	 <hr>
+    <div class="profile-edit">
+        <a href="#">프로필 수정</a>
+    </div>
+</div>
 
-      	
-    </div>
-    <div class="content" id="settingsTab" style="display:none;">
-      <!-- 설정 내용 -->
-      <h2>설정</h2>
-      <p>사용자의 설정을 여기에 표시합니다.</p>
-    </div>
-    
-    
-    
-    <div class="content" id="ordersTab" style="display:none;">
-      <!-- 주문 내역 내용 -->
-      <h2>예약 내역</h2>
-      
-         
-      
-  
-      
-      
-    </div>
-    
-    
-    <!-- 리뷰 -->
-    
-     <div id="my_modal" class="modal fade" >
-     
-    		<div>
-    		</div>
+<div class="tabs">
+    <div id="tab-likes" class="active">좋아요<span> (${map.COUNT_STORE_LIKE })</span></div>
+    <div id="tab-reviews">리뷰<span> (${map.COUNT_REVIEW })</span></div>
+    <div id="tab-reservations">예약<span> (${map.COUNT_RESERVATION })</span></div>
+</div>
 
-                 <form action="reviewInsert.do" method="post" enctype="multipart/form-data">
-    		<a><img class="modal_close_btn"  src="resources/images/close.png" style="width: 30px; height: 30px;"></a> 
-                    <h2 align="center">리뷰작성</h2>
-                    <table style="width: 400px; height:200px;">
-                        <tr>
-                           <td><input class="storeName" type="text" value=""></td>
-                            
-                            <td><input name="ucSeq"  class="storeNo" type="hidden" value="" ></td>
-                            <td><input name="userNo"  class="userNo" type="hidden" value="" ></td>
-                         
-                        </tr>
-                        <tr>
-                            <td><input type="text" class="reviewComment" name="reviewComment"style="width: 400px; height: 100px;"></td>
-                            
-                        </tr><br>
-                       
-                        <tr>
-                          
-                            <td><input type="file" class="upfile" name="upfile"></td>
-                        </tr><br>
-                    </table>
-    
-                    <!-- 별점 -->
-                    <div class="star-rating space-x-4 mx-auto">
-                        <input type="radio" id="5-stars"  class="rating" name="rating" value="5" v-model="ratings"/>
-                        <label for="5-stars" class="star pr-4">★</label>
-    
-    
-                        <input type="radio" id="4-stars" class="rating"  name="rating" value="4" v-model="ratings"/>
-                        <label for="4-stars" class="star">★</label>
-    
-    
-                        <input type="radio" id="3-stars" class="rating"  name="rating" value="3" v-model="ratings"/>
-                        <label for="3-stars" class="star">★</label>
-    
-    
-                        <input type="radio" id="2-stars" class="rating"  name="rating" value="2" v-model="ratings"/>
-                        <label for="2-stars" class="star">★</label>
-    
-    
-                        <input type="radio" id="1-star" class="rating"  name="rating" value="1" v-model="ratings" />
-                        <label for="1-star" class="star">★</label>
-                    </div>
-            
-                   
-                    <br>
-                    <div align="center">
-                        
-                        <button type="button" onclick="insertReview()">작성</button>
-    
-                    </div>
-                </form> 
-             
+<div id="likes" class="content-section likes" style="display: block;">
+    <h3>1개의 장소를 저장했습니다.</h3>
+    <div class="likes-item">
+        <img src="favorite-placeholder.png" alt="Favorite">
+        <div class="likes-item-details">
+            <strong>My 식신 맛집</strong>
+            <p>1</p>
+        </div>
+    </div>
+    <div class="add-folder">
+        <button class="btn-orange">폴더추가 +</button>
+    </div>
+</div>
+
+<div id="reviews" class="content-section reviews">
+    <h3>리뷰가 없습니다.</h3>
+</div>
+
+<div id="reservations" class="content-section reservations">
+    <h3>좋아요한 항목이 없습니다.</h3>
+</div>
+
+<!-- 리뷰 작성 모달 -->
+<div id="my_modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">리뷰 작성</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
- 
+            <form action="reviewInsert.do" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="storeName">가게 이름</label>
+                        <input type="text" class="form-control storeName" name="storeName" value="" readonly>
+                        <input type="hidden" name="ucSeq" class="storeNo" value="">
+                        <input type="hidden" name="userNo" class="userNo" value="">
+                    </div>
+                    <div class="form-group">
+                        <label for="reviewComment">리뷰 내용</label>
+                        <textarea class="form-control reviewComment" name="reviewComment" rows="4"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="upfile">이미지 업로드</label>
+                        <input type="file" class="form-control-file upfile" name="upfile">
+                    </div>
+                    <div class="form-group">
+                        <label>별점</label>
+                        <div class="star-rating space-x-4 mx-auto">
+                            <input type="radio" id="5-stars" class="rating" name="rating" value="5"/>
+                            <label for="5-stars" class="star pr-4">★</label>
+                            <input type="radio" id="4-stars" class="rating" name="rating" value="4"/>
+                            <label for="4-stars" class="star">★</label>
+                            <input type="radio" id="3-stars" class="rating" name="rating" value="3"/>
+                            <label for="3-stars" class="star">★</label>
+                            <input type="radio" id="2-stars" class="rating" name="rating" value="2"/>
+                            <label for="2-stars" class="star">★</label>
+                            <input type="radio" id="1-star" class="rating" name="rating" value="1" />
+                            <label for="1-star" class="star">★</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-orange" onclick="insertReview()">작성</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 
-  <script>
-  
-  
-    function showTab(tabId) {
-      // 모든 탭 숨기기
-      document.querySelectorAll('.content').forEach(tab => {
-        tab.style.display = 'none';
-      });
 
-      // 선택한 탭 보이기
-      document.getElementById(tabId + 'Tab').style.display = 'block';
-      
-      if(tabId == 'orders') {
-    	  
-    	  var userNo = "${loginUser.userNo}";
-    	  
-    	  
-    	  $.ajax({
-    		    url: 'selectReservation.do',
-    	        method: 'GET',
-    	        data: { userNo: userNo },
-    	        success: function(list) {
-    	            // 서버 응답에 따른 동작 수행
-    	            console.log(list);
-    	            $('#ordersTab').empty();
-    	            
-    	         // 현재 날짜 생성
-    	            var currentDate = new Date();
-    	            
-    	            list.forEach(function(item) {
-    	            	
-    	            	 // 예약 일자와 시간을 하이픈(-)으로 구분하여 합침
-    	                var reservationDateTime = item.reservation_date + ' ' + item.reservation_time;
-    	                // 예약 일시를 Date 객체로 변환
-    	                var reservationDate = new Date(reservationDateTime);
+<c:forEach items="${requestScope.reviewList}" var="r">
+    <!-- 리뷰 수정 모달 -->
+    <div class="modal fade" id="editReviewModal-${r.reviewNo}" tabindex="-1" role="dialog" aria-labelledby="editReviewModalLabel-${r.reviewNo}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editReviewModalLabel-${r.reviewNo}">리뷰 수정</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post" id="editReviewForm-${r.reviewNo}">
+                        <!-- 숨겨진 입력 필드: 리뷰와 사용자의 고유 번호 -->
+                        <input type="hidden" name="ucSeq" value="${r.ucSeq}" />
+                        <input type="hidden" name="reviewNo" value="${r.reviewNo}" />
+                        <input type="hidden" name="userNo" value="${loginUser.userNo}" />
+                        <input type="hidden" name="filePath" value="${ r.changeName }" />
+            	<!-- EL특성상 없으면 빈문자열이 ?????  -->
 
-    	                // 현재 날짜와 예약 일시를 비교하여 버튼 생성
-    	                var buttonHtml = '';
-    	                if (reservationDate.getTime() < currentDate.getTime()) {
-    	                    // 예약 일시가 과거 날짜인 경우
-    	                    buttonHtml = '<button type="button" class="btn btn-danger" onclick="modal(\'my_modal\', \''+item.mainTitle +'\',' +item.ucSeq+ ',' + item.user_no + ');"data-toggle="modal" data-target="#my_modal">리뷰 작성</button>';
-    	                } else {
-    	                    // 아직 지나지 않은 날짜인 경우
-    	                    buttonHtml = '<button onclick="cancelReservation('+item.reservation_no+')">예약 취소</button>';
-    	                }
+                        <!-- 별점 입력 -->
+                        <div class="form-group">
+                            <label for="editRating-${r.reviewNo}">별점</label>
+                            <div class="star-rating space-x-4 mx-auto">
+                                <input type="radio" id="5-stars-${r.reviewNo}" name="rating" value="5" ${r.rating == 5 ? 'checked' : ''} />
+                                <label for="5-stars-${r.reviewNo}" class="star pr-4">★</label>
 
-    	            	
-    	            	
-                        var reservationHtml =
-                            '<div class="reservation">' +
-                            '<img src="' + item.mainImgThumb + '" alt="식당 사진" width="200" height="150">' +
-                            
-                            '<div class="reservation-details">' +
-                            '<a>'+ item.mainTitle +'</a>' +
-                            '<p>예약 일시: ' + item.reservation_date +'-' +item.reservation_time +'</p>' +
-                            '<p>매장 번호: ' + item.cntctTel +'</p>' +
-                            '<p>인원 수: ' + item.number_of_guest + ' 명</p>' +
-                            '</div>' +
-                            '<div class="cancelArea">' +
-                            '<div class="cancelArea">' + buttonHtml + '</div>' +
-                            '</div>' +
-                            '</div>';
+                                <input type="radio" id="4-stars-${r.reviewNo}" name="rating" value="4" ${r.rating == 4 ? 'checked' : ''} />
+                                <label for="4-stars-${r.reviewNo}" class="star">★</label>
 
-                        $('#ordersTab').append(reservationHtml);
-                    });
-    	            
-    	        },
-    	        error: function(xhr, status, error) {
-    	            console.error('AJAX 요청 실패:', error);
-    	        }
-    	  });
-    	  
-      }
-      
+                                <input type="radio" id="3-stars-${r.reviewNo}" name="rating" value="3" ${r.rating == 3 ? 'checked' : ''} />
+                                <label for="3-stars-${r.reviewNo}" class="star">★</label>
+
+                                <input type="radio" id="2-stars-${r.reviewNo}" name="rating" value="2" ${r.rating == 2 ? 'checked' : ''} />
+                                <label for="2-stars-${r.reviewNo}" class="star">★</label>
+
+                                <input type="radio" id="1-star-${r.reviewNo}" name="rating" value="1" ${r.rating == 1 ? 'checked' : ''} />
+                                <label for="1-star-${r.reviewNo}" class="star">★</label>
+                            </div>
+                        </div>
+
+                        <!-- 리뷰 내용 입력 -->
+                        <div class="form-group">
+                            <label for="editComment-${r.reviewNo}">리뷰 내용</label>
+                            <textarea id="editComment-${r.reviewNo}" name="reviewComment" class="form-control" rows="4">${r.reviewComment}</textarea>
+                        </div>
+                        
+                        <c:if test="${not empty r.changeName}">
+				            <div style="flex: 1; max-width: 200px;">
+				                <img src="${r.changeName}" alt="Review Image" style="max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" />
+				            </div>
+				        </c:if>
+
+                        <!-- 수정 완료 버튼 -->
+                        <button type="button" class="btn btn-primary" onclick="postFormSubmit(2,${r.reviewNo})">수정</button>
+                        <button type="button" class="btn btn-red" onclick="postFormSubmit(1,${r.reviewNo});">삭제</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</c:forEach>
+
+<script>
+function showSection(section) {
+    $('#likes, #reviews, #reservations').hide();
+    $('#tab-likes, #tab-reviews, #tab-reservations').removeClass('active');
+    $('#' + section).show();
+    $('#tab-' + section).addClass('active');
+}
+
+function insertReview() {
+    var fileInput = $('.upfile')[0];
+    var formData = new FormData();
+
+    if (fileInput.files.length > 0) {
+        formData.append("upfile", fileInput.files[0]);
     }
-    
-    
-    function pwdCheck(){
-    	//사용자가 입력한 아이디와 비밀번호를 Controller에 가져가서 session에 있는 userId와 (암호화된)userPwd와 비교
-    	$.ajax({
-    		url : 'pwdCheck.do',
-        	data : 
-        		{
-        		 userId : $('#userId').val(),
-        		 userPwd : $('#userPwd').val()
-        		
-        		},
-        		
-        		success : function(result){
-        			console.log(result);
-        			
-        			
-        			if (result == 'success') {
-                        // 성공한 경우, 숨겨진 페이지를 보이게 함
-                       console.log(result);
-                        $('#hiddenPage').show();
-                        $('.userLogin').hide();
-                    } else {
-                    	  console.log(result);
-                        alert("아이디와 비밀번호를 확인해주세요.");
-                    }
-        		},
-        		error:function(){
-        			console.log('실패');
-        		}
-    	});
-    }
-    //비밀번호 2중체크 하기
-    function newPwdCheck(){
-    	if($('#newPwd').val() == $('#pwdCheck').val()){
-    		$('#updateButton').prop('disabled', false);
-    		
-    	}
-    }
-    
-    function isValidEmail(email) {
-	    // 이메일 형식을 정의합니다.
-	    let emailPattern = /^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]+$/;
-	   
-	    // 입력된 이메일 주소를 검사합니다.
-	    return emailPattern.test(email);
-	}
-    
-    //메일 유효성 검사
-    const mailInput=$('#userEmail');
-    
-    mailInput.keyup(function(){
-    	
-    	if(isValidEmail(mailInput.val())){
-    		//메일유효성 성공 시
-    		$('#checkResult').show();
-			$('#checkResult').css('color','green').text('사용가능한 메일 형식입니다');
-    	}else{
-    		$('#checkResult').show();
-			$('#checkResult').css('color','red').text('올바른 이메일 주소를 입력하세요');
-    	}
-    	
-    })
-    
-    <!----------- 예약 취소 함수 ------------------>
-	function cancelReservation(reservation_no) {
-		$.ajax({
-			url: 'cancelReservation.do',
-			method: 'POST',
-			data: {reservation_no : reservation_no },
-			success: function(result){
-				
-				alert('예약이 취소되었습니다.');
-				showTab('orders'); // 취소하고 화면 새로 생성할 수 있도록 호출
-			},
-			error: function(){
-				console.log(reservation_no);
-				console.log('통신실패');
-			}
-		});
-		
-	}
-	<!------------- 리뷰 작성 모달 ------------------>
-	// 모달을 닫는 함수
-	function closeModal() {
-	    var modal = document.getElementById('my_modal');
-	    if (modal) {
-	        modal.style.display = 'none';
-	        var backdrop = document.querySelector('.modal-backdrop');
-	        if (backdrop) {
-	            backdrop.remove();
+    formData.append("reviewNo", 999);
+    formData.append("mainTitle", $('.storeName').val());
+    formData.append("userNo", $('.userNo').val());
+    formData.append("ucSeq", $('.storeNo').val());
+    formData.append("rating", $('.rating:checked').val());
+    formData.append("reviewComment", $('.reviewComment').val());
+
+    $.ajax({
+        url: 'reviewInsert.do',
+        method: "post",
+        data: formData,
+        enctype: 'multipart/form-data',
+        processData: false,
+        contentType: false,
+        success: function(result) {
+            alert('리뷰가 작성되었습니다.');
+            window.location.href = 'myPage.do';
+        },
+        error: function() {
+            console.log('실패');
+        }
+    });
+}
+
+function postFormSubmit(num,reviewNo){
+	if(num == 1){ // 삭제하기 클릭 시
+		 	var form = $('#editReviewForm-' + reviewNo);
+	        
+	        // 삭제 확인 메시지
+	        if (confirm('정말로 삭제하시겠습니까?')) {
+	        	var formData = form.serialize(); // 폼 데이터를 직렬화하여 문자열로 얻음
+			    var additionalData = $.param({ reloadPath: "myPage.do" }); // 추가 데이터 문자열로 변환
+			    var combinedData = formData + '&' + additionalData; // 문자열을 병합
+
+			    $.ajax({
+			        url: 'deleteReview.do', // 폼의 action 속성을 사용
+			        type: 'POST',
+			        data: combinedData, // 병합된 데이터를 전송
+			        success: function(response) {
+			            console.log('삭제 성공:', response);
+			            window.location.reload(); // 현재 페이지 새로고침
+			        },
+			        error: function(xhr, status, error) {
+			            console.error('삭제 실패:', error);
+			            alert('삭제 중 오류가 발생했습니다. 다시 시도해주세요.');
+			        }
+			    });
+	        } else {
+	            console.log('삭제 취소됨');
 	        }
-	    }
-	}
-
-	// 모달을 표시하는 함수
-	function showModal() {
-	    var modal = document.getElementById('my_modal');
-	    if (modal) {
-	        modal.style.display = 'block';
-	    }
-	}
-
-	// 모달 닫기 버튼에 이벤트 리스너 추가
-	var closeButton = document.querySelector('.modal_close_btn');
-	if (closeButton) {
-	    closeButton.addEventListener('click', function() {
-	        console.log('모달 닫기 버튼 클릭됨');
-	        closeModal(); // 모달 닫기
-	    });
-	} else {
-	    console.error('모달 닫기 버튼이 찾을 수 없습니다.');
-	}
-
-	// 모달을 다시 열고자 할 때 호출할 함수
-	function openModal() {
-	    showModal(); // 모달 열기
-	}
-
-	// 이후 필요한 곳에서 openModal() 함수를 호출하여 모달을 다시 열 수 있습니다.
-
-
-
-	  function modal(id, storeName,storeNo,userNo) {
-	      
-			$('#test3').val(''); 
-			//모달창 reviewContent영역 공백으로
-
-	        $('.storeName').val(storeName);
-	        $('.userNo').val(userNo);
-	        $('.storeNo').val(storeNo);
-	        var zIndex = 9999;
-	        var modal = document.getElementById(id);
-
-	        // 모달 div 뒤에 희끄무레한 레이어
-	      
-
-	        // 닫기 버튼 처리, 시꺼먼 레이어와 모달 div 지우기
-	        /*
-	        modal.querySelector('.modal_close_btn').addEventListener('click', function() {
-	            
-	        	console.log("ㅎㅇ");
-	          
-	            bg.remove();
-	            modal.style.display = 'none';
-	        }); 
-	        */
-	       
-
-	      
-	    }
-	  
+		
+	} else { // 수정하기 클릭 시 
+		
+		var form = $('#editReviewForm-' + reviewNo);
 	
-
-	  function insertReview() {
-		    var fileInput = $('.upfile')[0];
-		    var formData = new FormData();
-
-		    // 파일이 선택되었는지 확인하고 FormData에 파일 추가
-		    if (fileInput.files.length > 0) {
-		        formData.append("upfile", fileInput.files[0]);
-		    }
-
-		    // 다른 필드들도 FormData에 추가
-		    formData.append("mainTitle", $('.storeName').val());
-		    formData.append("userNo", $('.userNo').val());
-		    formData.append("ucSeq", $('.storeNo').val());
-		    formData.append("rating", $('.rating').val());
-		    formData.append("reviewComment", $('.reviewComment').val());
+		if (confirm('수정하시겠습니까?')) {
+		    var formData = form.serialize(); // 폼 데이터를 직렬화하여 문자열로 얻음
+		    var additionalData = $.param({ reloadPath: "myPage.do" }); // 추가 데이터 문자열로 변환
+		    var combinedData = formData + '&' + additionalData; // 문자열을 병합
 
 		    $.ajax({
-		        url: 'reviewInsert.do',
-		        method: "post",
-		        data: formData,
-		        enctype: 'multipart/form-data',
-		        processData: false,
-		        contentType: false,
-		        success: function(result) {
-		            alert('리뷰가 작성되었습니다.');
-		            // 필요에 따라 적절한 후속 동작 수행
-		             window.location.href = 'myPage.do';
-    				 
+		        url: 'updateReview.do', // 폼의 action 속성을 사용
+		        type: 'POST',
+		        data: combinedData, // 병합된 데이터를 전송
+		        success: function(response) {
+		            console.log('수정 성공:', response);
+		            window.location.reload(); // 현재 페이지 새로고침
 		        },
-		        error: function() {
-		            console.log('실패');
+		        error: function(xhr, status, error) {
+		            console.error('수정 실패:', error);
+		            alert('수정 중 오류가 발생했습니다. 다시 시도해주세요.');
 		        }
 		    });
-		}
+		}else {
+            console.log('수정 취소됨');
+        }
+	}
+}
 
+$(document).ready(function () {
+    loadLikes();
 
-	
-	
-	
-  </script>
+    function loadLikes() {
+        showSection('likes');
+
+        $.ajax({
+            url: 'selectLikeList.do',
+            method: 'GET',
+            success: function (response) {
+                var likeHtml = '';
+
+                response.forEach(function (item) {
+                    likeHtml +=
+                        '<div class="grid-item">' +
+                        '<input type="hidden" class="ucSeq" name="ucSeq" value="' + item.ucSeq + '"/>' +
+                        '<img src="' + item.mainImgThumb + '" alt="식당 사진" width="200" height="150">' +
+                        '<div class="reservation-details">' +
+                        '<h3>' + item.mainTitle + '</h3>' +
+                        '<p>주소: ' + item.addr1 + '</p>' +
+                        '<p>매장 번호: ' + item.cntctTel + '</p>' +
+                        '</div>' +
+                        '<div class="bookmark"><img class="like" alt="' + item.ucSeq + '" src="resources/images/heart.png" width="20" height="20"></div>' +
+                        '</div>';
+                });
+
+                $('#likes').html(likeHtml);
+            },
+            error: function () {
+                alert('즐겨찾기 데이터를 불러오는 중 오류가 발생했습니다.');
+            }
+        });
+    }
+
+    $('#likes').on('click', '.like', function (event) {
+        event.stopPropagation();
+        var clickedElement = $(this);
+        var ucSeq = $(this).closest('.grid-item').find('.ucSeq').val();
+
+        var confirmMessage = '좋아요를 취소하시겠습니까?';
+        if (confirm(confirmMessage)) {
+            $.ajax({
+                url: 'deleteLike.do',
+                method: 'POST',
+                data: { ucSeq: ucSeq },
+                success: function(response) {
+                    if (response === 'success') {
+                        window.location.href = 'myPage.do';
+                    } else {
+                        console.log('실패');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX 요청이 실패했습니다:', error);
+                }
+            });
+        }
+    });
+
+    $(document).on('click', '.grid-item', function() {
+        var ucSeq = $(this).find('input[name="ucSeq"]').val();
+        location.href = "selectStoreDetail.do?ucSeq=" + ucSeq;
+    });
+
+    var userNo = "${loginUser.userNo}";
+
+    $('#tab-likes').on('click', function () {
+        loadLikes();
+    });
+
+    $('#tab-reviews').on('click', function () {
+        showSection('reviews');
+        $.ajax({
+            url: 'myReviews.do',
+            method: 'GET',
+            success: function (response) {
+                let reviewHtml = '';
+
+                response.forEach(function (r) {
+                    reviewHtml +=
+                        '<div class="review-item" style="display: flex; align-items: flex-start; margin-bottom: 20px; padding: 10px; background-color: #fff; border-radius: 8px; box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);">' +
+                            '<div style="flex: 1; margin-right: 10px;">' +
+                                '<p><strong>' + r.userId + '</strong></p>' +
+                                '<p class="rating" style="color: #ff6600;">' +
+                                    generateStars(r.rating) + ' (' + r.rating + ')' +
+                                '</p>' +
+                                '<p>' + r.reviewComment + '</p>' +
+                                '<p>' + r.reviewCreateDate + '</p>' +
+                            '</div>' +
+                            (r.changeName ? 
+                                '<div style="flex: 1; max-width: 200px;">' +
+                                    '<img src="' + r.changeName + '" alt="Review Image" style="max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" />' +
+                                '</div>' 
+                            : '') +
+                            (r.userNo === ${loginUser.userNo} ? 
+                                '<div class="edit-icon" style="position: absolute; top: 10px; right: 30px; cursor: pointer;">' +
+                                    '<img src="resources/images/pencil.png" alt="Edit" style="width: 80px; height: 30px;" data-toggle="modal" data-target="#editReviewModal-' + r.reviewNo + '" />' +
+                                '</div>' 
+                            : '') +
+                        '</div>';
+                });
+
+                $('#reviews').html(reviewHtml);
+            },
+            error: function () {
+                alert('리뷰 데이터를 불러오는 중 오류가 발생했습니다.');
+            }
+        });
+    });
+
+    function generateStars(rating) {
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+            stars += i <= rating ? '★' : '☆';
+        }
+        return stars;
+    }
+
+    $('#tab-reservations').on('click', function () {
+        showSection('reservations');
+
+        $.ajax({
+            url: 'selectReservation.do',
+            method: 'GET',
+            data: { userNo: userNo },
+            success: function (response) {
+                var reservationHtml = '';
+                var currentDate = new Date();
+
+                response.forEach(function (item) {
+                    var reservationDateTime = item.reservation_date + ' ' + item.reservation_time;
+                    var reservationDate = new Date(reservationDateTime);
+
+                    var buttonHtml = '';
+                    if (reservationDate.getTime() < currentDate.getTime()) {
+                        buttonHtml = '<button type="button" class="btn-green" onclick="modal(\'my_modal\', \'' + item.mainTitle + '\',' + item.ucSeq + ',' + item.user_no + ');" data-toggle="modal" data-target="#my_modal">리뷰 작성</button>';
+                    } else {
+                        buttonHtml = '<button class="btn-orange" onclick="cancelReservation(' + item.reservation_no + ')">예약 취소</button>';
+                    }
+
+                    reservationHtml +=
+                        '<div class="reservation">' +
+                        '<img src="' + item.mainImgThumb + '" alt="식당 사진" width="200" height="150">' +
+                        '<div class="reservation-details">' +
+                        '<h3>' + item.mainTitle + '</h3>' +
+                        '<p>예약 일시: ' + item.reservation_date + ' - ' + item.reservation_time + '</p>' +
+                        '<p>매장 번호: ' + item.cntctTel + '</p>' +
+                        '<p>인원 수: ' + item.number_of_guest + ' 명</p>' +
+                        '</div>' +
+                        '<div class="cancelArea">' + buttonHtml + '</div>' +
+                        '</div>';
+                });
+
+                $('#reservations').html(reservationHtml);
+            },
+            error: function () {
+                alert('예약 데이터를 불러오는 중 오류가 발생했습니다.');
+            }
+        });
+    });
+});
+</script>
 
 </body>
 </html>

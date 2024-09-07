@@ -3,26 +3,63 @@
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="likeMapper">
 
-<insert id="insertLike" >
-	  INSERT INTO STORE_LIKE
-	(
-	    USER_NO,
-	    UC_SEQ
-	)
-	VALUES
-	(
-	    #{userNo},
-	    #{ucSeq}
-	)
+	<resultMap id="likeResultSet" type="like">
+		<result column="USER_NO" property="userNo"/>
+		<result column="UC_SEQ" property="ucSeq"/>
+	</resultMap>
+	
+	<resultMap id="storeResultSet" type="store">
+		<result column="UC_SEQ"  property="ucSeq"/>
+		<result column="MAIN_TITLE" property="mainTitle"/>
+		<result column="GUGUN_NM"        property="gugunNm"/>
+		<result column="ADDR1"  property="addr1"/>
+		<result column="CNTCT_TEL"  property="cntctTel"/>
+		<result column="USAGE_DAY_WEEK_AND_TIME"  property="usageDayWeekAndTime"/>
+		<result column="RPRSNTV_MENU"  property="reprsntvMenu"/>
+		<result column="MAIN_IMG_NORMAL"  property="mainImgNormal"/>
+		<result column="MAIN_IMG_THUMB"  property="mainImgThumb"/>
+		<result column="ITEMCNTNTS"  property="itemCntnts"/>
+		<result column="LAT"  property="lat"/>
+		<result column="LNG"  property="lng"/>
+		<result column="COUNT"  property="count"/>
+	</resultMap>
 
-</insert>
-
-<delete id="deleteLike">
-	DELETE 
-    	FROM STORE_LIKE
-	WHERE USER_NO = #{userNo}
-	AND UC_SEQ = #{ucSeq}
-
-</delete>
+	<insert id="insertLike" >
+		  INSERT INTO STORE_LIKE
+		(
+		    USER_NO,
+		    UC_SEQ
+		)
+		VALUES
+		(
+		    #{userNo},
+		    #{ucSeq}
+		)
+	
+	</insert>
+	
+	<delete id="deleteLike">
+		DELETE 
+	    	FROM STORE_LIKE
+		WHERE USER_NO = #{userNo}
+		AND UC_SEQ = #{ucSeq}
+	
+	</delete>
+	
+	<select id="selectLikeList"  resultMap="storeResultSet" parameterType="_int">
+			SELECT
+			    *
+			FROM
+			    STORE
+			WHERE
+			    UC_SEQ IN (
+			        SELECT
+			            UC_SEQ
+			        FROM
+			            STORE_LIKE
+			        WHERE
+			            USER_NO = #{userNo}
+			    )
+	</select>
 
 </mapper>

@@ -1,5 +1,7 @@
 package com.busan.eats.like.model.service;
 
+import java.util.ArrayList;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,11 @@ public class LikeServiceImpl implements LikeService{
 	@Override
 	public int deleteLike(Like like) {
 		return likeDao.deleteLike(sqlSession,like);
+	}
+	
+	@Override
+	public ArrayList<Like> selectLikeList(int userNo) {
+		return new ArrayList<>(likeDao.selectLikeList(sqlSession, userNo));
 	}
 
 }

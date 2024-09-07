@@ -1,5 +1,7 @@
 package com.busan.eats.user.model.service;
 
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,6 +43,11 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int idCheck(String checkId) {
 		return 0;
+	}
+
+	@Override
+	public Map<String, Integer> myPage(int userNo) {
+		return userDao.myPage(sqlSession,userNo);
 	}
 
 }

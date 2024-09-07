@@ -249,6 +249,19 @@
 		#toggle_good {
 		    display: none; /* 체크박스를 화면에서 숨깁니다 */
 		}
+		
+		.btn-red {
+		    background-color: red;
+		    border-color: red; /* 버튼 테두리 색상도 설정할 수 있음 */
+		    color: white; /* 버튼 텍스트 색상 */
+		}
+		
+		.btn-primary {
+		    background-color: #ff6600;
+		    border-color: #ff6600; /* 버튼 테두리 색상도 설정할 수 있음 */
+		    color: white; /* 버튼 텍스트 색상 */
+		}
+		
 			
         
       
@@ -274,7 +287,7 @@
             </div>
             <div class="stats">
                 <span><img src="resources/images/bg_ico_s_click.png">&nbsp ${requestScope.s.count }</span>
-                <span><img src="resources/images/bg_ico_s_like.png">&nbsp ${requestScope.likeCount}</span>
+                 <span><img src="resources/images/bg_ico_s_like.png" alt="Like">&nbsp;<span id="likeCount">${requestScope.likeCount}</span></span>
                 <span><img src="resources/images/bg_icon_bookmark2.png" width="11">&nbsp 84</span>
             </div>
         </div>
@@ -390,25 +403,102 @@
             <!-- 리뷰 리스트 -->
             <div class="review-list">
             
-            	<c:forEach items="${ requestScope.reviewList }" var="r">
-	            	<div class="review-item" style="display: flex; align-items: flex-start; margin-bottom: 20px;">
-				        <!-- 리뷰 내용 영역 -->
-				        <div style="flex: 1; margin-right: 10px;">
-				            <p><strong>${r.reviewerId}</strong></p>
-				            <p class="rating">★★★★☆ ${r.rating}</p>
-				            <p>${r.reviewComment}</p>
-				        </div>
-				
-				        <!-- 이미지 영역 -->
-				        <c:if test="${not empty r.changeName}">
+     <c:forEach items="${requestScope.reviewList}" var="r">
+    <div class="review-item" style="position: relative; display: flex; align-items: flex-start; margin-bottom: 20px;">
+        <!-- 리뷰 내용 영역 -->
+        <div style="flex: 1; margin-right: 10px;">
+            <p><strong>${r.userId}</strong></p>
+            <p class="rating">
+                <c:forEach begin="1" end="5" var="i">
+                    <c:if test="${i <= r.rating}">
+                     	   ★
+                    </c:if>
+                    <c:if test="${i > r.rating}">
+                                                                     ☆
+                    </c:if>
+                </c:forEach>
+                (${r.rating})
+            </p>
+            <p>${r.reviewComment}</p>
+            <p>${r.reviewCreateDate}</p>
+        </div>
+
+        <!-- 이미지 영역 -->
+        <c:if test="${not empty r.changeName}">
+            <div style="flex: 1; max-width: 200px;">
+                <img src="${r.changeName}" alt="Review Image" style="max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" />
+            </div>
+        </c:if>
+
+        <c:if test="${loginUser.userNo == r.userNo}">
+            <!-- 수정 아이콘 영역 -->
+            <div class="edit-icon" style="position: absolute; top: 10px; right: 30px; cursor: pointer;">
+                <img src="resources/images/pencil.png" alt="Edit" style="width: 80px; height: 30px;" data-toggle="modal" data-target="#editReviewModal-${r.reviewNo}" />
+            </div>
+        </c:if>
+    </div>
+
+    <!-- 리뷰 수정 모달 -->
+    <div class="modal fade" id="editReviewModal-${r.reviewNo}" tabindex="-1" role="dialog" aria-labelledby="editReviewModalLabel-${r.reviewNo}" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editReviewModalLabel-${r.reviewNo}">리뷰 수정</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="" method="post" id="editReviewForm-${r.reviewNo}">
+                        <!-- 숨겨진 입력 필드: 리뷰와 사용자의 고유 번호 -->
+                        <input type="hidden" name="ucSeq" value="${r.ucSeq}" />
+                        <input type="hidden" name="reviewNo" value="${r.reviewNo}" />
+                        <input type="hidden" name="userNo" value="${loginUser.userNo}" />
+                        <input type="hidden" name="filePath" value="${ r.changeName }" />
+            	<!-- EL특성상 없으면 빈문자열이 ?????  -->
+
+                        <!-- 별점 입력 -->
+                        <div class="form-group">
+                            <label for="editRating-${r.reviewNo}">별점</label>
+                            <div class="star-rating space-x-4 mx-auto">
+                                <input type="radio" id="5-stars-${r.reviewNo}" name="rating" value="5" ${r.rating == 5 ? 'checked' : ''} />
+                                <label for="5-stars-${r.reviewNo}" class="star pr-4">★</label>
+
+                                <input type="radio" id="4-stars-${r.reviewNo}" name="rating" value="4" ${r.rating == 4 ? 'checked' : ''} />
+                                <label for="4-stars-${r.reviewNo}" class="star">★</label>
+
+                                <input type="radio" id="3-stars-${r.reviewNo}" name="rating" value="3" ${r.rating == 3 ? 'checked' : ''} />
+                                <label for="3-stars-${r.reviewNo}" class="star">★</label>
+
+                                <input type="radio" id="2-stars-${r.reviewNo}" name="rating" value="2" ${r.rating == 2 ? 'checked' : ''} />
+                                <label for="2-stars-${r.reviewNo}" class="star">★</label>
+
+                                <input type="radio" id="1-star-${r.reviewNo}" name="rating" value="1" ${r.rating == 1 ? 'checked' : ''} />
+                                <label for="1-star-${r.reviewNo}" class="star">★</label>
+                            </div>
+                        </div>
+
+                        <!-- 리뷰 내용 입력 -->
+                        <div class="form-group">
+                            <label for="editComment-${r.reviewNo}">리뷰 내용</label>
+                            <textarea id="editComment-${r.reviewNo}" name="reviewComment" class="form-control" rows="4">${r.reviewComment}</textarea>
+                        </div>
+                        
+                        <c:if test="${not empty r.changeName}">
 				            <div style="flex: 1; max-width: 200px;">
 				                <img src="${r.changeName}" alt="Review Image" style="max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" />
 				            </div>
 				        </c:if>
-				    </div>
-	                
-	                
-            	</c:forEach>
+
+                        <!-- 수정 완료 버튼 -->
+                        <button type="button" class="btn btn-primary" onclick="postFormSubmit(2,${r.reviewNo})">수정</button>
+                        <button type="button" class="btn btn-red" onclick="postFormSubmit(1,${r.reviewNo});">삭제</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</c:forEach>
             
             	<div id="pagingArea">
 				    <ul class="pagination">
@@ -518,6 +608,7 @@
 	    }
 
 	    // 다른 필드들도 FormData에 추가
+	    formData.append("reviewNo", 999); // reviewNo필드에 null값이 들어가는걸 방지하기 위해 임의 값
 	    formData.append("mainTitle", $('.storeName').val());
 	    formData.append("userNo", $('.userNo').val());
 	    formData.append("ucSeq", $('.storeNo').val());
@@ -609,6 +700,9 @@
                     },
                     success: function(response) {
                         // 성공 시 처리 (예: 성공 메시지 표시)
+                        var likeCountElement = $('#likeCount');
+                        var currentCount = parseInt(likeCountElement.text(), 10);
+                        likeCountElement.text(currentCount + 1);
                         console.log('좋아요가 추가되었습니다.');
                     },
                     error: function() {
@@ -634,6 +728,9 @@
                     },
                     success: function(response) {
                         // 성공 시 처리 (예: 성공 메시지 표시)
+                        var likeCountElement = $('#likeCount');
+                        var currentCount = parseInt(likeCountElement.text(), 10);
+                        likeCountElement.text(currentCount - 1);
                         console.log('좋아요가 취소되었습니다.');
                     },
                     error: function() {
@@ -647,6 +744,32 @@
             }
         });
     });
+    
+    
+    
+    function postFormSubmit(num,reviewNo){
+		if(num == 1){ // 삭제하기 클릭 시
+			var form = $('#editReviewForm-' + reviewNo);
+			form.attr('action', 'deleteReview.do'); // 서버에 전송할 URL을 설정
+			
+			// 삭제 확인 메시지
+	        if (confirm('정말로 삭제하시겠습니까?')) {
+	            form.submit(); // 확인 후 폼 제출
+	        } else {
+	            console.log('삭제 취소됨');
+	        }
+			
+		} else { // 수정하기 클릭 시 
+			var form = $('#editReviewForm-' + reviewNo);
+			form.attr('action','updateReview.do');
+			
+			if (confirm('수정하시겠습니까?')) {
+	            form.submit(); // 확인 후 폼 제출
+	        } else {
+	            console.log('수정 취소됨');
+	        }
+		}
+	}
 
 </script>
 

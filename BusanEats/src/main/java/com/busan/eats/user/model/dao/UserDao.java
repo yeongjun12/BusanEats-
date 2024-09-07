@@ -1,5 +1,7 @@
 package com.busan.eats.user.model.dao;
 
+import java.util.Map;
+
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +22,10 @@ public class UserDao {
 	
 	public int updateUser(SqlSessionTemplate sqlSession, User user) {
 		return sqlSession.update("userMapper.updateUser", user);
+	}
+	
+	public Map<String, Integer> myPage(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.selectOne("userMapper.myPage", userNo);
 	}
 
 }

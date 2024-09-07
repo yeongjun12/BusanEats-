@@ -1,5 +1,7 @@
 package com.busan.eats.like.controller;
 
+import java.util.ArrayList;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.busan.eats.like.model.service.LikeService;
 import com.busan.eats.like.model.vo.Like;
 import com.busan.eats.user.model.vo.User;
+import com.google.gson.Gson;
 
 @Controller
 public class LikeController {
@@ -49,4 +52,19 @@ public class LikeController {
 		     return "failure"; // 실패 시 failure 문자열 반환
 		 }
 	}
+	
+	
+	
+	
+	@ResponseBody
+	@RequestMapping(value="selectLikeList.do", produces="application/json; charset=UTF-8")
+	public String selectLikeList(HttpSession session) {
+		int userNo = ((User)(session.getAttribute("loginUser"))).getUserNo();
+		ArrayList<Like> list = new ArrayList<>();
+		list = likeService.selectLikeList(userNo);
+			
+		return new Gson().toJson(list);
+	}
+		
+		
 }

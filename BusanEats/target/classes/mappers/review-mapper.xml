@@ -5,7 +5,9 @@
 
 	<resultMap id="reviewResultSet" type="review">
 	
+		<result column="REVIEW_NO" property="reviewNo"/>
 		<result column="USER_NO" property="userNo"/>
+		<result column="USER_ID" property="userId"/>
 		<result column="UC_SEQ" property="ucSeq"/>
 		<result column="REVIEW_RATING" property="rating"/>
 		<result column="REVIEW_COMMENT" property="reviewComment"/>
@@ -13,7 +15,6 @@
 		<result column="FILE_PATH" property="filePath"/>
 		<result column="CHANGE_NAME" property="changeName"/>
 		<result column="REVIEW_STATUS" property="reviewStatus"/>
-		<result column="USER_ID" property="reviewerId"/>
 	</resultMap>
 
 
@@ -34,7 +35,7 @@
 					)
 			values
 					(
-						SEQ_REVIEW.NEXTVAL
+						 SEQ_REVIEW.NEXTVAL
 						,#{userNo}
 						,#{ucSeq}
 						,#{rating}
@@ -47,8 +48,9 @@
 	</insert>
 	
 	
-	<select id ="selectReview" resultMap="reviewResultSet">
+	<select id ="selectReview" parameterType="review" resultMap="reviewResultSet">
 		SELECT
+			R.REVIEW_NO,
 		    R.USER_NO,
 		    U.USER_ID,
 		    R.UC_SEQ,
@@ -78,6 +80,45 @@
 				UC_SEQ = #{ucSeq}
 	
 	</select>
+	
+	
+	<update id="updateReview" parameterType="Review">
+		UPDATE REVIEW
+		SET 
+			 REVIEW_RATING = #{rating}
+			,REVIEW_COMMENT = #{reviewComment}
+		WHERE
+			REVIEW_NO = #{reviewNo}
+	
+	</update>
+	
+	<select id="myReviews" parameterType="_int" resultMap="reviewResultSet">
+		SELECT
+			R.REVIEW_NO,
+		    R.USER_NO,
+		    U.USER_ID,
+		    R.UC_SEQ,
+		    R.REVIEW_RATING,
+		    R.REVIEW_COMMENT,
+		    R.REVIEW_CREATE_DATE,
+		    R.FILE_PATH,
+		    R.CHANGE_NAME,
+		    R.REVIEW_STATUS
+		FROM
+		    REVIEW R
+		    JOIN USERS U ON R.USER_NO = U.USER_NO
+		WHERE
+		    R.REVIEW_STATUS = 'Y'
+		    AND R.USER_NO = #{userNo}
+	</select>
+	
+	<update id="deleteReview" parameterType="_int">
+		UPDATE REVIEW
+		SET
+			REVIEW_STATUS = 'N'
+		WHERE
+			REVIEW_NO = #{reviewNo}
+	</update>
 	
 
 

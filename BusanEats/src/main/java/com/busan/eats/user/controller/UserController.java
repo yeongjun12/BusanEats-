@@ -1,5 +1,8 @@
 package com.busan.eats.user.controller;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.busan.eats.review.model.service.ReviewServiceImpl;
+import com.busan.eats.review.model.vo.Review;
 import com.busan.eats.user.model.service.UserServiceImpl;
 import com.busan.eats.user.model.vo.User;
 
@@ -18,6 +23,9 @@ public class UserController {
 	
 	@Autowired
 	private UserServiceImpl userService;
+	
+	@Autowired
+	private ReviewServiceImpl reviewService;
 	
 	@Autowired
 	private BCryptPasswordEncoder bcryptPasswordEncoder;
@@ -86,8 +94,20 @@ public class UserController {
 	}
 	
 	@RequestMapping("myPage.do")
-	public String MyPage() {
-		return "user/myPage";
+	public ModelAndView myPage(HttpSession session) {
+		ModelAndView mv = new ModelAndView();
+		int userNo = ((User)session.getAttribute("loginUser")).getUserNo();
+		
+		ArrayList<Review> reviewList = reviewService.myReviews(userNo);
+		
+		Map<String, Integer> map = userService.myPage(userNo); // 좋아요, 리뷰, 예약 개수 담아옴
+		
+		
+		mv.addObject("map", map)
+		  .addObject("reviewList",reviewList)
+	      .setViewName("user/myPage");
+		
+		return mv;
 	}
 	
 	@RequestMapping("test.do")
@@ -100,9 +120,8 @@ public class UserController {
 	public String updateUser(String newPwd,User user ) {
 		
 		
-		 String encPwd = bcryptPasswordEncoder.encode(newPwd);
-			
-		 user.setUserPwd(encPwd);
+		String encPwd = bcryptPasswordEncoder.encode(newPwd);
+		user.setUserPwd(encPwd);
 		
 		userService.updateUser(user);
 		

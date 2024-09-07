@@ -223,9 +223,6 @@
 
 </div>
 
-
-
-
 	
 	<!-- Reservation button and form -->
 	<div class="reservation-form">
@@ -261,9 +258,6 @@
 	    </c:choose>
 	</div>
 	
-
-	
-
 
 <script>
     function toggleReservationForm() {

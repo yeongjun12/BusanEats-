@@ -18,5 +18,14 @@ public interface ReviewService {
 	
 	//리뷰 리스트 뽑기
 	ArrayList<Review> selectList(int ucSeq, PageInfo pi);
+	
+	//리뷰 수정
+	int updateReview(Review r);
+	
+	//
+	int deleteReview(int reviewNo);
+	
+	//내가쓴 리뷰 조회
+	ArrayList<Review> myReviews(int userNo);
 
 }

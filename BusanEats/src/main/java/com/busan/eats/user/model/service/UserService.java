@@ -1,5 +1,7 @@
 package com.busan.eats.user.model.service;
 
+import java.util.Map;
+
 import com.busan.eats.user.model.vo.User;
 
 public interface UserService {
@@ -18,5 +20,7 @@ public interface UserService {
 	
 	//아이디 중복체크 서비스(select)
 	int idCheck(String checkId);
+	
+	Map<String, Integer> myPage(int userNo);
 
 }

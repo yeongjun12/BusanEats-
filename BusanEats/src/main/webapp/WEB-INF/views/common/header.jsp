@@ -75,7 +75,7 @@
 <body>
 
 <header>
-    <div class="logo"><img src="resources/images/mainlogo.PNG" width="220" height="50"></div>
+    <div class="logo"><img src="resources/images/mainLogo.png" width="150" height="90"></div>
     <div class="search">
         <input type="text" placeholder="검색어 입력">
         <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">

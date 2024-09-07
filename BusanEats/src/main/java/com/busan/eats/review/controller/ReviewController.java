@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.busan.eats.review.model.service.ReviewService;
 import com.busan.eats.review.model.vo.Review;
+import com.busan.eats.user.model.vo.User;
+import com.google.gson.Gson;
 @Controller
 public class ReviewController {
 	
@@ -62,6 +64,54 @@ public class ReviewController {
 		}
 	}
 	
+	@RequestMapping("updateReview.do")
+	public String updateReview(Review r,String reloadPath, HttpSession session,Model model) {
+		
+		System.out.println(reloadPath);
+		if(reviewService.updateReview(r) > 0) {
+			session.setAttribute("alertMsg","리뷰가 수정 되었습니다.");
+			
+			if(reloadPath.equals("myPage.do")) {
+				return "redirect:myPage.do"; //마이페이지에서 삭제, 수정시 마이페이지로 redirect
+			}else {
+				return "redirect:selectStoreDetail.do?ucSeq="+r.getUcSeq();
+			}
+		}else {
+			model.addAttribute("errorMsg","리뷰 수정 실패..");
+			return "common/errorPage";
+		}
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "myReviews.do", produces="application/json; charset=UTF-8")
+	public String myReviews(HttpSession session) {
+		int userNo = ((User)session.getAttribute("loginUser")).getUserNo();
+		ArrayList<Review> list = reviewService.myReviews(userNo);
+		
+		
+		System.out.println(list);
+		 return new Gson().toJson(list);
+	}
+	
+	@RequestMapping("deleteReview.do")
+	public String deleteReview(int reviewNo, int ucSeq, HttpSession session, Model model, String filePath ) {
+		
+		if(reviewService.deleteReview(reviewNo) > 0) { //삭제 성공
+			if (!filePath.equals("")) { // 만약에 첨부파일이 존재했을 경우
+				// 기존에 존재하는 첨부파일을 삭제
+				// resources/xxxxxx/xxxx.jpg 요걸 찾ㅇ,려면
+
+				//new File(session.getServletContext().getRealPath(filePath)).delete();
+				// 파일 객체를 만들어서 삭제
+			}
+			session.setAttribute("alertMsg", "삭제 되었습니다.");
+			return "redirect:selectStoreDetail.do?ucSeq="+ucSeq;
+		}else {//삭제 실패
+			model.addAttribute("errorMsg", "리뷰 삭제 실패 ");
+			return "common/errorPage";
+		}
+		
+	}
 	
 	//파일 첨부 관련 메소드
 	public String saveFile(MultipartFile upfile, HttpSession session) { // 실제 넘어온 파일의 이름을 변경해서 서버에 업로드

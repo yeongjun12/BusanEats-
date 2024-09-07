@@ -82,5 +82,15 @@
 		
 				 USER_NO = #{userNo}	
 	</update>
+	
+	
+	 <select id="myPage" resultType="map">
+        SELECT 
+            (SELECT COUNT(*) FROM STORE_LIKE WHERE USER_NO = #{userNo}) AS count_store_like,
+            (SELECT COUNT(*) FROM REVIEW WHERE USER_NO = #{userNo}) AS count_review,
+            (SELECT COUNT(*) FROM RESERVATION WHERE USER_NO = #{userNo}) AS count_reservation
+        FROM DUAL
+    </select>
+	
 
 </mapper>

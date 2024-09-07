@@ -7,8 +7,9 @@ import lombok.Data;
 @AllArgsConstructor
 public class Review {
 	
+	private Integer reviewNo;
 	private int userNo;
-	private String reviewerId;
+	private String userId;
 	private int ucSeq;
 	private int rating;
 	private String reviewComment;

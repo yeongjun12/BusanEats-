@@ -44,4 +44,22 @@ public class ReviewServiceImpl implements ReviewService {
 		return reviewDao.selectList(ucSeq,pi,sqlSession);
 	}
 
+
+	@Override
+	public int updateReview(Review r) {
+		return reviewDao.updateReview(r,sqlSession);
+	}
+
+
+	@Override
+	public ArrayList<Review> myReviews(int userNo) {
+		return reviewDao.myReviews(userNo, sqlSession);
+	}
+
+
+	@Override
+	public int deleteReview(int reviewNo) {
+		return reviewDao.deleteReview(reviewNo, sqlSession);
+	}
+
 }
