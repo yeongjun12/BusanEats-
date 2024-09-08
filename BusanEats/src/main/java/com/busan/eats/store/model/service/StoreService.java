@@ -29,5 +29,11 @@ public interface StoreService {
 	//식당 리뷰 숫자 count
 	int selectReviewCount(int ucSeq);
 	
+	//식당 좋아요 숫자 count
+	int selectLikeCount(int ucSeq);
+	
+	//검색창 검색해서 조회
+	ArrayList<Store> searchStore(String query);
+	
 
 }

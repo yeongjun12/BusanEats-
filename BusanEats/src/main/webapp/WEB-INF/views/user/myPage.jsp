@@ -213,7 +213,7 @@
         <h2>${sessionScope.loginUser.getUserId() }</h2>
     </div>
     <div class="profile-edit">
-        <a href="#">프로필 수정</a>
+        <a href="myPage2.do">프로필 수정</a>
     </div>
 </div>
 

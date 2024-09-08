@@ -83,7 +83,7 @@
 				 USER_NO = #{userNo}	
 	</update>
 	
-	
+	<!-- 마이페이지 졿아요, 리뷰, 예약한 수 보여주는 쿼리 -->
 	 <select id="myPage" resultType="map">
         SELECT 
             (SELECT COUNT(*) FROM STORE_LIKE WHERE USER_NO = #{userNo}) AS count_store_like,
@@ -91,6 +91,17 @@
             (SELECT COUNT(*) FROM RESERVATION WHERE USER_NO = #{userNo}) AS count_reservation
         FROM DUAL
     </select>
+    
+    <!-- 회원정보 탈퇴 쿼리 -->
+    <update id="deleteUser" parameterType="_int">
+    	UPDATE
+				USERS
+		   SET
+				 USER_STATUS = 'N'
+		WHERE
+				 USER_NO = #{userNo}
+    
+    </update>
 	
 
 </mapper>

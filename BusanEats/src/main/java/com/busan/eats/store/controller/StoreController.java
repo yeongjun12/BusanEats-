@@ -18,6 +18,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -177,6 +178,7 @@ public class StoreController {
 	    // Store의 ucSeq와 평균 평점을 매핑하기 위한 Map을 생성합니다.
 	    Map<Integer, Double> averageRatingMap = new HashMap<>();
 	    Map<Integer, Integer> reviewCountMap = new HashMap<>();
+	    Map<Integer, Integer> likeCountMap = new HashMap<>();
 
 		
 	    // 각 Store 객체에 대해 평균 평점을 조회
@@ -184,10 +186,11 @@ public class StoreController {
 			int ucSeq = store.getUcSeq();
 			double average_rating = storeService.selectAvgRating(ucSeq); //리스트에서 뽑은 ucSeq로 평점 평균 조회
 			int reviewCount = storeService.selectReviewCount(ucSeq);
+			int likeCount = storeService.selectLikeCount(ucSeq);
 			averageRatingMap.put(ucSeq,average_rating); // key:식당번호, value: 리뷰 평균으로 담음
 			reviewCountMap.put(ucSeq,reviewCount);
+			likeCountMap.put(ucSeq,likeCount);
 		}
-		
 		
 	    if(session.getAttribute("loginUser") != null) {
 	    	int userNo = ((User)session.getAttribute("loginUser")).getUserNo(); //먼저 현재 userNo로 좋아요 누른 식당 번호를 조회해와서 화면에 뿌려줌.
@@ -196,12 +199,12 @@ public class StoreController {
 	    		
 	    		mv.addObject("likeNoList",storeService.selectLikeList(userNo));
 	    	}
-	    	
 	    }
 		
 		mv.addObject("list",list)
 		.addObject("averageRatingMap",averageRatingMap)
 		.addObject("reviewCountMap",reviewCountMap)
+		.addObject("likeCountMap",likeCountMap)
 		.addObject("gugunNm",gugunNm)
 		.setViewName("store/storeList");
 		
@@ -209,11 +212,54 @@ public class StoreController {
 		
 	}
 	
+	/*
 	@RequestMapping("detail.do")
 	public String detail(){
 		return "store/storeDetailView";
 		
 	}
+	*/
+	
+	
+	@GetMapping("search.do")
+    public ModelAndView searchStore(String query, ModelAndView mv, HttpSession session) {
+		 // Store의 ucSeq와 평균 평점을 매핑하기 위한 Map을 생성합니다.
+	    Map<Integer, Double> averageRatingMap = new HashMap<>();
+	    Map<Integer, Integer> reviewCountMap = new HashMap<>();
+	    Map<Integer, Integer> likeCountMap = new HashMap<>();
+	    ArrayList<Store> list = storeService.searchStore(query);
+		
+	    // 각 Store 객체에 대해 평균 평점을 조회
+		for(Store store : list) {
+			int ucSeq = store.getUcSeq();
+			double average_rating = storeService.selectAvgRating(ucSeq); //리스트에서 뽑은 ucSeq로 평점 평균 조회
+			int reviewCount = storeService.selectReviewCount(ucSeq);
+			int likeCount = storeService.selectLikeCount(ucSeq);
+			averageRatingMap.put(ucSeq,average_rating); // key:식당번호, value: 리뷰 평균으로 담음
+			reviewCountMap.put(ucSeq,reviewCount);
+			likeCountMap.put(ucSeq,likeCount);
+		}
+		
+		 if(session.getAttribute("loginUser") != null) {
+		    	int userNo = ((User)session.getAttribute("loginUser")).getUserNo(); //먼저 현재 userNo로 좋아요 누른 식당 번호를 조회해와서 화면에 뿌려줌.
+		    	
+		    	if(storeService.selectLikeList(userNo) != null) {
+		    		
+		    		mv.addObject("likeNoList",storeService.selectLikeList(userNo));
+		    	}
+		    	
+		    }
+		
+		
+        mv.addObject("searchResults", storeService.searchStore(query))
+        .addObject("query",query)
+        .addObject("averageRatingMap",averageRatingMap)
+		.addObject("reviewCountMap",reviewCountMap)
+		.addObject("likeCountMap",likeCountMap)
+		.setViewName("store/searchStore");
+        
+        return mv; 
+    }
 	
 	@RequestMapping("selectStoreDetail.do")
 	public ModelAndView selectStoreDetail(@RequestParam(value="ucSeq") int ucSeq, @RequestParam(value="cpage",defaultValue="1") int currentPage, HttpSession session) {

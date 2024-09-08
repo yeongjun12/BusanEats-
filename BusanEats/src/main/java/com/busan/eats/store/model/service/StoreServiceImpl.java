@@ -69,6 +69,18 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 
+	@Override
+	public ArrayList<Store> searchStore(String query) {
+		return storeDao.searchStore(sqlSession,query);
+	}
+
+
+	@Override
+	public int selectLikeCount(int ucSeq) {
+		return storeDao.selectLikeCount(sqlSession,ucSeq);
+	}
+	
+
 	
 
 }

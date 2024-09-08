@@ -73,12 +73,22 @@
     <title>Header Example</title>
 </head>
 <body>
+	<c:if test="${ not empty alertMsg}">
+	<script>
+	
+		alert('${alertMsg}');
+	
+	</script>
+	<c:remove var="alertMsg" scope="session" />
+	</c:if>
 
 <header>
     <div class="logo"><img src="resources/images/mainLogo.png" width="150" height="90"></div>
     <div class="search">
-        <input type="text" placeholder="검색어 입력">
-        <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+       <form class="search" action="search.do" method="get"> <!-- Update 'search.do' to your desired controller path -->
+       <input type="text" name="query" placeholder="검색어 입력"> <!-- Name attribute added for search term -->
+       <img src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png">
+    </form>
     </div>
     <div class="login-signup">
     

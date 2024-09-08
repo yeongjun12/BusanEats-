@@ -110,6 +110,11 @@ public class UserController {
 		return mv;
 	}
 	
+	@RequestMapping("myPage2.do")
+	public String mypage2() {
+		return "user/myPage2";
+	}
+	
 	@RequestMapping("test.do")
 	public String Test() {
 		return "user/NewFile";
@@ -119,13 +124,26 @@ public class UserController {
 	@RequestMapping("update.do")
 	public String updateUser(String newPwd,User user ) {
 		
-		
 		String encPwd = bcryptPasswordEncoder.encode(newPwd);
 		user.setUserPwd(encPwd);
 		
 		userService.updateUser(user);
 		
 		return "redirect:myPage.do";
+	}
+	
+	@RequestMapping("deleteUser.do")
+	public String deleteUser(int userNo, HttpSession session) {
+		if(userService.deleteUser(userNo) > 0 ) {
+			//탈퇴처리 성공 => session에서 loginUser지움, alert문구 담기 => 메인페이지 url요청
+			  session.removeAttribute("loginUser");
+			  session.setAttribute("alertMsg", "탈퇴 되었습니다.");
+			  
+			  return "redirect:/";
+		}else {
+			  session.setAttribute("errorMsg", "실패");
+			  return "common/errorPage";
+		  }
 	}
 	
 	@ResponseBody

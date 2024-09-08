@@ -16,7 +16,7 @@ public interface UserService {
 	int updateUser(User user);
 	
 	//회원 탈퇴 서비스(update)
-	int deleteUser(String userId);
+	int deleteUser(int userNo);
 	
 	//아이디 중복체크 서비스(select)
 	int idCheck(String checkId);

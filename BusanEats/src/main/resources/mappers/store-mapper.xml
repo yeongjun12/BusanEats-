@@ -131,5 +131,60 @@
 		AND
 				REVIEW_STATUS = 'Y'
 	</select>
+	
+	<!-- 식당 좋아요수 카운트 쿼리 -->
+	<select id="selectLikeCount" parameterType="_int" resultType="int">
+		SELECT
+		    	COUNT(*)
+		FROM 
+				STORE S, STORE_LIKE L
+		WHERE 
+				S.UC_SEQ= L.UC_SEQ
+		AND 
+				S.UC_SEQ = #{ucSeq}
+	</select>
+	
+	<!-- 검색한 식당 리스트 조회 쿼리 -->
+	<select id="searchStore" resultMap="storeResultSet" parameterType="String" >
+	        
+	     SELECT 
+		    S.UC_SEQ,  
+		    S.MAIN_TITLE, 
+		    S.GUGUN_NM,
+		    S.ADDR1,
+		    S.CNTCT_TEL,
+		    S.USAGE_DAY_WEEK_AND_TIME,
+		    S.RPRSNTV_MENU,
+		    S.MAIN_IMG_NORMAL,
+		    S.MAIN_IMG_THUMB,
+		    S.ITEMCNTNTS,
+		    S.LAT,
+		    S.LNG,
+		    S.COUNT,
+		    COUNT(R.UC_SEQ) AS REVIEW_COUNT  <!-- 각 UC_SEQ에 대한 리뷰의 개수를 셉니다. --> 
+		FROM 
+		    STORE S
+		LEFT JOIN 
+		    REVIEW R ON S.UC_SEQ = R.UC_SEQ  <!-- STORE와 REVIEW 테이블을 UC_SEQ를 기준으로 조인합니다. --> 
+		WHERE 
+		    S.MAIN_TITLE LIKE '%' || #{query} || '%' 
+		    OR S.RPRSNTV_MENU LIKE '%' || #{query} || '%' <!-- MAIN_TITLE 또는 RPRSNTV_MENU에 '고기'가 포함된 행을 필터링합니다. -->  
+		GROUP BY 
+		    S.UC_SEQ,  
+		    S.MAIN_TITLE, 
+		    S.GUGUN_NM,
+		    S.ADDR1,
+		    S.CNTCT_TEL,
+		    S.USAGE_DAY_WEEK_AND_TIME,
+		    S.RPRSNTV_MENU,
+		    S.MAIN_IMG_NORMAL,
+		    S.MAIN_IMG_THUMB,
+		    S.ITEMCNTNTS,
+		    S.LAT,
+		    S.LNG,
+		    S.COUNT  
+		ORDER BY 
+		    (REVIEW_COUNT + S.COUNT) DESC
+	</select>
 
 </mapper>

@@ -27,5 +27,9 @@ public class UserDao {
 	public Map<String, Integer> myPage(SqlSessionTemplate sqlSession, int userNo) {
 		return sqlSession.selectOne("userMapper.myPage", userNo);
 	}
+	
+	public int deleteUser(SqlSessionTemplate sqlSession, int userNo) {
+		return sqlSession.update("userMapper.deleteUser",userNo);
+	}
 
 }

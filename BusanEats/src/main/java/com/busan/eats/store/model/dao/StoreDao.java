@@ -41,6 +41,14 @@ public class StoreDao {
 	public int selectReviewCount(SqlSessionTemplate sqlSession, int ucSeq) {
 		return sqlSession.selectOne("storeMapper.selectReviewCount", ucSeq);
 	}
+	
+	public ArrayList<Store> searchStore(SqlSessionTemplate sqlSession,String query) {
+		return (ArrayList)sqlSession.selectList("storeMapper.searchStore",query);
+	}
+	
+	public int selectLikeCount(SqlSessionTemplate sqlSession, int ucSeq) {
+		return sqlSession.selectOne("storeMapper.selectLikeCount",ucSeq);
+	}
 
 
 }
