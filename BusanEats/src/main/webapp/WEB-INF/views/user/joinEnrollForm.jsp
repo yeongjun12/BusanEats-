@@ -71,7 +71,20 @@
 					  </select>
 					</div>
                     <input type="text" id="selected-date" placeholder="선택된 날짜" name="userBirth" hidden >
-                    
+                     
+                     <!-- 이메일 입력 및 인증 -->
+                    <label for="email"> &nbsp; Email : </label>
+                    <div class="input-group mb-3">
+                        <input type="text" class="form-control" id="userEmail" placeholder="Please Enter Email" name="userEmail">
+                        <button type="button" class="btn btn-outline-secondary" id="sendEmailBtn">인증번호 발송</button>
+                    </div>
+
+                    <!-- 인증번호 입력 -->
+                    <div class="input-group mb-3" id="emailVerificationSection" style="display: none;">
+                        <input type="text" class="form-control" id="emailVerificationCode" placeholder="인증번호를 입력하세요">
+                        <button type="button" class="btn btn-outline-secondary" id="verifyEmailBtn">인증번호 확인</button>
+                    </div>
+                </div>
                     
                     
                   <label for="email"> &nbsp; Email : </label>
@@ -83,7 +96,7 @@
                 
                 <br>
                 <div class="btns" align="center">
-                    <button type="submit" class="btn btn-primary">회원가입</button>
+                    <button type="submit" id="registerBtn" class="btn btn-primary" disabled>회원가입</button>
                     <button type="reset" class="btn btn-danger">초기화</button>
                 </div>
             </form>
@@ -197,7 +210,55 @@
 	  }
 	}
 	
-	
+	$('#sendEmailBtn').click(function () {
+	    const email = $('#userEmail').val();
+	    if (!email) {
+	        alert('이메일을 입력하세요.');
+	        return;
+	    }
+
+	    // 인증번호 발송 요청
+	    $.ajax({
+	        type: 'POST',
+	        url: 'input', // 서버의 인증번호 발송 처리 URL
+	        data: { email: email },
+	        success: function (response) {
+	            if (response === 'success') {
+	                alert('인증번호가 발송되었습니다. 이메일을 확인하세요.');
+	                $('#emailVerificationSection').show(); // 인증번호 입력 필드 보이기
+	            } else {
+	                alert('인증번호 발송에 실패했습니다.');
+	            }
+	        },
+	        error: function () {
+	            alert('인증번호 발송에 실패했습니다.');
+	        }
+	    });
+	});
+
+
+	// 인증번호 확인 버튼 클릭 이벤트
+	$('#verifyEmailBtn').click(function () {
+	    const verificationCode = $('#emailVerificationCode').val();
+
+	    // 인증번호 검증 요청
+	    $.ajax({
+	        type: 'POST',
+	        url: 'check', // 서버의 인증번호 검증 처리 URL
+	        data: { secret: verificationCode },
+	        success: function (result) {
+	            if (result.includes('true')) {
+	                alert('이메일 인증에 성공했습니다.');
+	                 $('#registerBtn').prop('disabled', false); // 회원가입 버튼 활성화
+	            } else {
+	                alert('인증번호가 올바르지 않습니다.');
+	            }
+	        },
+	        error: function () {
+	            alert('인증번호 확인에 실패했습니다.');
+	        }
+	    });
+	});
 	
 
 </script>

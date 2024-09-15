@@ -79,6 +79,12 @@ public class StoreServiceImpl implements StoreService {
 	public int selectLikeCount(int ucSeq) {
 		return storeDao.selectLikeCount(sqlSession,ucSeq);
 	}
+
+
+	@Override
+	public ArrayList<Store> selectRegionTop5(String region) {
+		return storeDao.selectRegionTop5(sqlSession,region);
+	}
 	
 
 	

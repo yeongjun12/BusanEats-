@@ -49,6 +49,10 @@ public class StoreDao {
 	public int selectLikeCount(SqlSessionTemplate sqlSession, int ucSeq) {
 		return sqlSession.selectOne("storeMapper.selectLikeCount",ucSeq);
 	}
+	
+	public ArrayList<Store> selectRegionTop5(SqlSessionTemplate sqlSession,String region) {
+		return (ArrayList)sqlSession.selectList("storeMapper.selectRegionTop5",region);
+	}
 
 
 }

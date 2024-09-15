@@ -67,6 +67,8 @@ public class ReviewController {
 	@RequestMapping("updateReview.do")
 	public String updateReview(Review r,String reloadPath, HttpSession session,Model model) {
 		
+		reloadPath = (reloadPath != null) ? reloadPath : "";
+		
 		System.out.println(reloadPath);
 		if(reviewService.updateReview(r) > 0) {
 			session.setAttribute("alertMsg","리뷰가 수정 되었습니다.");

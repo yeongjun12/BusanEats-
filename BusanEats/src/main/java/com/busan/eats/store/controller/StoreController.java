@@ -6,10 +6,16 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
@@ -31,6 +37,7 @@ import com.busan.eats.review.model.vo.Review;
 import com.busan.eats.store.model.service.StoreService;
 import com.busan.eats.store.model.vo.Store;
 import com.busan.eats.user.model.vo.User;
+import com.google.gson.Gson;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
 
 @Controller
@@ -262,48 +269,120 @@ public class StoreController {
     }
 	
 	@RequestMapping("selectStoreDetail.do")
-	public ModelAndView selectStoreDetail(@RequestParam(value="ucSeq") int ucSeq, @RequestParam(value="cpage",defaultValue="1") int currentPage, HttpSession session) {
+	public ModelAndView selectStoreDetail(
+	        @RequestParam(value="ucSeq") int ucSeq, 
+	        @RequestParam(value="cpage", defaultValue="1") int currentPage, 
+	        HttpSession session,
+	        HttpServletResponse response,
+	        HttpServletRequest request) {
+	    
 	    ModelAndView mv = new ModelAndView();
-	    
-	    
-	    
+
+	    // 로그인한 사용자가 있을 경우
 	    if(session.getAttribute("loginUser") != null) {
-	    	int userNo = ((User)session.getAttribute("loginUser")).getUserNo(); //먼저 현재 userNo로 좋아요 누른 식당 번호를 조회해와서 화면에 뿌려줌.
-	    	
-	    	if(storeService.selectLikeList(userNo) != null) {
-	    		
-	    		mv.addObject("likeNoList",storeService.selectLikeList(userNo));
-	    	}
-	    	
+	        int userNo = ((User)session.getAttribute("loginUser")).getUserNo(); // 현재 userNo로 좋아요 누른 식당 번호를 조회
+	        List<Integer> likeNoList = storeService.selectLikeList(userNo);
+	        
+	        // 사용자가 좋아요 누른 식당 목록을 가져와서 모델에 추가
+	        if (likeNoList != null) {
+	            mv.addObject("likeNoList", likeNoList);
+	        }
 	    }
-	    
-	    
-	    if(storeService.increaseCount(ucSeq) > 0) { //조회수 증가 성공하면
-	    	
-	    	Store s = storeService.selectStoreDetail(ucSeq); //식당번호로 해당 식당 정보 조회 해서 객체에 담음
-	    	PageInfo pi = Pagination.getPageInfo(reviewService.reviewCount(ucSeq), currentPage , 10 , 5);
-	 	    List<Review> reviewList = reviewService.selectReview(ucSeq, pi);
-	 	    
-	 	    int likeCount = storeService.selectStoreLike(ucSeq);
-	 	    double average_rating = storeService.selectAvgRating(ucSeq);
-	 	    
-	 	    // ModelAndView에 객체와 뷰 이름을 설정
-	 	    mv.addObject("s", s)
-	 	      .addObject("pi",pi)
-	 	      .addObject("reviewList", reviewList)
-	 	      .addObject("likeCount", likeCount)
-	 	      .addObject("average_rating",average_rating)
-	 	      .setViewName("store/storeDetailView");
-	    	
-	    }else {
-			mv.addObject("errorMsg", "게시글 조회 실패").setViewName("common/errorPage");
-		}
+
+	    // 조회수 증가 성공 시
+	    if(storeService.increaseCount(ucSeq) > 0) {
+	        Store s = storeService.selectStoreDetail(ucSeq); // 식당 정보 조회
+	        PageInfo pi = Pagination.getPageInfo(reviewService.reviewCount(ucSeq), currentPage, 10, 5);
+	        List<Review> reviewList = reviewService.selectReview(ucSeq, pi);
+	        int likeCount = storeService.selectStoreLike(ucSeq);
+	        double average_rating = storeService.selectAvgRating(ucSeq);
+	        
+	        // 최근 본 식당을 쿠키에 추가
+	        Cookie recentStoreCookie = new Cookie("recentStores", getUpdatedRecentStoresCookieValue(ucSeq, request));
+	        recentStoreCookie.setMaxAge(1 * 24 * 60 * 60); // 쿠키 만료 시간 설정: 1일
+	        recentStoreCookie.setPath("/"); // 쿠키 경로 설정
+	        response.addCookie(recentStoreCookie);
+	        
+	        // 최근 본 식당 쿠키 값을 모델에 추가
+	        List<String> recentStoresList = parseRecentStoresCookieValue(request);
+	        mv.addObject("recentStoresList", recentStoresList);
+
+	        // ModelAndView에 객체와 뷰 이름을 설정
+	        mv.addObject("s", s)
+	          .addObject("pi", pi)
+	          .addObject("reviewList", reviewList)
+	          .addObject("likeCount", likeCount)
+	          .addObject("average_rating", average_rating)
+	          .setViewName("store/storeDetailView");
+	    } else {
+	        mv.addObject("errorMsg", "게시글 조회 실패").setViewName("common/errorPage");
+	    }
 
 	    return mv;
 	}
-	
-	
-	
 
+	// 최근 본 식당 쿠키 값을 업데이트하는 메서드
+	private String getUpdatedRecentStoresCookieValue(int ucSeq, HttpServletRequest request) {
+	    Cookie[] cookies = request.getCookies();
+	    LinkedHashSet<String> recentStoresSet = new LinkedHashSet<>();
+	    
+	    if (cookies != null) {
+	        for (Cookie cookie : cookies) {
+	            if ("recentStores".equals(cookie.getName())) {
+	                String cookieValue = cookie.getValue();
+	                if (cookieValue != null) {
+	                    // 기존 쿠키 값을 읽어서 업데이트
+	                    recentStoresSet.addAll(Arrays.asList(cookieValue.split("\\|")));
+	                }
+	                break;
+	            }
+	        }
+	    }
+	    
+	    // 기존에 있으면 제거하고 현재 식당을 추가
+	    recentStoresSet.remove(String.valueOf(ucSeq));
+	    recentStoresSet.add(String.valueOf(ucSeq));
+	    
+	    // 5개를 초과하면 가장 오래된 것을 제거
+	    if (recentStoresSet.size() > 5) {
+	        Iterator<String> iterator = recentStoresSet.iterator();
+	        while (iterator.hasNext() && recentStoresSet.size() > 5) {
+	            iterator.next();
+	            iterator.remove();
+	        }
+	    }
+	    
+	    // 최종 쿠키 값 생성 (구분 문자를 콤마 대신 파이프 문자 | 사용)
+	    return String.join("|", recentStoresSet);
+	}
+
+	// 쿠키 값을 리스트로 변환하는 메서드
+	private List<String> parseRecentStoresCookieValue(HttpServletRequest request) {
+	    Cookie[] cookies = request.getCookies();
+	    List<String> recentStoresList = new ArrayList<>();
+	    
+	    if (cookies != null) {
+	        for (Cookie cookie : cookies) {
+	            if ("recentStores".equals(cookie.getName())) {
+	                String cookieValue = cookie.getValue();
+	                if (cookieValue != null && !cookieValue.isEmpty()) {
+	                    recentStoresList = Arrays.asList(cookieValue.split("\\|"));
+	                }
+	                break;
+	            }
+	        }
+	    }
+	    
+	    return recentStoresList;
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="selectRegionTop5.do", produces="application/json; charset=UTF-8")
+	public String selectRegionTop5(String region) {
+		
+		ArrayList<Store> top5List = storeService.selectRegionTop5(region);
+		
+		return new Gson().toJson(top5List);
+	}
 
 }

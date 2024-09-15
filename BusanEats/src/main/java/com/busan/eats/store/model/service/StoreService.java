@@ -33,7 +33,10 @@ public interface StoreService {
 	int selectLikeCount(int ucSeq);
 	
 	//검색창 검색해서 조회
-	ArrayList<Store> searchStore(String query);
+	ArrayList<Store> searchStore(String query); 
+	
+	//지역 TOP5 조회
+	ArrayList<Store> selectRegionTop5(String region); 
 	
 
 }

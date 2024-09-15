@@ -102,6 +102,121 @@
 				 USER_NO = #{userNo}
     
     </update>
+    
+    <!-- 카카오 아이디 존재 여부를 확인하는 쿼리 -->
+    <select id="checkUserExists" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
+    
+    <!-- 네이버 아이디 존재 여부를 확인하는 쿼리 -->
+    <select id="emailCheck" parameterType="String" resultType="int">
+        SELECT COUNT(*)
+        FROM users
+        WHERE USER_EMAIL = #{email}
+    </select>
+    
+    
+	<insert id="registerKakaoUser" parameterType="String">
+	INSERT
+		INTO
+			USERS
+			(
+			  USER_NO
+			 ,USER_ID
+			 ,USER_PWD
+			 ,USER_NAME
+			 ,USER_PHONE
+			 ,USER_BIRTH
+			 ,USER_EMAIL
+			)
+	VALUES
+			(
+			 SEQ_UNO.NEXTVAL
+			,#{userId}
+			,'kakaoPwd'
+			,#{userName}
+			,''
+			,'2023-01-01'
+			,''
+			)
 	
+	</insert>
+	
+	<!-- 네이버 가입 -->
+	<insert id="naverInsert" parameterType="user">
+	INSERT
+		INTO
+			USERS
+			(
+			  USER_NO
+			 ,USER_ID
+			 ,USER_PWD
+			 ,USER_NAME
+			 ,USER_PHONE
+			 ,USER_BIRTH
+			 ,USER_EMAIL
+			)
+	VALUES
+			(
+			 SEQ_UNO.NEXTVAL
+			,#{userId}
+			,'naverPwd'
+			,#{userName}
+			,''
+			,'2023-01-01'
+			,#{userEmail}
+			)
+	
+	</insert>	
+	
+	
+	
+	<!-- 로그인용 쿼리문 -->
+	<select id="loginNaver" parameterType="String" resultMap="userResultSet">
+	
+	SELECT
+		     USER_NO
+		    ,USER_ID
+		    ,USER_PWD
+		    ,USER_NAME
+		    ,USER_PHONE
+		    ,TO_CHAR(USER_BIRTH, 'YYYY-MM-DD') AS USER_BIRTH
+		    ,USER_EMAIL
+		    ,USER_STATUS
+	FROM
+	   		USERS
+	WHERE
+			USER_EMAIL = #{email}
+	  AND
+	 		USER_STATUS ='Y'
+	</select>
+	
+	<insert id="insertSecret" parameterType="CertVO">
+		INSERT INTO CERT(
+						who, secret, when
+						)
+					VALUES (
+							#{who}, #{secret}, sysdate
+							)
+	
+	</insert>
+	
+	<select id="validate" resultType="com.busan.eats.common.entity.CertVO" parameterType="CertVO">
+		select
+			*
+		from
+				cert
+		where
+				who = #{who}
+		and
+				secret = #{secret}
+		and
+				when between sysdate - 3/24/60 and sysdate
+	</select>
 
+	<delete id="remove" parameterType="CertVO">
+		delete cert where who = #{who} and secret = #{secret}
+	</delete>
 </mapper>

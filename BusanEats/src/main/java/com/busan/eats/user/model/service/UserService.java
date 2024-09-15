@@ -2,6 +2,7 @@ package com.busan.eats.user.model.service;
 
 import java.util.Map;
 
+import com.busan.eats.common.entity.CertVO;
 import com.busan.eats.user.model.vo.User;
 
 public interface UserService {
@@ -22,5 +23,16 @@ public interface UserService {
 	int idCheck(String checkId);
 	
 	Map<String, Integer> myPage(int userNo);
+	
+	//카카로 로그인 아이디 중복체크
+	boolean checkUserExists(String userId);
+	
+	//카카오 로그인 회원 등록
+	int registerKakaoUser(User user);
+	
+	// 메일
+    void sendMail(CertVO certVo);
+    
+    boolean validate(CertVO certVo);
 
 }

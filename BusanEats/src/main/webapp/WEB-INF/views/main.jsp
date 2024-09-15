@@ -1,9 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html><html lang="ko"><head>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <title>메인 페이지</title>
+
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -227,6 +232,10 @@
 		    font-size: 14px;
 		    color: #777;
 		}
+		
+		.right-section .real-time-section {
+		    margin-bottom: 20px; /* 원하는 여백 크기로 조정 */
+		}
         
     </style></head><body>
     
@@ -251,52 +260,34 @@
             
                <div role="img" class="noresize" style="width: 400px; line-height: 1; text-align: center; background-color: #ffffff; position: relative;">
     <span typeof="mw:File">
-        <a href="https://commons.wikimedia.org/wiki/File:Map_Busan-gwangyeoksi.svg" class="mw-file-description">
-            <img alt="부산광역시 행정 지도" src="//upload.wikimedia.org/wikipedia/commons/thumb/6/65/Map_Busan-gwangyeoksi.svg/400px-Map_Busan-gwangyeoksi.svg.png" decoding="async" width="400" height="311" class="mw-file-element" 
+            <img alt="부산광역시 행정 지도" src="//upload.wikimedia.org/wikipedia/commons/thumb/6/65/Map_Busan-gwangyeoksi.svg/400px-Map_Busan-gwangyeoksi.svg.png" decoding="async" width="550" height="311" class="mw-file-element" 
                 srcset="//upload.wikimedia.org/wikipedia/commons/thumb/6/65/Map_Busan-gwangyeoksi.svg/600px-Map_Busan-gwangyeoksi.svg.png 1.5x, //upload.wikimedia.org/wikipedia/commons/thumb/6/65/Map_Busan-gwangyeoksi.svg/800px-Map_Busan-gwangyeoksi.svg.png 2x" 
                 data-file-width="600" data-file-height="466">
-        </a>
     </span>
 
     <!-- 지도에 표시되는 지역들 -->
     <div style="font-size: 0.75em; line-height: 20px;">
-        <div style="position:absolute; text-align:center; left:82px; top:192px"><a href="selectStoreList.do?gugunNm=강서구" title="강서구 (부산광역시)">강서구</a></div>
-        <div style="position:absolute; text-align:center; left:134px; top:192px"><a href="selectStoreList.do?gugunNm=사상구" title="사상구">사상구</a></div>
-        <div style="position:absolute; text-align:center; left:122px; top:248px"><a href="selectStoreList.do?gugunNm=사하구" title="사하구">사하구</a></div>
-        <div style="position:absolute; text-align:center; left:174px; top:188px"><a href="selectStoreList.do?gugunNm=부산진구" title="부산진구">부산진구</a></div>
-        <div style="position:absolute; text-align:center; left:182px; top:212px"><a href="selectStoreList.do?gugunNm=동구" title="동구 (부산광역시)">동구</a></div>
-        <div style="position:absolute; text-align:center; left:174px; top:232px"><a href="selectStoreList.do?gugunNm=중구" title="중구 (부산광역시)">중구</a></div>
-        <div style="position:absolute; text-align:center; left:190px; top:268px"><a href="selectStoreList.do?gugunNm=영도구" title="영도구">영도구</a></div>
-        <div style="position:absolute; text-align:center; left:160px; top:139.6px"><a href="selectStoreList.do?gugunNm=북구" title="북구 (부산광역시)">북구</a></div>
-        <div style="position:absolute; text-align:center; left:209.6px; top:112.4px"><a href="selectStoreList.do?gugunNm=금정구" title="금정구">금정구</a></div>
-        <div style="position:absolute; text-align:center; left:201.6px; top:147.6px"><a href="selectStoreList.do?gugunNm=동래구" title="동래구">동래구</a></div>
-        <div style="position:absolute; text-align:center; left:209.6px; top:172.8px"><a href="selectStoreList.do?gugunNm=연제구" title="연제구">연제구</a></div>
-        <div style="position:absolute; text-align:center; left:233.6px; top:184.8px"><a href="selectStoreList.do?gugunNm=수영구" title="수영구">수영구</a></div>
-        <div style="position:absolute; text-align:center; left:160px; top:248px"><a href="selectStoreList.do?gugunNm=서구" title="서구 (부산광역시)">서구</a></div>
-        <div style="position:absolute; text-align:center; left:261.6px; top:164.4px"><a href="selectStoreList.do?gugunNm=해운대구" title="해운대구">해운대구</a></div>
-        <div style="position:absolute; text-align:center; left:221.6px; top:212.4px"><a href="selectStoreList.do?gugunNm=남구" title="남구 (부산광역시)">남구</a></div>
-        <div style="position:absolute; text-align:center; left:293.6px; top:76.4px"><a href="selectStoreList.do?gugunNm=기장군" title="기장군">기장군</a></div>
+        <div style="position:absolute; text-align:center; left:120px; top:200px"><a href="selectStoreList.do?gugunNm=강서구" title="강서구 (부산광역시)">강서구</a></div>
+        <div style="position:absolute; text-align:center; left:180px; top:192px"><a href="selectStoreList.do?gugunNm=사상구" title="사상구">사상구</a></div>
+        <div style="position:absolute; text-align:center; left:180px; top:248px"><a href="selectStoreList.do?gugunNm=사하구" title="사하구">사하구</a></div>
+        <div style="position:absolute; text-align:center; left:240px; top:188px"><a href="selectStoreList.do?gugunNm=부산진구" title="부산진구">부산진구</a></div>
+        <div style="position:absolute; text-align:center; left:240px; top:212px"><a href="selectStoreList.do?gugunNm=동구" title="동구 (부산광역시)">동구</a></div>
+        <div style="position:absolute; text-align:center; left:240px; top:232px"><a href="selectStoreList.do?gugunNm=중구" title="중구 (부산광역시)">중구</a></div>
+        <div style="position:absolute; text-align:center; left:270px; top:268px"><a href="selectStoreList.do?gugunNm=영도구" title="영도구">영도구</a></div>
+        <div style="position:absolute; text-align:center; left:230px; top:139.6px"><a href="selectStoreList.do?gugunNm=북구" title="북구 (부산광역시)">북구</a></div>
+        <div style="position:absolute; text-align:center; left:300.6px; top:112.4px"><a href="selectStoreList.do?gugunNm=금정구" title="금정구">금정구</a></div>
+        <div style="position:absolute; text-align:center; left:290.6px; top:147.6px"><a href="selectStoreList.do?gugunNm=동래구" title="동래구">동래구</a></div>
+        <div style="position:absolute; text-align:center; left:290.6px; top:172.8px"><a href="selectStoreList.do?gugunNm=연제구" title="연제구">연제구</a></div>
+        <div style="position:absolute; text-align:center; left:320.6px; top:184.8px"><a href="selectStoreList.do?gugunNm=수영구" title="수영구">수영구</a></div>
+        <div style="position:absolute; text-align:center; left:230px; top:248px"><a href="selectStoreList.do?gugunNm=서구" title="서구 (부산광역시)">서구</a></div>
+        <div style="position:absolute; text-align:center; left:350.6px; top:164.4px"><a href="selectStoreList.do?gugunNm=해운대구" title="해운대구">해운대구</a></div>
+        <div style="position:absolute; text-align:center; left:400px; top:70px"><a href="selectStoreList.do?gugunNm=기장군" title="기장군">기장군</a></div>
+        <div style="position:absolute; text-align:center; left:300.6px; top:212.4px"><a href="selectStoreList.do?gugunNm=남구" title="남구 (부산광역시)">남구</a></div>
     </div>
 </div> 
                 
                 
-                <div class="weather-menu-container">
-                    <div class="weather">
-                        <div class="location">강원도 강릉시 강남동</div>
-                        <div class="weather-info">
-                            <div>월요일</div>
-                            <div>6°C</div>
-                        </div>
-                    </div>
-                    <div class="menu-recommendation">
-                        <h3>현재 날씨에 따른 메뉴 추천</h3>
-                        <ul>
-                            <li>1. 마라탕</li>
-                            <li>2. 파전</li>
-                            <li>3. 막걸리</li>
-                        </ul>
-                    </div>
-                </div>
+                
             </div>
 
             <!-- Ranking Section -->
@@ -304,26 +295,26 @@
 			    <!-- 지역별 메뉴 바 -->
 			    <div class="region-menu">
 			        <ul class="region-links">
-			            <li><a href="#">강서구</a></li>
-			            <li><a href="#">사상구</a></li>
-			            <li><a href="#">사하구</a></li>
-			            <li><a href="#">부산진구</a></li>
-			            <li><a href="#">동구</a></li>
-			            <li><a href="#">중구</a></li>
-			            <li><a href="#">영도구</a></li>
-			            <li><a href="#">북구</a></li>
-			            <li><a href="#">금정구</a></li>
-			            <li><a href="#">동래구</a></li>
-			            <li><a href="#">연제구</a></li>
-			            <li><a href="#">수영구</a></li>
-			            <li><a href="#">서구</a></li>
-			            <li><a href="#">해운대구</a></li>
-			            <li><a href="#">남구</a></li>
-			            <li><a href="#">기장군</a></li>
+			            <li><a href="#" class="region-link" data-region="강서구">강서구</a></li>
+			            <li><a href="#" class="region-link" data-region="사상구">사상구</a></li>
+			            <li><a href="#" class="region-link" data-region="사하구">사하구</a></li>
+			            <li><a href="#" class="region-link" data-region="부산진구">부산진구</a></li>
+			            <li><a href="#" class="region-link" data-region="동구">동구</a></li>
+			            <li><a href="#" class="region-link" data-region="중구">중구</a></li>
+			            <li><a href="#" class="region-link" data-region="영도구">영도구</a></li>
+			            <li><a href="#" class="region-link" data-region="북구">북구</a></li>
+			            <li><a href="#" class="region-link" data-region="금정구">금정구</a></li>
+			            <li><a href="#" class="region-link" data-region="동래구">동래구</a></li>
+			            <li><a href="#" class="region-link" data-region="연제구">연제구</a></li>
+			            <li><a href="#" class="region-link" data-region="수영구">수영구</a></li>
+			            <li><a href="#" class="region-link" data-region="서구">서구</a></li>
+			            <li><a href="#" class="region-link" data-region="해운대구">해운대구</a></li>
+			            <li><a href="#" class="region-link" data-region="남구">남구</a></li>
+			            <li><a href="#" class="region-link" data-region="기장군">기장군</a></li>
 			        </ul>
 			    </div>
 			
-			    <h2>지역별 실시간 맛집 TOP5</h2>
+			    <h2><a class="gugunNm"></a> 실시간 맛집 TOP5</h2>
 			    <div class="ranking-list">
 			        <div class="ranking-item">
 			            <img src="top1.jpg" alt="Top 1">
@@ -356,7 +347,34 @@
         </div>
 
         <!-- Right Section -->
+        <!-- 최근 본 식당 목록을 쿠키에서 읽어오기 -->
+		<c:set var="storeList" value="${storeList}" />
+		
+		<!-- JSTL을 사용하여 Store 리스트 출력 -->
+
+        
         <div class="right-section">
+            <div class="real-time-section">
+                <h2>최근 본 식당</h2>
+               
+                <c:if test="${not empty storeList}">
+				    <ul class="store-list">
+				        <c:forEach items="${storeList}" var="store">
+				            <li class="real-time-item" data-ucseq="${store.ucSeq}"
+				                     data-url="<c:url value='/selectStoreDetail.do'/>">
+				                
+				                    <img src="${store.mainImgThumb}" alt="${store.mainTitle}" />
+				                    <div>
+				                        <h3>${store.mainTitle}</h3>
+				                        <p>주소: ${store.addr1}</p>
+				                    </div>
+				            </li>
+				        </c:forEach>
+				    </ul>
+				</c:if>
+                
+            </div>
+            
             <div class="real-time-section">
                 <h2>실시간 맛집 평가</h2>
                 <div class="real-time-item">
@@ -391,4 +409,115 @@
         </div>
     </div>
 
-</body></html>
+</body>
+<script>
+    $(document).ready(function() {
+    	
+    	
+    	 $.ajax({ //****** 여기서 리스트 받아와서!!!!!!!!!!!!
+             url: 'selectRegionTop5.do', // 서버의 엔드포인트
+             type: 'POST',
+             data:{ region: '강서구' }, // 서버로 보낼 데이터
+             dataType: 'json',
+             success: function(response) {
+                 // 서버로부터 받은 데이터를 처리
+                 $('.gugunNm').text('깅서구');
+                 updateRankingList(response); // 순위 리스트 업데이트 함수 호출
+             },
+             error: function(error) {
+                 console.error('Error fetching data', error);
+             }
+         });
+    	
+    	
+    	
+    	
+    	
+        //최근본 식당 클릭시 해당 식당 상세정보
+        $('.real-time-item').on('click', function() {
+            var baseUrl = $(this).data('url');
+            var ucSeq = $(this).data('ucseq');
+
+            var url = baseUrl + '?ucSeq=' + ucSeq;
+            window.location.href = url;
+        });
+        
+        
+        $('.region-link').click(function(event) { //*********** 여기서 클릭하면!!!!!!!!!!!!!
+            event.preventDefault(); // 기본 링크 동작 방지
+            
+            var region = $(this).data('region'); // 선택한 구 데이터 가져오기
+			
+            console.log(region);
+            // Ajax 요청 보내기
+            
+            
+            $.ajax({ //****** 여기서 리스트 받아와서!!!!!!!!!!!!
+                url: 'selectRegionTop5.do', // 서버의 엔드포인트
+                type: 'POST',
+                data:{ region: region }, // 서버로 보낼 데이터
+                dataType: 'json',
+                success: function(response) {
+                    // 서버로부터 받은 데이터를 처리
+                    $('.gugunNm').text(region);
+                    updateRankingList(response); // 순위 리스트 업데이트 함수 호출
+                },
+                error: function(error) {
+                    console.error('Error fetching data', error);
+                }
+            });
+            
+            
+        });
+        
+     // 동적으로 생성된 .ranking-item에 클릭 이벤트 위임
+        $(document).on('click', '.ranking-item', function(event) {
+            event.preventDefault(); // 기본 링크 동작 방지
+            
+            var ucSeq = $(this).data('ucseq');
+
+            // 상세 페이지로 이동
+            if (ucSeq) {
+                window.location.href = 'selectStoreDetail.do?ucSeq=' + ucSeq;
+            } else {
+                console.error('ucSeq 값이 없습니다.');
+            }
+        });
+        
+       
+        function updateRankingList(data) {
+            var rankingList = $('.ranking-list');
+            rankingList.empty(); // 기존 리스트 제거
+            console.log(data);
+            
+            
+            // 데이터가 배열이고 길이가 0보다 클 때만 리스트 업데이트
+            if (Array.isArray(data) && data.length > 0) {
+                $.each(data, function(index, item) {
+                	
+
+                    var rankingItem = `
+                        <div class="ranking-item" data-ucSeq="\${item.ucSeq}"> 
+                    		<img src="\${item.mainImgNormal}">
+                            <h3>\${index + 1}. \${item.mainTitle}</h3>
+                        </div>`;
+                        
+                        
+                    rankingList.append(rankingItem);
+                });
+            } else {
+                rankingList.append('<p>데이터가 없습니다.</p>'); // 데이터가 없을 때 처리
+            }
+        }
+        
+        
+    });
+    
+   
+    
+    
+    
+</script>
+
+
+</html>

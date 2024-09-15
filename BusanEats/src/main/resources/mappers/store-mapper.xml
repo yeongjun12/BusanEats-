@@ -186,5 +186,34 @@
 		ORDER BY 
 		    (REVIEW_COUNT + S.COUNT) DESC
 	</select>
+	
+	<!-- 지역별 TOP5 쿼리 -->
+	<select id="selectRegionTop5" resultMap="storeResultSet" parameterType="String">
+		SELECT 
+    S.*                                <!-- 식당의 모든 정보를 조회 -->
+FROM (
+    SELECT 
+        S.UC_SEQ,                               <!-- 식당 고유번호 -->
+        S.MAIN_TITLE,                           <!-- 식당 이름 -->
+        COUNT(L.UC_SEQ) AS like_count,          <!-- 좋아요 수 -->
+        COUNT(CASE WHEN R.REVIEW_STATUS = 'Y' THEN 1 END) AS review_count, <!-- 리뷰 수 -->
+        (COUNT(L.UC_SEQ) + COUNT(CASE WHEN R.REVIEW_STATUS = 'Y' THEN 1 END)) AS total_count <!-- 좋아요 수 + 리뷰 수 -->
+    FROM 
+        STORE S
+        JOIN STORE_LIKE L ON S.UC_SEQ = L.UC_SEQ        <!-- 좋아요 테이블과 조인 -->
+        LEFT JOIN REVIEW R ON S.UC_SEQ = R.UC_SEQ       <!-- 리뷰 테이블과 조인 -->
+    WHERE 
+        S.gugun_nm = #{region}                         <!-- 지정된 지역에 위치한 식당 조회 -->
+    GROUP BY 
+        S.UC_SEQ, S.MAIN_TITLE                         <!-- 식당별 그룹화 -->
+    ORDER BY 
+        total_count DESC                               <!-- 좋아요 수와 리뷰 수 합산한 값으로 정렬 -->
+) T
+JOIN STORE S ON T.UC_SEQ = S.UC_SEQ                   <!-- 원래의 식당 테이블과 다시 조인하여 모든 정보 조회 -->
+WHERE ROWNUM BETWEEN 1 AND 5                        <!-- 상위 5개 식당 조회 -->
+		
+		
+	
+	</select>
 
 </mapper>
