@@ -1,0 +1,13 @@
+package com.busan.eats.chat.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class ChatWebSocketController {
+
+	@RequestMapping("chat")
+	public String chat() {
+		return "chat";
+	}
+}
