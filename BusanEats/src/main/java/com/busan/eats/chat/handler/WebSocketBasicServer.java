@@ -4,15 +4,20 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
+import com.busan.eats.chat.model.service.ChatServiceImpl;
 import com.busan.eats.chat.model.vo.ChatVO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class WebSocketBasicServer extends TextWebSocketHandler {
 
+	@Autowired
+	private ChatServiceImpl chatService;
+	
     // roomId를 키로 하고, 해당 방에 속한 세션들을 값으로 가지는 맵
     private static Map<String, Set<WebSocketSession>> chatRooms = new HashMap<>();
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -27,9 +32,23 @@ public class WebSocketBasicServer extends TextWebSocketHandler {
         String payload = message.getPayload();
         ChatVO chatMessage = objectMapper.readValue(payload, ChatVO.class);
         
-        System.out.println(message);
+        int userNo = chatMessage.getUserNo();
+        int ucSeq = chatMessage.getUcSeq();
+        
+        System.out.println("메시지 : "  + chatMessage.getMessage());
+        System.out.println("payload : " + payload);
         // roomId를 기준으로 해당 방에 있는 세션들에게만 메시지 전송
+        
         String roomId = chatMessage.getRoomId();
+        
+        if(chatService.getOrCreateRoom(roomId ,userNo, ucSeq) != null) {
+        	
+        	chatService.saveMessage(chatMessage);
+        }
+        
+        
+        
+        
         Set<WebSocketSession> roomSessions = chatRooms.get(roomId);
 
         if (roomSessions == null) {

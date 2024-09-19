@@ -262,6 +262,64 @@
 		    color: white; /* 버튼 텍스트 색상 */
 		}
 		
+		/* 채팅 모달 스타일 */
+    #chatModal .modal-dialog {
+        max-width: 600px;
+        margin: 30vh auto;
+    }
+
+    #messageList {
+        height: 300px;
+        overflow-y: auto;
+        border: 1px solid #ccc;
+        padding: 5px;
+        margin-bottom: 10px;
+        background-color: #f9f9f9;
+    }
+
+    #messageList li {
+        margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+        width: 80%;
+        padding: 10px;
+        margin-right: 10px;
+    }
+
+    button {
+        padding: 10px;
+    }
+    
+    /* 채팅 2222*/
+    .chat-messages {
+        padding: 10px;
+        overflow-y: scroll; /* 항상 스크롤바 표시 */
+        max-height: 800px;
+        height : 685px;
+    }
+    .chat-message {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+    .chat-message.received .message-bubble {
+        background-color: #e1e1e1;
+    }
+    .chat-message.sent .message-bubble {
+        background-color: #007bff;
+        color: #fff;
+        margin-left: auto; /* 오른쪽 정렬 */
+    }
+    .message-bubble {
+        display: inline-block;
+        padding: 8px 12px;
+        border-radius: 20px;
+    }
+    .chat-message .sender {
+        font-weight: bold;
+        margin-right: 10px;
+    }
 			
         
       
@@ -366,6 +424,38 @@
 				marker.setMap(map);
 		</script>
         </div>
+        
+         <!-- 1:1 채팅 버튼 -->
+    <button class="btn btn-primary" data-toggle="modal" data-target="#chatModal">1:1 문의</button>
+
+    <!-- 1:1 채팅 모달 -->
+    <div class="modal fade" id="chatModal" tabindex="-1" role="dialog" aria-labelledby="chatModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="chatModalLabel">1:1 채팅</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="chat">
+                        <h2>WebSocket 채팅</h2>
+                        <div class="chat-messages" id="chatMessages">
+					        <!-- 채팅 메시지가 여기에 표시됩니다. -->
+					        <div class="chat-message received">            
+					        </div>
+					        <div class="chat-message sent">
+					        </div>
+					        <!-- 이하 생략 -->
+					    </div>
+                        <input type="text" id="messageInput" placeholder="메시지를 입력하세요" />
+                        <button onclick="sendMessage()">보내기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
         <div class="review-section">
             <div class="review-toggle"  id="reviewToggle" onclick="toggleReviewForm()">리뷰 작성 ^</div>
@@ -743,6 +833,14 @@
                 }, 2000); // 취소 메시지가 2초 동안 표시됨
             }
         });
+        
+    	 // 모달이 열릴 때 실행될 이벤트 핸들러
+        $('#chatModal').on('shown.bs.modal', function () {
+            // 모달이 열리면 getMessages() 함수 실행
+            getMessages();
+        });
+        
+        
     });
     
     
@@ -770,6 +868,120 @@
 	        }
 		}
 	}
+    
+    
+    //***********************  채팅 ******************************
+    // USER_NO 및 UC_SEQ 설정
+    const userNo = ${sessionScope.loginUser.userNo};  // 현재 로그인 사용자 번호
+    const ucSeq = ${requestScope.s.ucSeq}; // 식당 ID
+
+    // WebSocket 연결 설정
+    const socket = new WebSocket("ws://" + location.host +"/eats/sc/"+userNo+"-"+ucSeq);
+
+    // WebSocket 연결 성공
+    socket.onopen = function(event) {
+        console.log("WebSocket 연결 성공");
+    };
+
+    // WebSocket으로부터 메시지를 수신
+    socket.onmessage = function(event) {
+        const message = JSON.parse(event.data);
+        displayMessage(message.senderType, message.message, message.userNo);  // 수신된 메시지 표시
+    };
+
+    // WebSocket 연결 종료
+    socket.onclose = function(event) {
+        console.log("WebSocket 연결 종료");
+    };
+
+    // WebSocket 에러 처리
+    socket.onerror = function(event) {
+        console.error("WebSocket 에러: ", event);
+    };
+
+    // 메시지 전송 함수
+    function sendMessage() {
+        const input = $("#messageInput").val();
+        if (input.trim() === "") {
+            alert("메시지를 입력하세요");
+            return;
+        }
+        
+        const now = new Date();
+        const formattedDateTime = now.toISOString().slice(0, 19).replace('T', ' '); // YYYY-MM-DD HH:MM:SS
+
+        // 서버로 보낼 메시지 객체
+        const message = {
+            roomId: ucSeq.toString() + "-" + userNo.toString(),  // UC_SEQ와 USER_NO로 채팅방 식별
+            senderType: "user",        // 사용자 발신
+            userNo: userNo,            // 발신자의 USER_NO
+            ucSeq: ucSeq,
+            message: input,            // 메시지 내용
+            sentAt: formattedDateTime  // 메시지 전송 날짜 및 시간
+        };
+
+        // 메시지를 서버로 전송
+        socket.send(JSON.stringify(message));
+
+        // 입력 필드를 비우기
+        document.getElementById("messageInput").value = "";
+    }
+
+    // 메시지를 화면에 표시하는 함수
+    function displayMessage(sender, message, userNo) {
+		
+        
+        let msg = '';
+        
+        //채팅정보에 userNo와 현재 로그인한 userNo 비교해서 같으면 오른쪽 다르면 보낸 영역
+        if (userNo == ${sessionScope.loginUser.userNo}) {
+        	msg = `<div class="chat-message sent">
+				<span class="message-bubble">\${ message }</span>
+			</div>`;
+        	
+        } else {
+        	msg = `<div class="chat-message received">
+				<span class="sender">${data.USR_NM}</span>
+				<span class="message-bubble">\${message}</span>
+			</div>`;
+        }
+        
+        $("#chatMessages").append(msg);
+
+    }
+    
+ // 모달이 닫힐 때 실행
+    $('#chatModal').on('hidden.bs.modal', function () {
+        // 메시지 영역을 비우기
+        $('#chatMessages').empty();  // 채팅 메시지 리스트를 비움
+        $('#messageInput').val('');  // 입력 필드를 비움
+    });
+    
+    //이전 메시지 조회하는 함수
+    function getMessages() {
+    $.ajax({
+        url: 'getPreviousMessages.do',  // 메시지를 가져오는 서버의 엔드포인트
+        type: 'POST',                   // 요청 방식 (POST)
+        dataType: 'json',               // 서버 응답을 JSON으로 기대
+        data: {                         // 서버로 전송할 데이터
+            roomId: ucSeq + "-" + userNo // 채팅방 ID (userNo-ucSeq)
+        },
+        success: function(response) {
+            // 서버로부터 받은 이전 메시지 처리
+            console.log('리스폰스', response);
+
+            // 응답이 배열이면 forEach로 처리
+                response.forEach(function(message) {
+                    displayMessage(message.senderType, message.message, message.userNo);
+                });
+        },
+        error: function(xhr, status, error) {
+            console.error('이전 메시지를 가져오는 중 오류 발생:', status, error);
+        }
+    });
+}
+
+    
 
 </script>
 

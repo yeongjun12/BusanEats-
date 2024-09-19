@@ -11,7 +11,7 @@ import com.busan.eats.chat.model.vo.ChatRoomVO;
 import com.busan.eats.chat.model.vo.ChatVO;
 
 @Service
-public class CharServiceImpl implements ChatService {
+public class ChatServiceImpl implements ChatService {
 	
     @Autowired
     private ChatDao chatDao;
@@ -20,10 +20,13 @@ public class CharServiceImpl implements ChatService {
 	private SqlSessionTemplate sqlSession;
 
 	@Override
-	public ChatRoomVO getOrCreateRoom(int ucSeq, int userNo) {
-		String roomId = ucSeq + "&" + userNo;
+	public ChatRoomVO getOrCreateRoom(String roomId, int userNo, int ucSeq) {
+		
+		
 		ChatRoomVO chatRoom = chatDao.getChatRoom(sqlSession, roomId);
         
+		System.out.println("chatRoom : " + chatRoom);
+		
         if (chatRoom == null) {
             chatRoom = new ChatRoomVO();
             chatRoom.setRoomId(roomId);  // roomId 설정
@@ -36,7 +39,7 @@ public class CharServiceImpl implements ChatService {
 	}
 
 	@Override
-	public List<ChatVO> getMessages(int roomId) {
+	public List<ChatVO> getMessages(String roomId) {
 		return chatDao.getMessages(sqlSession, roomId);
 	}
 

@@ -5,6 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <title>WebSocket 채팅 테스트</title>
     <style>
         body {
@@ -63,9 +64,12 @@
 
         // WebSocket으로부터 메시지를 수신
         socket.onmessage = function(event) {
-        	console.log(event);
+            console.log(event);
             const message = JSON.parse(event.data);
-            displayMessage(message.senderType, message.message);
+            console.log(message.senderType);
+            console.log(message.message,);
+            console.log(message.userNo);
+            displayMessage(message.senderType, message.message, message.userNo);  // 수신된 메시지 표시
         };
 
         // WebSocket 연결 종료
@@ -80,33 +84,64 @@
 
         // 메시지 전송 함수
         function sendMessage() {
-            const input = document.getElementById("messageInput").value;
+            const input = $("#messageInput").val();
             if (input.trim() === "") {
                 alert("메시지를 입력하세요");
                 return;
             }
+			
+            // 현재 날짜 및 시간
+            const now = new Date();
+
+            // 날짜 형식: YYYY-MM-DD
+            const formattedDate = now.getFullYear() + '-' + 
+                                  String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                                  String(now.getDate()).padStart(2, '0');
+
+            // 시간 형식: HH:MM:SS (24시간 형식)
+            const formattedTime = String(now.getHours()).padStart(2, '0') + ':' + 
+                                  String(now.getMinutes()).padStart(2, '0') + ':' + 
+                                  String(now.getSeconds()).padStart(2, '0');
+
+            // 날짜와 시간을 합친 형식: YYYY-MM-DD HH:MM:SS
+            const formattedDateTime = formattedDate + ' ' + formattedTime;
+
+            console.log(`Formatted DateTime: ${formattedDateTime}`);
 
             // 서버로 보낼 메시지 객체
             const message = {
-                roomId: ucSeq.toString(),  // UC_SEQ 값으로 채팅방 식별
+                roomId: ucSeq.toString()+"-"+ userNo.toString(),  // UC_SEQ 값으로 채팅방 식별
                 senderType: "user",        // USER_NO에 따라 발신자 구분
                 userNo: userNo,            // 발신자의 USER_NO
-                message: input,
-                sentAt: new Date().toLocaleTimeString()  // 메시지 전송 시간
+                ucSeq: ucSeq,
+                message: input,            // 메시지 내용
+                sentAt: formattedDateTime  // 메시지 전송 날짜 및 시간 (YYYY-MM-DD HH:MM:SS)
             };
 
             // 메시지를 서버로 전송
             socket.send(JSON.stringify(message));
+
+            // 보낸 메시지를 화면에 표시
+            //displayMessage("나", input, true);
 
             // 입력 필드를 비우기
             document.getElementById("messageInput").value = "";
         }
 
         // 메시지를 화면에 표시하는 함수
-        function displayMessage(senderType, message) {
+        function displayMessage(sender, message, userNo) {
             const messageList = document.getElementById("messageList");
             const newMessage = document.createElement("li");
-            newMessage.textContent = `${senderType}: ${message}`;
+			
+            // 보낸 메시지는 '나'로 표시
+            if (userNo == 9) {
+                newMessage.textContent = `나:` + message;
+                newMessage.style.color = 'blue'; // 보낸 메시지 색상
+            } else {
+                newMessage.textContent = `${sender}: ` + message;
+                newMessage.style.color = 'green'; // 받은 메시지 색상
+            }
+
             messageList.appendChild(newMessage);
             messageList.scrollTop = messageList.scrollHeight;  // 스크롤을 최신 메시지로
         }

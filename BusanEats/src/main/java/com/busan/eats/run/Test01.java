@@ -1,5 +1,7 @@
 package com.busan.eats.run;
 
+import java.util.Properties;
+
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 //직접 도구를 생성해서 이메일을 보내는 예제
@@ -21,7 +23,11 @@ public class Test01 {
 		impl.setPort(587);
 		impl.setUsername("dldudwns4065@gmail.com");
 		impl.setPassword("dudwns3252!");
-
+		
+		
+		//-옵션설정
+		Properties prop = new Properties(); //Map<Object,Object> 형태
+		prop.put("mail.smtp.auth",true)
 	}
 
 }

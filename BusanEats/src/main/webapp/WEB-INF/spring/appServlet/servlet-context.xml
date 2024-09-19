@@ -29,7 +29,7 @@
 	
 	 <!-- 접속주소는 ws://localhost:8008/ws/basic -->
 	<websocket:handlers>
-	 <websocket:mapping handler="basicServer" path="sc" />
+	 <websocket:mapping handler="basicServer" path="/sc/**" />
 	</websocket:handlers>
 	
 	
