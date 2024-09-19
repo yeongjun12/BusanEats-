@@ -950,7 +950,7 @@
 
     }
     
- // 모달이 닫힐 때 실행
+ 	// 모달이 닫힐 때 실행..
     $('#chatModal').on('hidden.bs.modal', function () {
         // 메시지 영역을 비우기
         $('#chatMessages').empty();  // 채팅 메시지 리스트를 비움
