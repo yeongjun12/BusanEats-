@@ -2,7 +2,9 @@ package com.busan.eats.store.model.service;
 
 import java.util.ArrayList;
 
+import com.busan.eats.chat.model.vo.ChatVO;
 import com.busan.eats.store.model.vo.Store;
+import com.busan.eats.store.model.vo.StoreUser;
 
 public interface StoreService {
 	
@@ -38,5 +40,10 @@ public interface StoreService {
 	//지역 TOP5 조회
 	ArrayList<Store> selectRegionTop5(String region); 
 	
+	//식당 회원 로그인
+	StoreUser storeLogin(StoreUser s_user);
+	
+	//식당 채팅 조회
+	ArrayList<ChatVO> checkNewChat(int ucSeq);
 
 }

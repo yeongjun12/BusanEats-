@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import com.busan.eats.chat.model.vo.ChatVO;
 import com.busan.eats.store.model.vo.Store;
+import com.busan.eats.store.model.vo.StoreUser;
 
 @Repository
 public class StoreDao {
@@ -52,6 +54,14 @@ public class StoreDao {
 	
 	public ArrayList<Store> selectRegionTop5(SqlSessionTemplate sqlSession,String region) {
 		return (ArrayList)sqlSession.selectList("storeMapper.selectRegionTop5",region);
+	}
+	
+	public StoreUser storeLogin(SqlSessionTemplate sqlSession, StoreUser s_user) {
+		return sqlSession.selectOne("storeMapper.storeLogin",s_user);
+	}
+	
+	public ArrayList<ChatVO> checkNewChat(SqlSessionTemplate sqlSession,int ucSeq){
+		return (ArrayList)sqlSession.selectList("chatMapper.checkNewChat",ucSeq);
 	}
 
 

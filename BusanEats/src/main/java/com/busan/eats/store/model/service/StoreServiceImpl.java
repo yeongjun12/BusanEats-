@@ -6,8 +6,10 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.busan.eats.chat.model.vo.ChatVO;
 import com.busan.eats.store.model.dao.StoreDao;
 import com.busan.eats.store.model.vo.Store;
+import com.busan.eats.store.model.vo.StoreUser;
 
 @Service
 public class StoreServiceImpl implements StoreService {
@@ -84,6 +86,18 @@ public class StoreServiceImpl implements StoreService {
 	@Override
 	public ArrayList<Store> selectRegionTop5(String region) {
 		return storeDao.selectRegionTop5(sqlSession,region);
+	}
+
+
+	@Override
+	public StoreUser storeLogin(StoreUser s_user) {
+		return storeDao.storeLogin(sqlSession, s_user);
+	}
+
+
+	@Override
+	public ArrayList<ChatVO> checkNewChat(int ucSeq) {
+		return storeDao.checkNewChat(sqlSession, ucSeq);
 	}
 	
 

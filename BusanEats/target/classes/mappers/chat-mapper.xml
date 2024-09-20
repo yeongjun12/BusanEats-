@@ -41,6 +41,34 @@
         INSERT INTO CHAT (MESSAGE_ID, ROOM_ID, SENDER_TYPE, MESSAGE, SENT_AT ,USER_NO, UC_SEQ)
         VALUES (message_id_seq.NEXTVAL, #{roomId}, #{senderType}, #{message}, #{sentAt}, #{userNo}, #{ucSeq})
     </insert>
+    
+    
+    <select id="checkNewChat" parameterType="_int" resultMap="chatResultMap">
+    	SELECT
+		    C.MESSAGE_ID,
+		    C.ROOM_ID,                
+		    C.USER_NO,                
+		    U.USER_NAME,              
+		    C.MESSAGE,                
+		    C.SENDER_TYPE,            
+		    C.SENT_AT,
+		    C.UC_SEQ               
+		FROM
+		    CHAT C
+		JOIN
+		    USERS U ON C.USER_NO = U.USER_NO  
+		WHERE
+		    C.UC_SEQ = #{ucSeq}   
+		AND
+		    C.SENT_AT = (          
+		        SELECT MAX(SENT_AT)
+		        FROM CHAT
+		        WHERE ROOM_ID = C.ROOM_ID
+		    )
+		ORDER BY
+		    C.SENT_AT DESC
+    
+    </select>
 
 
 

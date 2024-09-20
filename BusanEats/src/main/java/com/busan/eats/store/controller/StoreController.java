@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -36,6 +37,7 @@ import com.busan.eats.review.model.service.ReviewService;
 import com.busan.eats.review.model.vo.Review;
 import com.busan.eats.store.model.service.StoreService;
 import com.busan.eats.store.model.vo.Store;
+import com.busan.eats.store.model.vo.StoreUser;
 import com.busan.eats.user.model.vo.User;
 import com.google.gson.Gson;
 import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
@@ -157,7 +159,7 @@ public class StoreController {
             urlConnection.disconnect();
         }
     }
-
+	
 	
 	
 	@RequestMapping("map.do")
@@ -174,6 +176,21 @@ public class StoreController {
 	public String storeList() {
 		
 		return "store/storeList";
+	}
+	
+	@PostMapping("storeLogin.do")
+	public ModelAndView storeLogin(ModelAndView mv, HttpSession session,StoreUser s_user) {
+		
+		StoreUser storeUser = storeService.storeLogin(s_user);
+		
+		if(storeUser != null) {
+			
+			Store loginStore = storeService.selectStoreDetail(storeUser.getUcSeq());
+			session.setAttribute("loginStore",loginStore);
+		}
+		
+		mv.setViewName("storeMain");
+		return mv;
 	}
 	
 	
@@ -376,6 +393,7 @@ public class StoreController {
 	    return recentStoresList;
 	}
 	
+	//TOP5
 	@ResponseBody
 	@RequestMapping(value="selectRegionTop5.do", produces="application/json; charset=UTF-8")
 	public String selectRegionTop5(String region) {
@@ -384,5 +402,15 @@ public class StoreController {
 		
 		return new Gson().toJson(top5List);
 	}
+	
+	//store회원 채팅 조호
+	@ResponseBody
+	@RequestMapping(value="checkNewChat.do", produces="application/json; charset=UTF-8")
+	public String checkNewChat(int ucSeq) {
+		System.out.println(storeService.checkNewChat(ucSeq));
+		return "d";
+			
+	}
+	
 
 }

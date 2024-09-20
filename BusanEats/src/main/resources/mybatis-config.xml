@@ -10,6 +10,7 @@
 			
 		<typeAliases>
 			<typeAlias type="com.busan.eats.store.model.vo.Store" alias="store"/>
+			<typeAlias type="com.busan.eats.store.model.vo.StoreUser" alias="storeUser"/>
 			<typeAlias type="com.busan.eats.user.model.vo.User" alias="user"/>
 			<typeAlias type="com.busan.eats.reservation.model.vo.Reservation" alias="reservation"/>
 			<typeAlias type="com.busan.eats.review.model.vo.Review" alias="review"/>

@@ -140,7 +140,6 @@ public class UserController {
 		    
 		    // "아이디 저장" 체크박스 상태 확인
 	        String rememberMe = request.getParameter("rememberMe");
-	        System.out.println("rememberMe : " + rememberMe);
 	        if ("on".equals(rememberMe)) {
 	            // 체크박스가 체크된 경우 쿠키 생성
 	            Cookie saveId = new Cookie("saveId", loginUser.getUserId());
