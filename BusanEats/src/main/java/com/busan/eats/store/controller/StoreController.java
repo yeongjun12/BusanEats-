@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.busan.eats.chat.model.vo.ChatVO;
 import com.busan.eats.common.model.PageInfo;
 import com.busan.eats.common.template.Pagination;
 import com.busan.eats.review.model.service.ReviewService;
@@ -407,8 +408,8 @@ public class StoreController {
 	@ResponseBody
 	@RequestMapping(value="checkNewChat.do", produces="application/json; charset=UTF-8")
 	public String checkNewChat(int ucSeq) {
-		System.out.println(storeService.checkNewChat(ucSeq));
-		return "d";
+		ArrayList<ChatVO> list = storeService.checkNewChat(ucSeq);
+		return new Gson().toJson(list);
 			
 	}
 	

@@ -263,64 +263,99 @@
 		}
 		
 		/* 채팅 모달 스타일 */
-    #chatModal .modal-dialog {
-        max-width: 600px;
-        margin: 30vh auto;
-    }
-
-    #messageList {
-        height: 300px;
-        overflow-y: auto;
-        border: 1px solid #ccc;
-        padding: 5px;
-        margin-bottom: 10px;
-        background-color: #f9f9f9;
-    }
-
-    #messageList li {
-        margin-bottom: 5px;
-    }
-
-    input[type="text"] {
-        width: 80%;
-        padding: 10px;
-        margin-right: 10px;
-    }
-
-    button {
-        padding: 10px;
-    }
-    
-    /* 채팅 2222*/
-    .chat-messages {
-        padding: 10px;
-        overflow-y: scroll; /* 항상 스크롤바 표시 */
-        max-height: 800px;
-        height : 685px;
-    }
-    .chat-message {
-        margin-bottom: 10px;
-        display: flex;
-        align-items: center;
-    }
-    .chat-message.received .message-bubble {
-        background-color: #e1e1e1;
-    }
-    .chat-message.sent .message-bubble {
-        background-color: #007bff;
-        color: #fff;
-        margin-left: auto; /* 오른쪽 정렬 */
-    }
-    .message-bubble {
-        display: inline-block;
-        padding: 8px 12px;
-        border-radius: 20px;
-    }
-    .chat-message .sender {
-        font-weight: bold;
-        margin-right: 10px;
-    }
-			
+	    #chatModal .modal-dialog {
+	        max-width: 600px;
+	        margin: 30vh auto;
+	    }
+	
+	    #messageList {
+	        height: 300px;
+	        overflow-y: auto;
+	        border: 1px solid #ccc;
+	        padding: 5px;
+	        margin-bottom: 10px;
+	        background-color: #f9f9f9;
+	    }
+	
+	    #messageList li {
+	        margin-bottom: 5px;
+	    }
+	
+	    input[type="text"] {
+	        width: 80%;
+	        padding: 10px;
+	        margin-right: 10px;
+	    }
+	
+	    button {
+	        padding: 10px;
+	    }
+	    
+	    /* 채팅 2222*/
+	    .chat-messages {
+	        padding: 10px;
+	        overflow-y: scroll; /* 항상 스크롤바 표시 */
+	        max-height: 800px;
+	        height : 685px;
+	    }
+	    .chat-message {
+	        margin-bottom: 10px;
+	        display: flex;
+	        align-items: center;
+	    }
+	    .chat-message.received .message-bubble {
+	        background-color: #e1e1e1;
+	        max-width: 60%; /* 버블 최대 너비 설정 */
+	        word-wrap: break-word; /* 긴 단어 줄바꿈 처리 */
+	    }
+	    .chat-message.sent .message-bubble {
+		    background-color: #ff6600;
+		    color: #fff;
+		    margin-left: 0; /* 왼쪽 여백 제거 */
+		    margin-right: 0; /* 오른쪽 여백 필요 시 추가 */
+		    max-width: 60%; /* 버블 최대 너비 설정 */
+		    word-wrap: break-word; /* 긴 단어 줄바꿈 처리 */
+		    text-align: left; /* 텍스트 정렬 왼쪽 */
+		}
+		
+		.chat-message.sent {
+		    justify-content: flex-end; /* 버블을 오른쪽에 배치 */
+		    width: 100%; /* 부모 요소가 전체 너비를 가짐 */
+		}
+	    .message-bubble {
+	        display: inline-block;
+	        padding: 8px 12px;
+	        border-radius: 20px;
+	        margin-left : 0;
+	    }
+	    
+	    
+	     .date-separator {
+	        text-align: center;
+	        color: #555;
+	        font-weight: bold;
+	        margin: 10px 0;
+	    }
+	    
+	     .message-time {
+	        font-size: 0.85em;
+	        color: #888;
+	        margin-left: 10px;
+	        vertical-align: bottom;
+	    }
+		
+		.message-time-left {
+	        font-size: 0.85em;
+	        color: #888;
+	        margin-right: 10px; /* 버블과 시간 간격 */
+	    }	
+				
+		.message-time-right {
+	        font-size: 0.85em;
+	        color: #888;
+	        margin-left: 10px; /* 버블과 시간 간격 */
+	        margin-right: 0; /* 오른쪽 여백 제거 */
+	    }
         
       
     </style>
@@ -433,14 +468,14 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="chatModalLabel">1:1 채팅</h5>
+                    <h5 class="modal-title" id="chatModalLabel">1:1 문의</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div id="chat">
-                        <h2>WebSocket 채팅</h2>
+                        <h2>${requestScope.s.mainTitle }</h2>
                         <div class="chat-messages" id="chatMessages">
 					        <!-- 채팅 메시지가 여기에 표시됩니다. -->
 					        <div class="chat-message received">            
@@ -870,7 +905,7 @@
 	}
     
     
-    //***********************  채팅 ******************************
+    //***********************  채팅  ******************************
     // USER_NO 및 UC_SEQ 설정
     const userNo = ${sessionScope.loginUser.userNo};  // 현재 로그인 사용자 번호
     const ucSeq = ${requestScope.s.ucSeq}; // 식당 ID
@@ -886,7 +921,7 @@
     // WebSocket으로부터 메시지를 수신
     socket.onmessage = function(event) {
         const message = JSON.parse(event.data);
-        displayMessage(message.senderType, message.message, message.userNo);  // 수신된 메시지 표시
+        displayMessage(message.senderType, message.message, message.sentAt ,message.userNo);  // 수신된 메시지 표시
     };
 
     // WebSocket 연결 종료
@@ -908,8 +943,17 @@
         }
         
         const now = new Date();
-        const formattedDateTime = now.toISOString().slice(0, 19).replace('T', ' '); // YYYY-MM-DD HH:MM:SS
+        
+        const year = now.getFullYear();  // 연도
+        const month = String(now.getMonth() + 1).padStart(2, '0');  // 월 (0부터 시작하므로 +1), 2자리로 변환
+        const day = String(now.getDate()).padStart(2, '0');  // 일, 2자리로 변환
+        const hours = String(now.getHours()).padStart(2, '0');  // 시, 2자리로 변환
+        const minutes = String(now.getMinutes()).padStart(2, '0');  // 분, 2자리로 변환
 
+        // 로컬 시간으로 YYYY-MM-DD HH:MM 형식 만들기
+        const formattedDateTime = `\${year}-\${month}-\${day} \${hours}:\${minutes}`;
+        
+        
         // 서버로 보낼 메시지 객체
         const message = {
             roomId: ucSeq.toString() + "-" + userNo.toString(),  // UC_SEQ와 USER_NO로 채팅방 식별
@@ -926,36 +970,82 @@
         // 입력 필드를 비우기
         document.getElementById("messageInput").value = "";
     }
+    
+ 	// 날짜 구분을 위한 변수 저장
+    let lastDate = '';
 
     // 메시지를 화면에 표시하는 함수
-    function displayMessage(sender, message, userNo) {
+    function displayMessage(senderType, message, sentAt ,userNo) {
 		
         
         let msg = '';
+        const currentDate = sentAt.split(' ')[0]; // YYYY-MM-DD 형식에서 날짜 부분만 추출
+        const time = formatTime(sentAt.split(' ')[1]); // 시간을 오전/오후 형식으로 변환
         
-        //채팅정보에 userNo와 현재 로그인한 userNo 비교해서 같으면 오른쪽 다르면 보낸 영역
-        if (userNo == ${sessionScope.loginUser.userNo}) {
-        	msg = `<div class="chat-message sent">
+        
+        // 새로운 메시지마다 이전 메시지와 날짜를 비교하여 날짜가 달라지면 날짜 구분선을 추가
+        if (lastDate !== currentDate) {
+            msg += `<div class="date-separator"><strong>\${formatDate(currentDate)}</strong></div>`;
+            lastDate = currentDate; // 마지막 메시지 날짜 업데이트
+        }
+        
+        
+        //채팅정보에  senderType이 'user'이면 내가보낸영역
+        if (senderType == 'user') {
+        	msg += `<div class="chat-message sent">
+				<span class="message-time-left">\${time}</span> <!-- 시간 왼쪽 -->
 				<span class="message-bubble">\${ message }</span>
 			</div>`;
         	
         } else {
-        	msg = `<div class="chat-message received">
+        	msg += `<div class="chat-message received">
 				<span class="sender">${data.USR_NM}</span>
 				<span class="message-bubble">\${message}</span>
+				<span class="message-time-right">\${time}</span> <!-- 시간 오른쪽 -->
 			</div>`;
         }
         
+        
         $("#chatMessages").append(msg);
+        
+     // 스크롤을 최신 메시지로 이동
+        const chatMessages = document.getElementById("chatMessages");
+        chatMessages.scrollTop = chatMessages.scrollHeight;
 
     }
     
+    
  	// 모달이 닫힐 때 실행..
     $('#chatModal').on('hidden.bs.modal', function () {
-        // 메시지 영역을 비우기
+    	 if (socket) {
+             socket.close();
+         }
+    	
+    	// 메시지 영역을 비우기
         $('#chatMessages').empty();  // 채팅 메시지 리스트를 비움
         $('#messageInput').val('');  // 입력 필드를 비움
+        
+        lastDate = ''; //모달 닫으면 날짜 초기화
     });
+ 	
+ 	// 날짜 형식을 'YYYY-MM-DD'에서 'YYYY년 MM월 DD일' 형식으로 변환
+	 function formatDate(dateString) {
+	     const date = new Date(dateString);
+	     const year = date.getFullYear(); // 연도
+	     const month = date.getMonth() + 1; // 월 (0부터 시작하므로 +1)
+	     const day = date.getDate(); // 일
+	
+	     return `\${year}년 \${month}월 \${day}일`; // 'YYYY년 MM월 DD일' 형식으로 반환
+	 }
+ 	
+ 	// 시간을 'HH:MM' 형식에서 '오전/오후 HH:MM'으로 변환
+    function formatTime(timeString) {
+        const [hours, minutes] = timeString.split(':'); // HH:MM:SS 중에서 HH와 MM 추출
+        const hoursInt = parseInt(hours); // 정수형으로 변환
+        const period = hoursInt >= 12 ? '오후' : '오전'; // 12시 이상이면 오후, 아니면 오전
+        const formattedHours = hoursInt % 12 || 12; // 12시간제로 변환 (0시는 12시로 표시)
+        return `\${period} \${formattedHours}:\${minutes}`; // '오전/오후 HH:MM' 형식으로 반환
+    }
     
     //이전 메시지 조회하는 함수
     function getMessages() {
@@ -972,7 +1062,7 @@
 
             // 응답이 배열이면 forEach로 처리
                 response.forEach(function(message) {
-                    displayMessage(message.senderType, message.message, message.userNo);
+                    displayMessage(message.senderType, message.message, message.sentAt ,message.userNo);
                 });
         },
         error: function(xhr, status, error) {

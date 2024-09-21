@@ -44,30 +44,40 @@
     
     
     <select id="checkNewChat" parameterType="_int" resultMap="chatResultMap">
-    	SELECT
-		    C.MESSAGE_ID,
-		    C.ROOM_ID,                
-		    C.USER_NO,                
-		    U.USER_NAME,              
-		    C.MESSAGE,                
-		    C.SENDER_TYPE,            
-		    C.SENT_AT,
-		    C.UC_SEQ               
+    	WITH LatestChat AS (
+		    SELECT
+		        C.MESSAGE_ID,
+		        C.ROOM_ID,
+		        C.USER_NO,
+		        C.MESSAGE,
+		        C.SENDER_TYPE,
+		        C.SENT_AT,
+		        C.UC_SEQ,
+		        ROW_NUMBER() OVER (PARTITION BY C.ROOM_ID ORDER BY C.SENT_AT DESC) AS rn
+		    FROM
+		        CHAT C
+		    WHERE
+		        C.UC_SEQ = #{ucSeq}  
+		)
+		SELECT
+		    L.MESSAGE_ID,
+		    L.ROOM_ID,
+		    CASE
+		        WHEN L.SENDER_TYPE = 'user' THEN U.USER_NAME  
+		        ELSE '식당'            
+		    END AS SENDER_NAME,       
+		    L.MESSAGE,                
+		    L.SENDER_TYPE,            
+		    L.SENT_AT,               
+		    L.UC_SEQ
 		FROM
-		    CHAT C
-		JOIN
-		    USERS U ON C.USER_NO = U.USER_NO  
+		    LatestChat L
+		LEFT JOIN
+		    USERS U ON L.USER_NO = U.USER_NO AND L.SENDER_TYPE = 'user'  
 		WHERE
-		    C.UC_SEQ = #{ucSeq}   
-		AND
-		    C.SENT_AT = (          
-		        SELECT MAX(SENT_AT)
-		        FROM CHAT
-		        WHERE ROOM_ID = C.ROOM_ID
-		    )
+		    L.rn = 1  
 		ORDER BY
-		    C.SENT_AT DESC
-    
+		    L.SENT_AT DESC    
     </select>
 
 
