@@ -60,9 +60,7 @@ public class StoreDao {
 		return sqlSession.selectOne("storeMapper.storeLogin",s_user);
 	}
 	
-	public ArrayList<ChatVO> checkNewChat(SqlSessionTemplate sqlSession,int ucSeq){
-		return (ArrayList)sqlSession.selectList("chatMapper.checkNewChat",ucSeq);
-	}
+	
 
 
 }

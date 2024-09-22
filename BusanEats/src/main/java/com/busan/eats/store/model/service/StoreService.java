@@ -43,7 +43,5 @@ public interface StoreService {
 	//식당 회원 로그인
 	StoreUser storeLogin(StoreUser s_user);
 	
-	//식당 채팅 조회
-	ArrayList<ChatVO> checkNewChat(int ucSeq);
 
 }

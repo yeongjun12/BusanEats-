@@ -39,7 +39,7 @@
             position: absolute;
             top: 20px;
             right: 20px;
-            background-color: red;
+            background-color:  #ff6600;
             color: white;
             padding: 5px 10px;
             border-radius: 15px;
@@ -48,6 +48,7 @@
         }
         /* 채팅 목록 스타일 */
         .chat-item {
+        	position: relative; /* Make the parent div relative */
             padding: 10px;
             border: 1px solid #ddd;
             margin-bottom: 10px;
@@ -154,6 +155,64 @@
 	        margin: 10px 0;
 	    }
 	    
+	    /*메시지 전송버튼*/
+	    .send-button {
+		    background-color: #ff6600;
+		    color: white;
+		    border: none;
+		    padding: 10px 20px;
+		    border-radius: 5px;
+		    font-size: 16px;
+		    cursor: pointer;
+		    transition: background-color 0.3s ease;
+		}
+		
+		.send-button:hover {
+		    background-color: #e65c00; /* 마우스 오버 시 색상 변경 */
+		}
+		
+		.send-button:focus {
+		    outline: none; /* 버튼 포커스 시 외곽선 제거 */
+		}
+		
+		.send-button:active {
+		    background-color: #cc5200; /* 클릭 시 색상 변경 */
+		}
+		
+		  }
+        /* 채팅 목록 스타일 */
+        #chatList {
+            display: none; /* Initially hidden */
+            padding: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+        .chat-item {
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: #f1f1f1;
+            cursor: pointer;
+        }
+        .chat-item:hover {
+            background-color: #ddd;
+        }
+        
+        .unread-count-bubble {
+		    display: inline-block;
+		    background-color:  #ff6600;
+		    color: white;
+		    border-radius: 50%;
+		    padding: 5px 10px;
+		    font-size: 14px;
+		    position: absolute;
+		    top: 50px; 
+		    right: 20px; 
+		    margin: 0;
+		}
+        
+        
+	    
     </style>
 </head>
 <body>
@@ -169,7 +228,7 @@
         </div>
 
         <!-- 채팅 알림 표시 -->
-        <div class="chat-info">
+        <div class="chat-info" id="chatNotification">
             <h2>채팅 알림</h2>
             <p>현재 새로운 채팅 메시지 여부 확인 중...</p>
             <div class="new-chat-alert" id="newChatAlert">새로운 채팅!</div>
@@ -181,7 +240,6 @@
         </div>
     </div>
 
-    
     
     <!-- 1:1 채팅 모달 -->
     <div class="modal fade" id="chatModal" tabindex="-1" role="dialog" aria-labelledby="chatModalLabel" aria-hidden="true">
@@ -205,7 +263,7 @@
 					        <!-- 이하 생략 -->
 					    </div>
                         <input type="text" id="messageInput" placeholder="메시지를 입력하세요" />
-                        <button onclick="sendMessage()">보내기</button>
+                        <button class="send-button" onclick="sendMessage()">전송</button>
                     </div>
                 </div>
             </div>
@@ -220,18 +278,25 @@
     <script type="text/javascript">
     let socket;  // WebSocket 객체
     let roomId;  // 선택된 채팅방 ID
+    let g_messageCount = 0;
 
     $(document).ready(function() {
         var ucSeq = parseInt("${loginStore.ucSeq}", 10);  // EL로 ucSeq 값을 가져옴
         console.log(ucSeq);  // 제대로 값이 넘어오는지 확인
-
+		
+        $('#chatNotification').click(function() {
+            $('#chatList').slideToggle();  // Toggle chat list display
+        });
+        
+        
+        
         // 페이지 로드 시 즉시 채팅 확인
         checkNewChat(ucSeq);
 
         // 일정 시간마다 채팅 확인 (예: 30초마다)
-        setInterval(function() {
-            checkNewChat(ucSeq);  // ucSeq 값을 넘겨주며 checkNewChat 함수 실행
-        }, 30000);  // 30초마다 실행
+        //setInterval(function() {
+         //   checkNewChat(ucSeq);  // ucSeq 값을 넘겨주며 checkNewChat 함수 실행
+       // }, 30000);  // 30초마다 실행
     });
 
     function checkNewChat(ucSeq) {
@@ -239,14 +304,16 @@
         $.ajax({
             type: 'GET',
             url: 'checkNewChat.do',
-            data: { ucSeq: ucSeq },  // 서버에 넘길 ucSeq 값
+            data: { 
+            	ucSeq: ucSeq ,
+            	senderType : 'user' //일반 유저가 보낸 메시지를 카운트
+            	},  // 서버에 넘길 ucSeq 값
             dataType: 'json',
             success: function(response) {
                 console.log(response);
                 if (response.length > 0) {
                     // 채팅 목록 업데이트 함수 호출
                     updateChatList(response);
-                    $('#newChatAlert').show();  // 새로운 채팅이 있으면 알림 표시
                 } else {
                     $('#newChatAlert').hide();
                 }
@@ -256,38 +323,104 @@
             }
         });
     }
+    
+    
 
     function updateChatList(chatMessages) {
         var chatListContainer = $('#chatList');
         chatListContainer.empty();  // 기존 채팅 목록 초기화
+        
+        
+            
         chatMessages.forEach(function(chat) {
+        	
+        	 g_messageCount += chat.unread_count;
+        	
+        	 console.log('coint : ' + g_messageCount);
+        	// unread_count가 0보다 클 경우에만 숫자 버블을 표시
+            var unreadCountBubble = chat.unread_count > 0 
+                ? `<p class="unread-count-bubble" id="unreadBubble_\${chat.roomId}">\${chat.unread_count}</p>`
+                : '';
+        	
             var chatItem = `
-                <div class="chat-item" onclick="openChatModal('\${chat.roomId}')">
+                <div class="chat-item" onclick="openChatModal('\${chat.roomId}', \${chat.unread_count})">
                     <p><strong>Room ID:</strong> \${chat.roomId}</p>
                     <p><strong>Message:</strong> \${chat.message}</p>
                     <p><strong>Sent At:</strong> \${chat.sentAt}</p>
+                    \${unreadCountBubble}
+                    
                 </div>
                 <hr />
             `;
             chatListContainer.append(chatItem);
         });
+        
+        // "새로운 채팅!" 알림 표시 여부 결정
+        if (g_messageCount > 0) {
+            $('#newChatAlert').show();  // 새로운 채팅이 있으면 알림 표시
+        } else {
+            $('#newChatAlert').hide();  // 새로운 채팅이 없으면 알림 숨기기
+        }
+        
+        
+        chatListContainer.hide();
     }
 
     // 채팅 목록에서 채팅을 클릭하면 해당 roomId에 따라 모달을 열고 WebSocket 연결 설정
-    function openChatModal(roomIdParam) {
+    function openChatModal(roomIdParam , unreadCount) {
+    	 
+    	
+    	console.log('un' + unreadCount);
+    	g_messageCount -= unreadCount;
+    	
+    	console.log('여기선?' + g_messageCount);
+    	
+    	// "새로운 채팅!" 알림 표시 여부 결정
+        if (g_messageCount > 0) {
+            $('#newChatAlert').show();  // 새로운 채팅이 있으면 알림 표시
+        } else {
+            $('#newChatAlert').hide();  // 새로운 채팅이 없으면 알림 숨기기
+        }
+    	
+    	 $.ajax({
+    		 url : 'readMessage.do',
+    		 type : 'POST',
+    		 data : {
+    			 roomId : roomIdParam,
+    			 senderType : 'user' //식당 로그인 입장에서 일반유저가 보낸거만 읽음처리 되게
+    			 },
+    		 success: function(response) {
+    				// roomIdParam에 해당하는 알림 수 버블 숨기기
+    	            $("#unreadBubble_" + roomIdParam).hide();
+             },
+             error: function(xhr, status, error) {
+                 console.error('오류 발생:', status, error);
+             }
+    	 });
     	
     	
         roomId = roomIdParam;  // 선택된 roomId 저장
-        
+        triggerFakeMessage(roomId);
         console.log(roomId);
         $('#chatModal').modal('show');  // 모달 열기
         connectWebSocket(roomId);       // WebSocket 연결
         getMessages(roomId);            // 이전 메시지 가져오기
     }
+    
+ 	// 모달이 열릴 때 실행될 이벤트 핸들러
+    $('#chatModal').on('shown.bs.modal', function () {
+        scrollToBottom(); // 스크롤을 맨 아래로 이동
+    });
+ 	
+ 	// 스크롤을 맨 아래로 이동하는 함수
+    function scrollToBottom() {
+        var chatMessages = $('#chatMessages'); // 채팅 메시지를 표시하는 div
+        chatMessages.scrollTop(chatMessages[0].scrollHeight); // scrollHeight로 스크롤 맨 아래로 이동
+    }
 
+      socket = new WebSocket("ws://" + location.host + "/eats/sc/" + roomId);
     // WebSocket 연결 설정
     function connectWebSocket(roomId) {
-        socket = new WebSocket("ws://" + location.host + "/eats/sc/" + roomId);
 
         // WebSocket 연결 성공
         socket.onopen = function(event) {
@@ -310,7 +443,22 @@
             console.error("WebSocket 에러: ", event);
         };
     }
-
+    
+ 	// 임의로 onmessage 이벤트 실행
+    function triggerFakeMessage(roomId) {
+ 		
+        const message = {
+                roomId: roomId,  // UC_SEQ와 USER_NO로 채팅방 식별
+                senderType: "fake",        // 사용자 발신
+                userNo: 0,            // 발신자의 USER_NO
+                ucSeq: 0,
+                message: "fake",            // 메시지 내용
+                sentAt: "fake"  // 메시지 전송 날짜 및 시간
+            };
+            // 메시지를 서버로 전송
+            socket.send(JSON.stringify(message));
+    }
+    
     // 메시지 전송 함수
     function sendMessage() {
         const input = $("#messageInput").val();
@@ -375,10 +523,12 @@
             </div>`;
         }
         $("#chatMessages").append(msg);
-
+		
+        
+        scrollToBottom(); // 스크롤을 맨 아래로 이동
         // 스크롤을 최신 메시지로 이동
-        const chatMessages = document.getElementById("chatMessages");
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+        //const chatMessages = document.getElementById("chatMessages");
+        //chatMessages.scrollTop = chatMessages.scrollHeight;
     }
 
     // 이전 메시지 가져오는 함수
@@ -401,9 +551,7 @@
 
     // 모달 닫힐 때 WebSocket 연결 종료
     $('#chatModal').on('hidden.bs.modal', function () {
-        if (socket) {
-            socket.close();
-        }
+        
         $("#chatMessages").empty();  // 채팅 메시지 리스트 비우기
         $('#messageInput').val('');  // 입력 필드를 비움
         
@@ -428,9 +576,6 @@
        const formattedHours = hoursInt % 12 || 12; // 12시간제로 변환 (0시는 12시로 표시)
        return `\${period} \${formattedHours}:\${minutes}`; // '오전/오후 HH:MM' 형식으로 반환
    }
-    
-    
-    
     
     </script>
 </body>

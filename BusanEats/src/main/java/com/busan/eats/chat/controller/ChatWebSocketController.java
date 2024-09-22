@@ -1,5 +1,6 @@
 package com.busan.eats.chat.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,28 @@ public class ChatWebSocketController {
     @PostMapping("getPreviousMessages.do")
     public String getMessages(@RequestParam("roomId") String roomId) {
         
-		System.out.println("이전메시지 : " + roomId);
-		
 		List<ChatVO> list = chatService.getMessages(roomId);
-		System.out.println("리스트입니다!!!" + list);
 		return new Gson().toJson(list);
     }
+	
+	//store회원 채팅 조호
+		@ResponseBody
+		@RequestMapping(value="checkNewChat.do", produces="application/json; charset=UTF-8")
+		public String checkNewChat(ChatVO chat) {
+			
+			ArrayList<ChatVO> list = chatService.checkNewChat(chat);
+			
+			
+			return new Gson().toJson(list);
+				
+		}
+	
+	@ResponseBody
+	@PostMapping("readMessage.do" )
+	public String readMessage(ChatVO chat) {
+		
+		int result = chatService.readMessage(chat);
+		
+		return (result > 0 ) ? "success" : "fail" ;
+	}
 }

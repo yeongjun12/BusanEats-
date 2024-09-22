@@ -95,10 +95,6 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 
-	@Override
-	public ArrayList<ChatVO> checkNewChat(int ucSeq) {
-		return storeDao.checkNewChat(sqlSession, ucSeq);
-	}
 	
 
 	

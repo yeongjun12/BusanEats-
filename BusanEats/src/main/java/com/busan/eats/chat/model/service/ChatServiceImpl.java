@@ -1,5 +1,6 @@
 package com.busan.eats.chat.model.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
@@ -46,6 +47,16 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public void saveMessage(ChatVO chatVO) {
 		 chatDao.saveMessage(sqlSession, chatVO);
+	}
+
+	@Override
+	public int readMessage(ChatVO chat) {
+		return chatDao.readMessage(sqlSession, chat);
+	}
+
+	@Override
+	public ArrayList<ChatVO> checkNewChat(ChatVO chat) {
+		return chatDao.checkNewChat(sqlSession, chat);
 	} 
 
 

@@ -404,14 +404,7 @@ public class StoreController {
 		return new Gson().toJson(top5List);
 	}
 	
-	//store회원 채팅 조호
-	@ResponseBody
-	@RequestMapping(value="checkNewChat.do", produces="application/json; charset=UTF-8")
-	public String checkNewChat(int ucSeq) {
-		ArrayList<ChatVO> list = storeService.checkNewChat(ucSeq);
-		return new Gson().toJson(list);
-			
-	}
+	
 	
 
 }

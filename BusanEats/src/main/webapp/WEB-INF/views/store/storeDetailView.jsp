@@ -356,6 +356,31 @@
 	        margin-left: 10px; /* 버블과 시간 간격 */
 	        margin-right: 0; /* 오른쪽 여백 제거 */
 	    }
+	    
+	    /*메시지 전송버튼*/
+	    .send-button {
+		    background-color: #ff6600;
+		    color: white;
+		    border: none;
+		    padding: 10px 20px;
+		    border-radius: 5px;
+		    font-size: 16px;
+		    cursor: pointer;
+		    transition: background-color 0.3s ease;
+		}
+		
+		.send-button:hover {
+		    background-color: #e65c00; /* 마우스 오버 시 색상 변경 */
+		}
+		
+		.send-button:focus {
+		    outline: none; /* 버튼 포커스 시 외곽선 제거 */
+		}
+		
+		.send-button:active {
+		    background-color: #cc5200; /* 클릭 시 색상 변경 */
+		}
+	    
         
       
     </style>
@@ -485,7 +510,7 @@
 					        <!-- 이하 생략 -->
 					    </div>
                         <input type="text" id="messageInput" placeholder="메시지를 입력하세요" />
-                        <button onclick="sendMessage()">보내기</button>
+                        <button  class="send-button" onclick="sendMessage()">전송</button>
                     </div>
                 </div>
             </div>
@@ -873,11 +898,11 @@
         $('#chatModal').on('shown.bs.modal', function () {
             // 모달이 열리면 getMessages() 함수 실행
             getMessages();
+            triggerFakeMessage();
         });
         
         
     });
-    
     
     
     function postFormSubmit(num,reviewNo){
@@ -904,7 +929,6 @@
 		}
 	}
     
-    
     //***********************  채팅  ******************************
     // USER_NO 및 UC_SEQ 설정
     const userNo = ${sessionScope.loginUser.userNo};  // 현재 로그인 사용자 번호
@@ -915,13 +939,18 @@
 
     // WebSocket 연결 성공
     socket.onopen = function(event) {
-        console.log("WebSocket 연결 성공");
+        console.log("WebSocket 연결 성공!!!");
     };
 
     // WebSocket으로부터 메시지를 수신
     socket.onmessage = function(event) {
         const message = JSON.parse(event.data);
-        displayMessage(message.senderType, message.message, message.sentAt ,message.userNo);  // 수신된 메시지 표시
+        console.log('수신!!!');
+        
+     	// 임의의 조건으로 화면에 표시하지 않음
+        if (message.message !== "hidden") {
+            displayMessage(message.senderType, message.message, message.sentAt, message.userNo);  // 수신된 메시지 표시
+        }
     };
 
     // WebSocket 연결 종료
@@ -933,6 +962,30 @@
     socket.onerror = function(event) {
         console.error("WebSocket 에러: ", event);
     };
+    
+ 	// 메시지 입력 필드에서 엔터 키를 누르면 메시지 전송
+    $('#messageInput').keypress(function(event) {
+        if (event.which === 13) {  // 'Enter' 키의 keycode는 13
+            event.preventDefault(); // 기본 엔터 동작(줄바꿈) 방지
+            sendMessage(); // 메시지 전송 함수 호출
+        }
+    });
+ 	
+ 	// 임의로 onmessage 이벤트 실행
+    function triggerFakeMessage() {
+        const message = {
+                roomId: ucSeq.toString() + "-" + userNo.toString(),  // UC_SEQ와 USER_NO로 채팅방 식별
+                senderType: "fake",        // 사용자 발신
+                userNo: 0,            // 발신자의 USER_NO
+                ucSeq: 0,
+                message: "fake",            // 메시지 내용
+                sentAt: "fake"  // 메시지 전송 날짜 및 시간
+            };
+ 
+            // 메시지를 서버로 전송
+            socket.send(JSON.stringify(message));
+    }
+
 
     // 메시지 전송 함수
     function sendMessage() {

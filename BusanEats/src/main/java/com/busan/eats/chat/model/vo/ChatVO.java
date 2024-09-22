@@ -11,5 +11,6 @@ public class ChatVO {
 	 private String sentAt;
 	 private int userNo;  // 새로 추가
 	 private int ucSeq;  // 새로 추가
+	 private int unread_count;  // 새로 추가
 
 }
