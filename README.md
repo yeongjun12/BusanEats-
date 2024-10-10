@@ -41,3 +41,23 @@
 </div>
 
 ## 구현화면
+
+![image (1)](https://github.com/user-attachments/assets/892d5611-0c2a-4401-bc88-dfc0c6ae62ea) 디비설계
+![image (1)](https://github.com/user-attachments/assets/7c014f92-1f2f-45cc-aa66-a0ea03c9b338) 로그인 화면
+![image (3)](https://github.com/user-attachments/assets/91d1c18b-1649-4f72-a97c-b2f411c7de0a) 지역선택
+![image (3)](https://github.com/user-attachments/assets/1c7e6952-02aa-441c-b856-366bd66a1d5e) 식당리스트
+![image (5)](https://github.com/user-attachments/assets/ae225cb8-4db4-4714-bea3-634fd32eff04) 식당디테일
+![image (6)](https://github.com/user-attachments/assets/ca65a1f4-eaa9-43d9-bfda-2bba9363e6f4) 리뷰작성
+![image (7)](https://github.com/user-attachments/assets/3701be84-3aa8-43ed-9ea3-8d33ab875e28) 리뷰모달
+![image (8)](https://github.com/user-attachments/assets/dba2ceb1-3098-4b25-9e40-e996bb12205f) 예약모달
+![image (9)](https://github.com/user-attachments/assets/53fe9962-665c-4923-8aca-95710482adfe)  식당디테일 채팅
+![image (10)](https://github.com/user-attachments/assets/b8810ff6-e627-4ce9-a4a9-5142a31e41c5)
+![image (11)](https://github.com/user-attachments/assets/16a772ae-0c1f-4aa1-a105-13b4706af2bf)
+![image (12)](https://github.com/user-attachments/assets/d03cf1d6-267d-4504-85d5-9f7e5bda0886)
+![image (13)](https://github.com/user-attachments/assets/a0bb4e18-185c-42cc-ab43-f5ab71277da7)
+![image (14)](https://github.com/user-attachments/assets/dc347fdb-a6e1-4af6-9763-aa1e13083f7d)
+![image (15)](https://github.com/user-attachments/assets/15a21200-5d58-468e-9c42-5aab364ff78c)
+![image (16)](https://github.com/user-attachments/assets/1f3f733e-62d0-406f-bfe0-7b4a3d55254f)
+![image (17)](https://github.com/user-attachments/assets/f751fc3e-ddf7-40a8-acf5-7972b705ad52)
+![image (18)](https://github.com/user-attachments/assets/7ae7a8e6-a880-407a-a3aa-16a83bb40a10)
+![image (19)](https://github.com/user-attachments/assets/d70f5117-b841-46ef-8018-bed4e5f04571)
