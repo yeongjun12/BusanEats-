@@ -46,6 +46,7 @@
 
 ![image](https://github.com/user-attachments/assets/8de7a064-99d5-48e6-927b-27b88b453d03)
 <ul>
+<h2>메인페이지</h2>
   <li>Real-time communication</li>
   <li>Event-based architecture</li>
   <li>Cross-browser compatibility</li>
