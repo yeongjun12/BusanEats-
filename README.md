@@ -45,6 +45,11 @@
 ![image (1)](https://github.com/user-attachments/assets/892d5611-0c2a-4401-bc88-dfc0c6ae62ea) 디비설계
 
 ![image](https://github.com/user-attachments/assets/8de7a064-99d5-48e6-927b-27b88b453d03)
+<ul>
+  <li>Real-time communication</li>
+  <li>Event-based architecture</li>
+  <li>Cross-browser compatibility</li>
+</ul>
 
 ![image (2)](https://github.com/user-attachments/assets/11b58dbd-1621-47c7-b5e1-0df1487c317d)
 ![image (3)](https://github.com/user-attachments/assets/91d1c18b-1649-4f72-a97c-b2f411c7de0a) 지역선택
