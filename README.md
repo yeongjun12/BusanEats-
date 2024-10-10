@@ -53,6 +53,7 @@
   <li>쿠키를 이용해서 최근 본 식당 구현</li>
   <li>실시간 맛집 - 구별로 좋아요수와 리뷰수가 많은 식당 조회</li>
 </ul>
+
 ![image](https://github.com/user-attachments/assets/8de7a064-99d5-48e6-927b-27b88b453d03)
 
 <ul>
@@ -61,6 +62,7 @@
   <li>쿠키를 이용해서 ID저장 기능 구현</li>
   <li>일반 회원과 식당 회원 로그인 분리</li>
 </ul>
+
 ![image (2)](https://github.com/user-attachments/assets/11b58dbd-1621-47c7-b5e1-0df1487c317d)
 
 
@@ -72,6 +74,7 @@
   <li>모달로 지역을 선택하여 조회 할 수 있음</li>
   <li>리뷰 수, 좋아요 수, 조회 수로 정렬 순서 변경 가능</li>
 </ul>
+
 ![image (3)](https://github.com/user-attachments/assets/91d1c18b-1649-4f72-a97c-b2f411c7de0a)
 ![image (3)](https://github.com/user-attachments/assets/1c7e6952-02aa-441c-b856-366bd66a1d5e)
 
@@ -109,6 +112,7 @@
   <li>채팅이 왔을 시 헤더바에 표시되도록 구현</li>
   <li>채팅리스트와 안 읽은 메시지 표시</li>
 </ul>
+
 ![image (15)](https://github.com/user-attachments/assets/15a21200-5d58-468e-9c42-5aab364ff78c)
 ![image (16)](https://github.com/user-attachments/assets/1f3f733e-62d0-406f-bfe0-7b4a3d55254f)
 ![image (17)](https://github.com/user-attachments/assets/f751fc3e-ddf7-40a8-acf5-7972b705ad52)
@@ -120,5 +124,6 @@
   <li>새로운 채팅이 오면 안읽은 메시지 수가 표시됨, 클릭하면 채팅리스트가 보암</li>
 
 </ul>
+
 ![image (18)](https://github.com/user-attachments/assets/7ae7a8e6-a880-407a-a3aa-16a83bb40a10)
 ![image (19)](https://github.com/user-attachments/assets/d70f5117-b841-46ef-8018-bed4e5f04571)
