@@ -1,4 +1,4 @@
-# BusanEats-
+# 밥뭇나
 공공데이터포털 api 사용 https://www.data.go.kr/data/15063472/openapi.do
 
 ## 🖥️ 기획의도
