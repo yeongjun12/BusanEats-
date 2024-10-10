@@ -43,7 +43,10 @@
 ## 구현화면
 
 ![image (1)](https://github.com/user-attachments/assets/892d5611-0c2a-4401-bc88-dfc0c6ae62ea) 디비설계
-![image (1)](https://github.com/user-attachments/assets/7c014f92-1f2f-45cc-aa66-a0ea03c9b338) 로그인 화면
+
+![image](https://github.com/user-attachments/assets/8de7a064-99d5-48e6-927b-27b88b453d03)
+
+![image (2)](https://github.com/user-attachments/assets/11b58dbd-1621-47c7-b5e1-0df1487c317d)
 ![image (3)](https://github.com/user-attachments/assets/91d1c18b-1649-4f72-a97c-b2f411c7de0a) 지역선택
 ![image (3)](https://github.com/user-attachments/assets/1c7e6952-02aa-441c-b856-366bd66a1d5e) 식당리스트
 ![image (5)](https://github.com/user-attachments/assets/ae225cb8-4db4-4714-bea3-634fd32eff04) 식당디테일
