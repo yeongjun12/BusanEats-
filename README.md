@@ -38,9 +38,6 @@
     <img src="https://img.shields.io/badge/Kakao%20API-FFCD00?style=flat-square&logo=Kakao&logoColor=black" />
     <img src="https://img.shields.io/badge/Naver%20API-03C75A?style=flat-square&logo=Naver&logoColor=white" />
     <img src="https://img.shields.io/badge/Socket.io-010101?style=flat-square&logo=Socket.io&logoColor=white" />
-
-
-   ![ㄴㅇㅁㄴㅇㅁ](https://github.com/user-attachments/assets/732818f2-e138-4216-bdd8-83d18ebaa670)
-
-
 </div>
+
+## 구현화면
