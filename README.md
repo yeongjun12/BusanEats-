@@ -90,11 +90,11 @@
   <li>1:1 문의 클릭시 소켓 활용한 채팅 문의 기능 구현</li>
 </ul>
 
-![image (5)](https://github.com/user-attachments/assets/ae225cb8-4db4-4714-bea3-634fd32eff04) 식당디테일
-![image (6)](https://github.com/user-attachments/assets/ca65a1f4-eaa9-43d9-bfda-2bba9363e6f4) 리뷰작성
-![image (7)](https://github.com/user-attachments/assets/3701be84-3aa8-43ed-9ea3-8d33ab875e28) 리뷰모달
-![image (8)](https://github.com/user-attachments/assets/dba2ceb1-3098-4b25-9e40-e996bb12205f) 예약모달
-![image (9)](https://github.com/user-attachments/assets/53fe9962-665c-4923-8aca-95710482adfe)  식당디테일 채팅
+![image (5)](https://github.com/user-attachments/assets/ae225cb8-4db4-4714-bea3-634fd32eff04) 
+![image (6)](https://github.com/user-attachments/assets/ca65a1f4-eaa9-43d9-bfda-2bba9363e6f4) 
+![image (7)](https://github.com/user-attachments/assets/3701be84-3aa8-43ed-9ea3-8d33ab875e28) 
+![image (8)](https://github.com/user-attachments/assets/dba2ceb1-3098-4b25-9e40-e996bb12205f) 
+![image (9)](https://github.com/user-attachments/assets/53fe9962-665c-4923-8aca-95710482adfe)  
 
 
 <ul>
