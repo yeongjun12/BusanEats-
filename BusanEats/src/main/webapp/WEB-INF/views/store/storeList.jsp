@@ -136,36 +136,34 @@
     border-radius: 5px;
 }
 
-/* Modal styles */
+
 .location-modal {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.8); /* Dark overlay for focus */
+    background-color: rgba(0, 0, 0, 0.8); 
     display: flex;
-    justify-content: center; /* Center horizontally */
-    align-items: center; /* Center vertically */
-    z-index: 1000; /* Ensure it is on top */
-    padding: 0; /* No padding to interfere with centering */
-    margin: 0; /* No margin to interfere with centering */
-    overflow: hidden; /* Prevent overflow from scroll */
+    justify-content: center; 
+    align-items: center; 
+    z-index: 1000; 
+    padding: 0; 
+    margin: 0; 
+    overflow: hidden; 
 }
 
-/* Modal content styling with soft background color */
 .modal-content {
-    background-color: #f4f4f9; /* Soft light gray background */
+    background-color: #f4f4f9; 
     width: 90%;
     max-width: 600px;
     padding: 20px 30px;
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Soft shadow for depth */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); 
     position: relative;
-    color: #333; /* Dark text for good contrast */
+    color: #333; 
 }
 
-/* Close button */
 .close {
     position: absolute;
     top: 10px;
@@ -175,14 +173,13 @@
     border: none;
     background: none;
     color: #333;
-    transition: color 0.3s ease; /* Smooth color change on hover */
+    transition: color 0.3s ease; 
 }
 
 .close:hover {
-    color: #ff6600; /* Hover color */
+    color: #ff6600; 
 }
 
-/* Tab buttons styling */
 .location-tabs {
     display: flex;
     justify-content: space-around;
@@ -209,7 +206,6 @@
     color: white;
 }
 
-/* Category button styling */
 .location-categories,
 .location-list {
     display: flex;
@@ -235,11 +231,6 @@
     border-color: #ff6600;
 }
 
-
-
-
-
-
         
     </style>
    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
@@ -247,7 +238,14 @@
 <body>
 
 <jsp:include page="../common/header.jsp" />
-
+<div class="header">
+        <a href="selectStoreList.do?storeType=한식&gugunNm=${requestScope.gugunNm }">한식</a>
+        <a href="selectStoreList.do?storeType=양식&gugunNm=${requestScope.gugunNm }">양식/레스토랑</a>
+        <a href="selectStoreList.do?storeType=고기&gugunNm=${requestScope.gugunNm }">고기/구이류</a>
+        <a href="selectStoreList.do?storeType=씨푸드&gugunNm=${requestScope.gugunNm }">씨푸드</a>
+        <a href="selectStoreList.do?storeType=세계&gugunNm=${requestScope.gugunNm }">일/중/세계음식</a>
+        <a href="selectStoreList.do?storeType=카페&gugunNm=${requestScope.gugunNm }">카페/디저트</a>
+    </div>
 <div class="location-bar">
     <span>현재 보고있는 맛집 지역은</span>
     <button class="location-btn" onclick="toggleLocationModal()">${requestScope.gugunNm }</button>
@@ -287,26 +285,16 @@
 
 
 <div class="container">
-    <div class="header">
-        <a href="#">전체</a>
-        <a href="#">웨신</a>
-        <a href="#">양식/스테이크</a>
-        <a href="#">고기/구이류</a>
-        <a href="#">씨푸드</a>
-        <a href="#">일/중/서양음식</a>
-        <a href="#">카페/디저트</a>
-        <a href="#">나이트라이프</a>
-    </div>
 
     <div class="sort-bar">
-        <a href="#">리뷰순</a>
-        <a href="#">즐겨찾기순</a>
-        <a href="#">조회순</a>
+        <a href="selectStoreList.do?gugunNm=${ requestScope.gugunNm }&orderBy=review">리뷰순</a>
+        <a href="selectStoreList.do?gugunNm=${ requestScope.gugunNm }&orderBy=like">좋아요순</a>
+        <a href="selectStoreList.do?gugunNm=${ requestScope.gugunNm }&orderBy=count">조회순</a>
     </div>
     
     <div class="title">
 						
-	<h3 align="center" id="resturantTitle"> <c:out value="${ requestScope.gugunNm }" /> 식당</h3>
+	<h3 align="center" id="resturantTitle"> <c:out value="${ requestScope.gugunNm }" /><c:out value="${ requestScope.storeType }" /> 식당</h3>
 						
 	</div>
 
@@ -317,7 +305,7 @@
         
         <div class="grid-item" >
         	<input type="hidden" class="ucSeq" name="ucSeq" value="${s.ucSeq }"/>
-            <img src="${s.mainImgThumb }" alt="">
+            <img src="${s.mainImgThumb}" alt="" style="width: 298.67px; height: 229.2px;">
             <div class="info">
                 <div class="rating">${averageRatingMap[s.ucSeq]}</div>
                 <div class="title">${s.mainTitle }</div>
@@ -328,7 +316,7 @@
                     <span>리뷰: ${reviewCountMap[s.ucSeq]}</span>
                 </div>
             </div>
-            <div class="bookmark"><img class="like"  alt="${s.ucSeq }" src="resources/images/deleteheart.png" width="20" height="20">2</div>
+            <div class="bookmark"><img class="like"  alt="${s.ucSeq }" src="resources/images/deleteheart.png" width="20" height="20"></div>
         </div>
         
         </c:forEach>

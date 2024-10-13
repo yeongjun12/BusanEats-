@@ -533,27 +533,27 @@ $(document).ready(function () {
                 let reviewHtml = '';
 
                 response.forEach(function (r) {
-                    reviewHtml +=
-                        '<div class="review-item" style="display: flex; align-items: flex-start; margin-bottom: 20px; padding: 10px; background-color: #fff; border-radius: 8px; box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);">' +
-                            '<div style="flex: 1; margin-right: 10px;">' +
-                                '<p><strong>' + r.userId + '</strong></p>' +
-                                '<p class="rating" style="color: #ff6600;">' +
-                                    generateStars(r.rating) + ' (' + r.rating + ')' +
-                                '</p>' +
-                                '<p>' + r.reviewComment + '</p>' +
-                                '<p>' + r.reviewCreateDate + '</p>' +
-                            '</div>' +
-                            (r.changeName ? 
-                                '<div style="flex: 1; max-width: 200px;">' +
-                                    '<img src="' + r.changeName + '" alt="Review Image" style="max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" />' +
-                                '</div>' 
-                            : '') +
-                            (r.userNo === ${loginUser.userNo} ? 
-                                '<div class="edit-icon" style="position: absolute; top: 10px; right: 30px; cursor: pointer;">' +
-                                    '<img src="resources/images/pencil.png" alt="Edit" style="width: 80px; height: 30px;" data-toggle="modal" data-target="#editReviewModal-' + r.reviewNo + '" />' +
-                                '</div>' 
-                            : '') +
-                        '</div>';
+                	reviewHtml += 
+                	    '<div class="review-item" style="display: flex; align-items: flex-start; margin-bottom: 20px; padding: 10px; background-color: #fff; border-radius: 8px; box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);">' +
+                	        '<div style="flex: 1; margin-right: 10px;">' +
+                	            '<p><strong>' +  r.mainTitle + '</strong></p>' +
+                	            '<p class="rating" style="color: #ff6600;">' +
+                	                generateStars(r.rating) + ' (' + r.rating + ')' +
+                	            '</p>' +
+                	            '<p>' + r.reviewComment + '</p>' +
+                	            '<p>' + r.reviewCreateDate + '</p>' +
+                	        '</div>' +
+                	        (r.changeName ? 
+                	            '<div style="flex: 1; max-width: 200px;">' +
+                	                '<img src="' + r.changeName + '" alt="Review Image" style="max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 5px;" />' +
+                	            '</div>' 
+                	        : '') +
+                	        (r.userNo === ${loginUser.userNo} ? 
+                	            '<div class="edit-icon" style="position: absolute; top: 10px; right: 30px; cursor: pointer;">' +
+                	                '<img src="resources/images/pencil.png" alt="Edit" style="width: 80px; height: 30px;" data-toggle="modal" data-target="#editReviewModal-' + r.reviewNo + '" />' +
+                	            '</div>' 
+                	        : '') +
+                	    '</div>';
                 });
 
                 $('#reviews').html(reviewHtml);

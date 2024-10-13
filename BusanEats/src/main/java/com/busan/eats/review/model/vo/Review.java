@@ -17,6 +17,7 @@ public class Review {
 	private String filePath;
 	private String changeName;
 	private String reviewStatus;
+	private String mainTitle;
 	
 
 }

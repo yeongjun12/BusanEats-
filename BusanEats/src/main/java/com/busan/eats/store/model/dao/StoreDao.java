@@ -1,11 +1,12 @@
 package com.busan.eats.store.model.dao;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
-import com.busan.eats.chat.model.vo.ChatVO;
 import com.busan.eats.store.model.vo.Store;
 import com.busan.eats.store.model.vo.StoreUser;
 
@@ -17,8 +18,13 @@ public class StoreDao {
 	}
 	
 	
-	public ArrayList<Store> selectStoreList(SqlSessionTemplate sqlSession,String gugunNm) {
-		return (ArrayList)sqlSession.selectList("storeMapper.selectStoreList",gugunNm);
+	public ArrayList<Store> selectStoreList(SqlSessionTemplate sqlSession,Store store, String orderBy) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("storeType",store.getStoreType());
+		params.put("gugunNm",store.getGugunNm());
+		params.put("orderBy", orderBy); //map에 담아서 쿼리에서 좋아요,리뷰,조회순 정렬
+		
+		return (ArrayList)sqlSession.selectList("storeMapper.selectStoreList",params);
 	}
 	
 	public Store selectStoreDetail(SqlSessionTemplate sqlSession, int unSeq) {
@@ -58,6 +64,10 @@ public class StoreDao {
 	
 	public StoreUser storeLogin(SqlSessionTemplate sqlSession, StoreUser s_user) {
 		return sqlSession.selectOne("storeMapper.storeLogin",s_user);
+	}
+	
+	public ArrayList<Store> selectStoreTypeList(SqlSessionTemplate sqlSession, String type){
+		return (ArrayList)sqlSession.selectList("storeMapper.selectStoreTypeList",type);
 	}
 	
 	

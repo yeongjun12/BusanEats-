@@ -27,7 +27,7 @@
             border-radius: 10px;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         }
-        .header {
+        .headerArea {
             display: flex;
             align-items: center;
         }
@@ -393,7 +393,7 @@
 
 
 
-    <div class="header">
+    <div class="headerArea">
         <div class="header-left">
             <img src="${requestScope.s.mainImgThumb }" alt="Restaurant Logo" width="80" height="80">
         </div>
@@ -406,7 +406,6 @@
             <div class="stats">
                 <span><img src="resources/images/bg_ico_s_click.png">&nbsp ${requestScope.s.count }</span>
                  <span><img src="resources/images/bg_ico_s_like.png" alt="Like">&nbsp;<span id="likeCount">${requestScope.likeCount}</span></span>
-                <span><img src="resources/images/bg_icon_bookmark2.png" width="11">&nbsp 84</span>
             </div>
         </div>
     </div>
@@ -946,9 +945,9 @@
     socket.onmessage = function(event) {
         const message = JSON.parse(event.data);
         console.log('수신!!!');
-        
+        console.log(message);
      	// 임의의 조건으로 화면에 표시하지 않음
-        if (message.message !== "hidden") {
+        if (message.senderType !== "fake") { //fake메시지가 아니면 화면표시
             displayMessage(message.senderType, message.message, message.sentAt, message.userNo);  // 수신된 메시지 표시
         }
     };
@@ -973,11 +972,12 @@
  	
  	// 임의로 onmessage 이벤트 실행
     function triggerFakeMessage() {
+ 		console.log('전송');
         const message = {
                 roomId: ucSeq.toString() + "-" + userNo.toString(),  // UC_SEQ와 USER_NO로 채팅방 식별
                 senderType: "fake",        // 사용자 발신
-                userNo: 0,            // 발신자의 USER_NO
-                ucSeq: 0,
+                userNo: userNo,            // 발신자의 USER_NO
+                ucSeq: ucSeq,
                 message: "fake",            // 메시지 내용
                 sentAt: "fake"  // 메시지 전송 날짜 및 시간
             };
@@ -995,17 +995,16 @@
             return;
         }
         
-        const now = new Date();
-        
+        const now = new Date();                  
         const year = now.getFullYear();  // 연도
         const month = String(now.getMonth() + 1).padStart(2, '0');  // 월 (0부터 시작하므로 +1), 2자리로 변환
         const day = String(now.getDate()).padStart(2, '0');  // 일, 2자리로 변환
         const hours = String(now.getHours()).padStart(2, '0');  // 시, 2자리로 변환
         const minutes = String(now.getMinutes()).padStart(2, '0');  // 분, 2자리로 변환
+        const seconds = String(now.getSeconds()).padStart(2, '0');  // 초, 2자리로 변환
 
-        // 로컬 시간으로 YYYY-MM-DD HH:MM 형식 만들기
-        const formattedDateTime = `\${year}-\${month}-\${day} \${hours}:\${minutes}`;
-        
+        // 로컬 시간으로 YYYY-MM-DD HH:MM:SS 형식 만들기
+        const formattedDateTime = `\${year}-\${month}-\${day} \${hours}:\${minutes}:\${seconds}`;
         
         // 서버로 보낼 메시지 객체
         const message = {
@@ -1033,7 +1032,7 @@
         
         let msg = '';
         const currentDate = sentAt.split(' ')[0]; // YYYY-MM-DD 형식에서 날짜 부분만 추출
-        const time = formatTime(sentAt.split(' ')[1]); // 시간을 오전/오후 형식으로 변환
+        const time = formatTime(sentAt.split(' ')[1]);
         
         
         // 새로운 메시지마다 이전 메시지와 날짜를 비교하여 날짜가 달라지면 날짜 구분선을 추가
@@ -1091,6 +1090,8 @@
 	     return `\${year}년 \${month}월 \${day}일`; // 'YYYY년 MM월 DD일' 형식으로 반환
 	 }
  	
+ 	
+ 	
  	// 시간을 'HH:MM' 형식에서 '오전/오후 HH:MM'으로 변환
     function formatTime(timeString) {
         const [hours, minutes] = timeString.split(':'); // HH:MM:SS 중에서 HH와 MM 추출
@@ -1114,9 +1115,11 @@
             console.log('리스폰스', response);
 
             // 응답이 배열이면 forEach로 처리
-                response.forEach(function(message) {
-                    displayMessage(message.senderType, message.message, message.sentAt ,message.userNo);
-                });
+                if (response.length > 0) {
+		        response.forEach(function(message) {
+		            displayMessage(message.senderType, message.message, message.sentAt, message.userNo);
+		        });
+    }
         },
         error: function(xhr, status, error) {
             console.error('이전 메시지를 가져오는 중 오류 발생:', status, error);

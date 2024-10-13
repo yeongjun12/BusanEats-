@@ -14,7 +14,6 @@ import com.busan.eats.chat.model.vo.ChatVO;
 public class ChatDao {
 	
 	    public ChatRoomVO getChatRoom(SqlSession sqlSession, String roomId) {
-	    	System.out.println("또 dao다 오바 : " + roomId);
 	        return sqlSession.selectOne("chatMapper.getChatRoom", roomId);
 	    }
 
@@ -35,8 +34,11 @@ public class ChatDao {
 		}
 	    
 	    public int readMessage(SqlSession sqlSession, ChatVO chat) {
-	    	System.out.println("readDao" + chat);
 	    	return sqlSession.update("chatMapper.readMessage", chat);
+	    }
+	    
+	    public String selectUserName(SqlSession sqlSession, int userNo) {
+	    	return sqlSession.selectOne("chatMapper.selectUserName", userNo);
 	    }
 
 }

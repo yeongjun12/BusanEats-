@@ -236,6 +236,21 @@
 		.right-section .real-time-section {
 		    margin-bottom: 20px; /* 원하는 여백 크기로 조정 */
 		}
+		
+		.header {
+            background-color: #ff6600;
+            padding: 10px;
+            text-align: center;
+        }
+        .header a {
+            color: white;
+            margin: 0 15px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .header a:hover {
+            text-decoration: underline;
+        }
         
     </style></head><body>
     
@@ -243,12 +258,12 @@
     
 
     <div class="header">
-        <div class="menu">
-            <a href="#">홈</a>
-            <a href="#">지역별 랭킹</a>
-            <a href="#">맛집 찾기</a>
-            <a href="#">TEST</a>
-        </div>
+        <a href="selectStoreList.do?type=한식">한식</a>
+        <a href="selectStoreList.do?type=양식">양식/레스토랑</a>
+        <a href="selectStoreList.do?type=고기">고기/구이류</a>
+        <a href="selectStoreList.do?type=씨푸드">씨푸드</a>
+        <a href="selectStoreList.do?type=세계">일/중/세계음식</a>
+        <a href="selectStoreList.do?type=카페">카페/디저트</a>
     </div>
 
     <div class="main">
@@ -373,38 +388,6 @@
 				    </ul>
 				</c:if>
                 
-            </div>
-            
-            <div class="real-time-section">
-                <h2>실시간 맛집 평가</h2>
-                <div class="real-time-item">
-                    <img src="review1.jpg" alt="Review 1">
-                    <div>
-                        <h3>속초물회 1호점</h3>
-                        <p>더운 여름에 좋습니다!</p>
-                    </div>
-                </div>
-                <div class="real-time-item">
-                    <img src="review2.jpg" alt="Review 2">
-                    <div>
-                        <h3>외국</h3>
-                        <p>해외음식점이라니, 정말 놀랍습니다.</p>
-                    </div>
-                </div>
-                <div class="real-time-item">
-                    <img src="review3.jpg" alt="Review 3">
-                    <div>
-                        <h3>밀양한우</h3>
-                        <p>이곳은 소고기가 최고입니다.</p>
-                    </div>
-                </div>
-                <div class="real-time-item">
-                    <img src="review4.jpg" alt="Review 4">
-                    <div>
-                        <h3>후미애</h3>
-                        <p>산책하기에 아주 좋습니다.</p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>

@@ -50,7 +50,7 @@
 	
 	<select id ="selectReview" parameterType="review" resultMap="reviewResultSet">
 		SELECT
-			R.REVIEW_NO,
+		    R.REVIEW_NO,
 		    R.USER_NO,
 		    U.USER_ID,
 		    R.UC_SEQ,
@@ -59,10 +59,12 @@
 		    R.REVIEW_CREATE_DATE,
 		    R.FILE_PATH,
 		    R.CHANGE_NAME,
-		    R.REVIEW_STATUS
+		    R.REVIEW_STATUS,
+		    S.MAIN_TITLE -- STORE 테이블의 MAIN_TITLE 컬럼 추가
 		FROM
 		    REVIEW R
 		    JOIN USERS U ON R.USER_NO = U.USER_NO
+		    JOIN STORE S ON R.UC_SEQ = S.UC_SEQ -- STORE 테이블과 조인
 		WHERE
 		    R.REVIEW_STATUS = 'Y'
 		    AND R.UC_SEQ = #{ucSeq}
@@ -103,10 +105,12 @@
 		    R.REVIEW_CREATE_DATE,
 		    R.FILE_PATH,
 		    R.CHANGE_NAME,
-		    R.REVIEW_STATUS
+		    R.REVIEW_STATUS,
+		    S.MAIN_TITLE
 		FROM
 		    REVIEW R
 		    JOIN USERS U ON R.USER_NO = U.USER_NO
+		    JOIN STORE S ON R.UC_SEQ = S.UC_SEQ -- STORE 테이블과 조인
 		WHERE
 		    R.REVIEW_STATUS = 'Y'
 		    AND R.USER_NO = #{userNo}

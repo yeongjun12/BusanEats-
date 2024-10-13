@@ -12,7 +12,7 @@ public interface StoreService {
 	int saveToDataBase(Store s);
 	
 	//구별로 가게 리스트 select
-	ArrayList<Store> selectStoreList(String gugunNm);
+	ArrayList<Store> selectStoreList(Store store, String orderBy);
 	
 	//가게 상세 정보 select
 	Store selectStoreDetail(int ucSeq);
@@ -42,6 +42,9 @@ public interface StoreService {
 	
 	//식당 회원 로그인
 	StoreUser storeLogin(StoreUser s_user);
+	
+	//식당 카테고리 분류 조회
+	ArrayList<Store> selectStoreTypeList(String type);
 	
 
 }

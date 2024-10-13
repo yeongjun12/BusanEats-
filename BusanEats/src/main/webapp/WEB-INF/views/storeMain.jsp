@@ -58,7 +58,7 @@
             margin-top: 20px;
         }
         #chatMessages {
-            max-height: 300px;
+            max-height: 600px;
             overflow-y: auto;
             margin-bottom: 10px;
         }
@@ -210,14 +210,13 @@
 		    right: 20px; 
 		    margin: 0;
 		}
-        
-        
+		
 	    
     </style>
 </head>
 <body>
+	<jsp:include page="common/header.jsp" />
 
-    <jsp:include page="common/header.jsp" />
     
     <div class="container">
         <!-- 매장 정보 표시 -->
@@ -231,7 +230,7 @@
         <div class="chat-info" id="chatNotification">
             <h2>채팅 알림</h2>
             <p>현재 새로운 채팅 메시지 여부 확인 중...</p>
-            <div class="new-chat-alert" id="newChatAlert">새로운 채팅!</div>
+            <div class="new-chat-alert" id="newChatAlert"> <span id="messageCount"></span></div>
         </div>
 
         <!-- 채팅 목록 -->
@@ -246,14 +245,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="chatModalLabel">1:1 채팅</h5>
+                    <h5 class="modal-title" id="chatModalLabel"><span id="userName"></span> </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div id="chat">
-                        <h2>WebSocket 채팅</h2>
                         <div class="chat-messages" id="chatMessages">
 					        <!-- 채팅 메시지가 여기에 표시됩니다. -->
 					        <div class="chat-message received">            
@@ -279,12 +277,14 @@
     let socket;  // WebSocket 객체
     let roomId;  // 선택된 채팅방 ID
     let g_messageCount = 0;
+    let isChatListOpen = false;  // 채팅 리스트의 열림 상태를 추적
 
     $(document).ready(function() {
         var ucSeq = parseInt("${loginStore.ucSeq}", 10);  // EL로 ucSeq 값을 가져옴
         console.log(ucSeq);  // 제대로 값이 넘어오는지 확인
 		
         $('#chatNotification').click(function() {
+        	isChatListOpen = !isChatListOpen;  // 상태 반전
             $('#chatList').slideToggle();  // Toggle chat list display
         });
         
@@ -293,13 +293,18 @@
         // 페이지 로드 시 즉시 채팅 확인
         checkNewChat(ucSeq);
 
+        //setInterval(checkNewChat(ucSeq), 1000);
+        
         // 일정 시간마다 채팅 확인 (예: 30초마다)
         //setInterval(function() {
-         //   checkNewChat(ucSeq);  // ucSeq 값을 넘겨주며 checkNewChat 함수 실행
-       // }, 30000);  // 30초마다 실행
+            //checkNewChat(ucSeq);  // ucSeq 값을 넘겨주며 checkNewChat 함수 실행
+        //}, 1000);  // 30초마다 실행
     });
 
     function checkNewChat(ucSeq) {
+    	
+    	g_messageCount = 0;
+    	
         console.log("UC_SEQ:", ucSeq);
         $.ajax({
             type: 'GET',
@@ -330,23 +335,23 @@
         var chatListContainer = $('#chatList');
         chatListContainer.empty();  // 기존 채팅 목록 초기화
         
+        console.log(chatMessages);
         
             
         chatMessages.forEach(function(chat) {
         	
         	 g_messageCount += chat.unread_count;
         	
-        	 console.log('coint : ' + g_messageCount);
         	// unread_count가 0보다 클 경우에만 숫자 버블을 표시
             var unreadCountBubble = chat.unread_count > 0 
                 ? `<p class="unread-count-bubble" id="unreadBubble_\${chat.roomId}">\${chat.unread_count}</p>`
                 : '';
-        	
+        		
             var chatItem = `
-                <div class="chat-item" onclick="openChatModal('\${chat.roomId}', \${chat.unread_count})">
-                    <p><strong>Room ID:</strong> \${chat.roomId}</p>
-                    <p><strong>Message:</strong> \${chat.message}</p>
-                    <p><strong>Sent At:</strong> \${chat.sentAt}</p>
+                <div class="chat-item" onclick="openChatModal('\${chat.roomId}', \${chat.unread_count}, '\${chat.userName}')">
+                    <p><strong>\${chat.userName}</strong></p>
+                    <p>\${chat.message}</p>
+                    <p>\${chat.sentAt}</p>
                     \${unreadCountBubble}
                     
                 </div>
@@ -358,22 +363,27 @@
         // "새로운 채팅!" 알림 표시 여부 결정
         if (g_messageCount > 0) {
             $('#newChatAlert').show();  // 새로운 채팅이 있으면 알림 표시
+            $('#messageCount').text(g_messageCount);  // 알림 영역에 새로운 메시지 수 표시
         } else {
             $('#newChatAlert').hide();  // 새로운 채팅이 없으면 알림 숨기기
         }
         
         
-        chatListContainer.hide();
+     	// 채팅 리스트가 이미 열려있다면 숨기지 않고 유지
+        if (isChatListOpen) {
+            chatListContainer.show();
+        } else {
+            chatListContainer.hide();
+        }
     }
 
     // 채팅 목록에서 채팅을 클릭하면 해당 roomId에 따라 모달을 열고 WebSocket 연결 설정
-    function openChatModal(roomIdParam , unreadCount) {
+    function openChatModal(roomIdParam , unreadCount, userName) {
     	 
+    	console.log('userName : ' + userName);
     	
-    	console.log('un' + unreadCount);
     	g_messageCount -= unreadCount;
     	
-    	console.log('여기선?' + g_messageCount);
     	
     	// "새로운 채팅!" 알림 표시 여부 결정
         if (g_messageCount > 0) {
@@ -402,6 +412,7 @@
         roomId = roomIdParam;  // 선택된 roomId 저장
         triggerFakeMessage(roomId);
         console.log(roomId);
+        $('#userName').text(userName); // 채팅창 모달에 보낸사람 이름 표시
         $('#chatModal').modal('show');  // 모달 열기
         connectWebSocket(roomId);       // WebSocket 연결
         getMessages(roomId);            // 이전 메시지 가져오기
@@ -461,28 +472,32 @@
     
     // 메시지 전송 함수
     function sendMessage() {
+    	
+    	var userNo = roomId.split('-')[1]; //RoomId에서 userNo만 분리
+    	
         const input = $("#messageInput").val();
         if (input.trim() === "") {
             alert("메시지를 입력하세요");
             return;
         }
 
-        const now = new Date();
-		
+        const now = new Date();                  
         const year = now.getFullYear();  // 연도
         const month = String(now.getMonth() + 1).padStart(2, '0');  // 월 (0부터 시작하므로 +1), 2자리로 변환
         const day = String(now.getDate()).padStart(2, '0');  // 일, 2자리로 변환
         const hours = String(now.getHours()).padStart(2, '0');  // 시, 2자리로 변환
         const minutes = String(now.getMinutes()).padStart(2, '0');  // 분, 2자리로 변환
-
-        // 로컬 시간으로 YYYY-MM-DD HH:MM 형식 만들기
-        const formattedDateTime = `\${year}-\${month}-\${day} \${hours}:\${minutes}`;
+        const seconds = String(now.getSeconds()).padStart(2, '0');  // 초, 2자리로 변환
+		
+        
+        // 로컬 시간으로 YYYY-MM-DD HH:MM:SS 형식 만들기
+        const formattedDateTime = `\${year}-\${month}-\${day} \${hours}:\${minutes}:\${seconds}`;
         
         
         const message = {
             roomId: roomId,
             senderType: "store",
-            userNo: 9999,  // 로그인한 사용자 번호
+            userNo: userNo,  // 로그인한 사용자 번호
             ucSeq: ${loginStore.ucSeq},               // 매장 고유 ID
             message: input,
             sentAt: formattedDateTime

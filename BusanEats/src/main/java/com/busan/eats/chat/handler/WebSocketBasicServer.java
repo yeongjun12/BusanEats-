@@ -57,13 +57,15 @@ public class WebSocketBasicServer extends TextWebSocketHandler {
             roomSessions.add(session);
         }
         
-       
+        chatService.getOrCreateRoom(roomId, userNo, ucSeq); //채팅방 먼저 만들고
         // 방이 존재하지 않으면 생성하고 메시지 저장
-        if (chatService.getOrCreateRoom(roomId, userNo, ucSeq) != null && !"fake".equals(chatMessage.getMessage()) ) {
+        if (!"fake".equals(chatMessage.getMessage()) ) { //fake메시지만 거르기
+        	
+        	//!"fake".equals(chatMessage.getMessage())
 
             // 현재 열린 방의 세션 수 확인
             // 서로 채팅방 열려있을떄는 읽은 상태인 메시지 전송
-            if (roomSessions.size() > 1) {
+            if (roomSessions.size() > 1 ) {
                chatMessage.setUnread_count(1);
                
                chatService.saveMessage(chatMessage); // 다른 요청 메소드 호출

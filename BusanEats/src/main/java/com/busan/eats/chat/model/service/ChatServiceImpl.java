@@ -57,6 +57,11 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public ArrayList<ChatVO> checkNewChat(ChatVO chat) {
 		return chatDao.checkNewChat(sqlSession, chat);
+	}
+
+	@Override
+	public String selectUserName(int userNo) {
+		return chatDao.selectUserName(sqlSession, userNo);
 	} 
 
 

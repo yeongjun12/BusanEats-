@@ -1,10 +1,11 @@
 package com.busan.eats.store.model.vo;
 
-import jdk.nashorn.internal.objects.annotations.Getter;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class Store {
 	
@@ -22,6 +23,7 @@ public class Store {
 	    private double lng;
 	    private int count;
 	    //private double averageRating; // 가게 평점 평균
+	    private String storeType;
 	    
 	 
 	    

@@ -21,5 +21,7 @@ public interface ChatService {
     
     int readMessage(ChatVO chat);
     
+    String selectUserName(int userNo);
+    
 
 }

@@ -29,9 +29,9 @@ public class StoreServiceImpl implements StoreService {
 
 
 	@Override
-	public ArrayList<Store> selectStoreList(String gugunNm) {
+	public ArrayList<Store> selectStoreList(Store store, String orderBy) {
 		
-		return storeDao.selectStoreList(sqlSession,gugunNm);
+		return storeDao.selectStoreList(sqlSession,store,orderBy);
 	}
 
 
@@ -95,7 +95,10 @@ public class StoreServiceImpl implements StoreService {
 	}
 
 
-	
+	@Override
+	public ArrayList<Store> selectStoreTypeList(String type) {
+		return storeDao.selectStoreTypeList(sqlSession, type);
+	}
 
 	
 

@@ -31,7 +31,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.busan.eats.chat.model.vo.ChatVO;
 import com.busan.eats.common.model.PageInfo;
 import com.busan.eats.common.template.Pagination;
 import com.busan.eats.review.model.service.ReviewService;
@@ -142,6 +141,7 @@ public class StoreController {
                     		,Double.parseDouble(foodItem.get("LAT").toString())
                     		,Double.parseDouble(foodItem.get("LNG").toString())
                     		,0
+                    		,"type"
                     		);
                    int result =  storeService.saveToDataBase(s);
                    if(result>0) {
@@ -160,7 +160,6 @@ public class StoreController {
             urlConnection.disconnect();
         }
     }
-	
 	
 	
 	@RequestMapping("map.do")
@@ -196,9 +195,11 @@ public class StoreController {
 	
 	
 	@RequestMapping("selectStoreList.do")
-	public ModelAndView selectStoreList(ModelAndView mv, String gugunNm , HttpSession session) {
+	public ModelAndView selectStoreList(ModelAndView mv, Store store1 ,String orderBy, HttpSession session) {
 		
-		ArrayList<Store> list = storeService.selectStoreList(gugunNm);
+		System.out.println( "니니니니니!!! :  " + store1);
+		
+		ArrayList<Store> list = storeService.selectStoreList(store1,orderBy);
 		
 	    // Store의 ucSeq와 평균 평점을 매핑하기 위한 Map을 생성합니다.
 	    Map<Integer, Double> averageRatingMap = new HashMap<>();
@@ -230,7 +231,53 @@ public class StoreController {
 		.addObject("averageRatingMap",averageRatingMap)
 		.addObject("reviewCountMap",reviewCountMap)
 		.addObject("likeCountMap",likeCountMap)
-		.addObject("gugunNm",gugunNm)
+		.addObject("gugunNm",store1.getGugunNm())
+		.addObject("storeType",store1.getStoreType())
+		.setViewName("store/storeList");
+		
+		return mv;
+		
+	}
+	
+	
+	
+	
+	@RequestMapping("selectStoreTypeList.do")
+	public ModelAndView selectStoreTypeList(ModelAndView mv, String type , HttpSession session) {
+		
+		ArrayList<Store> list = storeService.selectStoreTypeList(type);
+		
+	    // Store의 ucSeq와 평균 평점을 매핑하기 위한 Map을 생성합니다.
+	    Map<Integer, Double> averageRatingMap = new HashMap<>();
+	    Map<Integer, Integer> reviewCountMap = new HashMap<>();
+	    Map<Integer, Integer> likeCountMap = new HashMap<>();
+
+		
+	    // 각 Store 객체에 대해 평균 평점을 조회
+		for(Store store : list) {
+			int ucSeq = store.getUcSeq();
+			double average_rating = storeService.selectAvgRating(ucSeq); //리스트에서 뽑은 ucSeq로 평점 평균 조회
+			int reviewCount = storeService.selectReviewCount(ucSeq);
+			int likeCount = storeService.selectLikeCount(ucSeq);
+			averageRatingMap.put(ucSeq,average_rating); // key:식당번호, value: 리뷰 평균으로 담음
+			reviewCountMap.put(ucSeq,reviewCount);
+			likeCountMap.put(ucSeq,likeCount);
+		}
+		
+	    if(session.getAttribute("loginUser") != null) {
+	    	int userNo = ((User)session.getAttribute("loginUser")).getUserNo(); //먼저 현재 userNo로 좋아요 누른 식당 번호를 조회해와서 화면에 뿌려줌.
+	    	
+	    	if(storeService.selectLikeList(userNo) != null) {
+	    		
+	    		mv.addObject("likeNoList",storeService.selectLikeList(userNo));
+	    	}
+	    }
+		
+		mv.addObject("list",list)
+		.addObject("averageRatingMap",averageRatingMap)
+		.addObject("reviewCountMap",reviewCountMap)
+		.addObject("likeCountMap",likeCountMap)
+		.addObject("type",type)
 		.setViewName("store/storeList");
 		
 		return mv;
@@ -295,7 +342,9 @@ public class StoreController {
 	        HttpServletRequest request) {
 	    
 	    ModelAndView mv = new ModelAndView();
-
+	    
+	    System.out.println("ucSEq : " + ucSeq);
+	    
 	    // 로그인한 사용자가 있을 경우
 	    if(session.getAttribute("loginUser") != null) {
 	        int userNo = ((User)session.getAttribute("loginUser")).getUserNo(); // 현재 userNo로 좋아요 누른 식당 번호를 조회
@@ -312,6 +361,8 @@ public class StoreController {
 	        Store s = storeService.selectStoreDetail(ucSeq); // 식당 정보 조회
 	        PageInfo pi = Pagination.getPageInfo(reviewService.reviewCount(ucSeq), currentPage, 10, 5);
 	        List<Review> reviewList = reviewService.selectReview(ucSeq, pi);
+	        
+	        
 	        int likeCount = storeService.selectStoreLike(ucSeq);
 	        double average_rating = storeService.selectAvgRating(ucSeq);
 	        

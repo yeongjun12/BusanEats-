@@ -9,8 +9,10 @@ public class ChatVO {
 	 private String senderType;
 	 private String message;
 	 private String sentAt;
-	 private int userNo;  // 새로 추가
-	 private int ucSeq;  // 새로 추가
+	 private Integer userNo;  // 새로 추가
+	 private Integer ucSeq;  // 새로 추가
 	 private int unread_count;  // 새로 추가
+	 private String mainTitle;  // 새로 추가
+	 private String userName;
 
 }
