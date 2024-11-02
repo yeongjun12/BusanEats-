@@ -361,12 +361,10 @@
             
         </div>
 
-        <!-- Right Section -->
+        <!-- 최근본 식당 Section -->
         <!-- 최근 본 식당 목록을 쿠키에서 읽어오기 -->
 		<c:set var="storeList" value="${storeList}" />
-		
 		<!-- JSTL을 사용하여 Store 리스트 출력 -->
-
         
         <div class="right-section">
             <div class="real-time-section">
@@ -387,7 +385,6 @@
 				        </c:forEach>
 				    </ul>
 				</c:if>
-                
             </div>
         </div>
     </div>

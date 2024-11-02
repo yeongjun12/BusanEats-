@@ -197,7 +197,6 @@ public class StoreController {
 	@RequestMapping("selectStoreList.do")
 	public ModelAndView selectStoreList(ModelAndView mv, Store store1 ,String orderBy, HttpSession session) {
 		
-		System.out.println( "니니니니니!!! :  " + store1);
 		
 		ArrayList<Store> list = storeService.selectStoreList(store1,orderBy);
 		
@@ -359,7 +358,7 @@ public class StoreController {
 	    // 조회수 증가 성공 시
 	    if(storeService.increaseCount(ucSeq) > 0) {
 	        Store s = storeService.selectStoreDetail(ucSeq); // 식당 정보 조회
-	        PageInfo pi = Pagination.getPageInfo(reviewService.reviewCount(ucSeq), currentPage, 10, 5);
+	        PageInfo pi = Pagination.getPageInfo(reviewService.reviewCount(ucSeq), currentPage, 10, 5); //리뷰를 불러옴
 	        List<Review> reviewList = reviewService.selectReview(ucSeq, pi);
 	        
 	        
@@ -367,10 +366,10 @@ public class StoreController {
 	        double average_rating = storeService.selectAvgRating(ucSeq);
 	        
 	        // 최근 본 식당을 쿠키에 추가
-	        Cookie recentStoreCookie = new Cookie("recentStores", getUpdatedRecentStoresCookieValue(ucSeq, request));
+	        Cookie recentStoreCookie = new Cookie("recentStores", getUpdatedRecentStoresCookieValue(ucSeq, request)); //쿠키 객체 생성, getUpdatedRecentStoresCookieValue() 쿠키에 저장될 값
 	        recentStoreCookie.setMaxAge(1 * 24 * 60 * 60); // 쿠키 만료 시간 설정: 1일
 	        recentStoreCookie.setPath("/"); // 쿠키 경로 설정
-	        response.addCookie(recentStoreCookie);
+	        response.addCookie(recentStoreCookie); // 생성한 recentStoreCookie를 HTTP 응답에 추가
 	        
 	        // 최근 본 식당 쿠키 값을 모델에 추가
 	        List<String> recentStoresList = parseRecentStoresCookieValue(request);
@@ -392,16 +391,17 @@ public class StoreController {
 
 	// 최근 본 식당 쿠키 값을 업데이트하는 메서드
 	private String getUpdatedRecentStoresCookieValue(int ucSeq, HttpServletRequest request) {
-	    Cookie[] cookies = request.getCookies();
+	    Cookie[] cookies = request.getCookies(); // 모든 쿠키를 가져옴
 	    LinkedHashSet<String> recentStoresSet = new LinkedHashSet<>();
 	    
 	    if (cookies != null) {
-	        for (Cookie cookie : cookies) {
-	            if ("recentStores".equals(cookie.getName())) {
+	        for (Cookie cookie : cookies) { // 반목문을 통해 "recentStores"라는 이름의 쿠키를 찾음
+	            if ("recentStores".equals(cookie.getName())) { 
 	                String cookieValue = cookie.getValue();
 	                if (cookieValue != null) {
 	                    // 기존 쿠키 값을 읽어서 업데이트
-	                    recentStoresSet.addAll(Arrays.asList(cookieValue.split("\\|")));
+	                    recentStoresSet.addAll(Arrays.asList(cookieValue.split("\\|"))); 
+	                    // 쿠키의 값을 파이프문자로 분리하여 recentStoreSet에 추가
 	                }
 	                break;
 	            }
