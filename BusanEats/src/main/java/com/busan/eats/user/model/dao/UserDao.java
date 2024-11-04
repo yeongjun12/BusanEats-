@@ -36,7 +36,6 @@ public class UserDao {
 	public boolean checkUserExists(SqlSessionTemplate sqlSession,String userId) {
 		// MyBatis Mapper에 정의된 쿼리를 호출하여 COUNT(*) 결과를 가져옵니다.
 	    Integer count = sqlSession.selectOne("userMapper.checkUserExists", userId);
-	    
 	    // count가 null이 아니고 0보다 크면 true, 그렇지 않으면 false 반환
 	    return count != null && count > 0;
 	}

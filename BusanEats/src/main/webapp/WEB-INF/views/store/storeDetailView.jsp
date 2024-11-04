@@ -940,7 +940,6 @@
     socket.onopen = function(event) {
         console.log("WebSocket 연결 성공!!!");
     };
-
     // WebSocket으로부터 메시지를 수신
     socket.onmessage = function(event) {
         const message = JSON.parse(event.data);
@@ -951,12 +950,10 @@
             displayMessage(message.senderType, message.message, message.sentAt, message.userNo);  // 수신된 메시지 표시
         }
     };
-
     // WebSocket 연결 종료
     socket.onclose = function(event) {
         console.log("WebSocket 연결 종료");
     };
-
     // WebSocket 에러 처리
     socket.onerror = function(event) {
         console.error("WebSocket 에러: ", event);
@@ -985,7 +982,6 @@
             // 메시지를 서버로 전송
             socket.send(JSON.stringify(message));
     }
-
 
     // 메시지 전송 함수
     function sendMessage() {
@@ -1028,27 +1024,21 @@
 
     // 메시지를 화면에 표시하는 함수
     function displayMessage(senderType, message, sentAt ,userNo) {
-		
-        
         let msg = '';
         const currentDate = sentAt.split(' ')[0]; // YYYY-MM-DD 형식에서 날짜 부분만 추출
         const time = formatTime(sentAt.split(' ')[1]);
-        
         
         // 새로운 메시지마다 이전 메시지와 날짜를 비교하여 날짜가 달라지면 날짜 구분선을 추가
         if (lastDate !== currentDate) {
             msg += `<div class="date-separator"><strong>\${formatDate(currentDate)}</strong></div>`;
             lastDate = currentDate; // 마지막 메시지 날짜 업데이트
         }
-        
-        
         //채팅정보에  senderType이 'user'이면 내가보낸영역
         if (senderType == 'user') {
         	msg += `<div class="chat-message sent">
 				<span class="message-time-left">\${time}</span> <!-- 시간 왼쪽 -->
 				<span class="message-bubble">\${ message }</span>
 			</div>`;
-        	
         } else {
         	msg += `<div class="chat-message received">
 				<span class="sender">${data.USR_NM}</span>
@@ -1057,13 +1047,10 @@
 			</div>`;
         }
         
-        
         $("#chatMessages").append(msg);
-        
      // 스크롤을 최신 메시지로 이동
         const chatMessages = document.getElementById("chatMessages");
         chatMessages.scrollTop = chatMessages.scrollHeight;
-
     }
     
     
@@ -1111,8 +1098,6 @@
             roomId: ucSeq + "-" + userNo // 채팅방 ID (userNo-ucSeq)
         },
         success: function(response) {
-            // 서버로부터 받은 이전 메시지 처리
-            console.log('리스폰스', response);
 
             // 응답이 배열이면 forEach로 처리
                 if (response.length > 0) {

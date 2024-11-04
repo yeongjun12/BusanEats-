@@ -218,7 +218,8 @@ public class StoreController {
 		}
 		
 	    if(session.getAttribute("loginUser") != null) {
-	    	int userNo = ((User)session.getAttribute("loginUser")).getUserNo(); //먼저 현재 userNo로 좋아요 누른 식당 번호를 조회해와서 화면에 뿌려줌.
+	    	int userNo = ((User)session.getAttribute("loginUser")).getUserNo(); 
+	    	//먼저 현재 userNo로 좋아요 누른 식당 번호를 조회해와서 화면에 뿌려줌.
 	    	
 	    	if(storeService.selectLikeList(userNo) != null) {
 	    		
@@ -371,9 +372,6 @@ public class StoreController {
 	        recentStoreCookie.setPath("/"); // 쿠키 경로 설정
 	        response.addCookie(recentStoreCookie); // 생성한 recentStoreCookie를 HTTP 응답에 추가
 	        
-	        // 최근 본 식당 쿠키 값을 모델에 추가
-	        List<String> recentStoresList = parseRecentStoresCookieValue(request);
-	        mv.addObject("recentStoresList", recentStoresList);
 
 	        // ModelAndView에 객체와 뷰 이름을 설정
 	        mv.addObject("s", s)
@@ -407,7 +405,6 @@ public class StoreController {
 	            }
 	        }
 	    }
-	    
 	    // 기존에 있으면 제거하고 현재 식당을 추가
 	    recentStoresSet.remove(String.valueOf(ucSeq));
 	    recentStoresSet.add(String.valueOf(ucSeq));
@@ -420,30 +417,10 @@ public class StoreController {
 	            iterator.remove();
 	        }
 	    }
-	    
 	    // 최종 쿠키 값 생성 (구분 문자를 콤마 대신 파이프 문자 | 사용)
 	    return String.join("|", recentStoresSet);
 	}
 
-	// 쿠키 값을 리스트로 변환하는 메서드
-	private List<String> parseRecentStoresCookieValue(HttpServletRequest request) {
-	    Cookie[] cookies = request.getCookies();
-	    List<String> recentStoresList = new ArrayList<>();
-	    
-	    if (cookies != null) {
-	        for (Cookie cookie : cookies) {
-	            if ("recentStores".equals(cookie.getName())) {
-	                String cookieValue = cookie.getValue();
-	                if (cookieValue != null && !cookieValue.isEmpty()) {
-	                    recentStoresList = Arrays.asList(cookieValue.split("\\|"));
-	                }
-	                break;
-	            }
-	        }
-	    }
-	    
-	    return recentStoresList;
-	}
 	
 	//TOP5
 	@ResponseBody

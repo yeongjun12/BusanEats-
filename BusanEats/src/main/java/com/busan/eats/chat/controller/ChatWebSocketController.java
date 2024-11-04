@@ -83,6 +83,10 @@ public class ChatWebSocketController {
 		ArrayList<ChatVO> list = chatService.checkNewChat(chat);
 		
 		
+		System.out.println("리스트 : " + list);
+		System.out.println("controller " + chat);
+		
+		
 		return new Gson().toJson(list);
 	}
 	

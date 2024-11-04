@@ -32,8 +32,6 @@ public class WebSocketBasicServer extends TextWebSocketHandler {
         String payload = message.getPayload();
         ChatVO chatMessage = objectMapper.readValue(payload, ChatVO.class);
         
-        
-        
         int userNo = chatMessage.getUserNo();
         int ucSeq = chatMessage.getUcSeq();
         

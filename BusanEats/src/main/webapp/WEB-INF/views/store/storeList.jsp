@@ -357,27 +357,6 @@ function selectLocation(button) {
 
 			
 			$(function() {
-			    
-				
-				$('.like').each(function(){
-					var check = 0;
-					<c:forEach items = "${ likeNoList }" var = "like">
-					
-					if(${like.ucSeq} == $(this).attr("alt")) { check += 1 }
-					
-					</c:forEach>
-					
-					
-					if(check > 0) {
-                        $(this).attr("src", "resources/images/heart.png");
-                    }
-                    else {
-                        $(this).attr("src", "resources/images/deleteheart.png");
-                    }
-				});
-				
-				
-				
 				
 				
 				$(document).on('click', '.grid-item', function() {
@@ -386,20 +365,32 @@ function selectLocation(button) {
 			        location.href = "selectStoreDetail.do?ucSeq=" + ucSeq;
 			    });
 				
+				$('.like').each(function(){
+					var check = 0;
+					<c:forEach items = "${ likeNoList }" var = "like">
+					
+					if(${like.ucSeq} == $(this).attr("alt")) { check += 1 }
+					
+					</c:forEach>
+					if(check > 0) {
+                        $(this).attr("src", "resources/images/heart.png");
+                    }
+                    else {
+                        $(this).attr("src", "resources/images/deleteheart.png");
+                    }
+				});
+				
 			    
 			    // 하트 좋아요 / 해제
 			    $('.like').click(function() {
 			    	event.stopPropagation(); // 클릭 이벤트가 상위 요소로 전파되지 않도록 방지
 			        var clickedElement = $(this); // 클릭된 요소를 변수에 저장
 			        
-			        console.log(clickedElement);
 			        var imgPath = $(this).attr('src'); // 클릭된 요소의 src 속성 값을 가져옴
 
 			        // 클릭된 요소의 가장 가까운 부모 <li> 요소에서 ucSeq 값을 가져옴
-			        //var ucSeq = $(this).closest('li').find('.ucSeq').val();
 			        var ucSeq = $(this).closest('.grid-item').find('.ucSeq').val();
 
-			        console.log(ucSeq);
 			        // 만약 클릭된 이미지가 'resources/images/deleteheart.png'라면
 			        if (imgPath == 'resources/images/deleteheart.png') {
 			            // AJAX 요청을 보냄

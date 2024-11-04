@@ -59,7 +59,6 @@ public class UserController {
 	@RequestMapping("main")
 	public ModelAndView welcomePage(HttpServletRequest request) {
 	    ModelAndView mv = new ModelAndView();
-	    System.out.println("dsds");
 	    // 쿠키에서 최근 방문한 식당 ID 읽기
 	    List<Store> storeList = getStoresFromCookie(request);
 
@@ -68,6 +67,9 @@ public class UserController {
 	    mv.setViewName("main"); // 웰컴 페이지 JSP 뷰 이름
 	    return mv;
 	}
+	
+	
+	
 	
 	private List<Store> getStoresFromCookie(HttpServletRequest request) {
 	    Cookie[] cookies = request.getCookies();
@@ -130,13 +132,11 @@ public class UserController {
 	public ModelAndView login(User user, ModelAndView mv,  HttpSession session, HttpServletResponse response
 			, HttpServletRequest request) {
 		
-		
 		User loginUser = userService.loginUser(user);
 		
 		if(loginUser != null && bcryptPasswordEncoder.matches(user.getUserPwd(),loginUser.getUserPwd())) {
 			session.setAttribute("loginUser",loginUser);
 		    mv.setViewName("redirect:/main");
-		    
 		    
 		    // "아이디 저장" 체크박스 상태 확인
 	        String rememberMe = request.getParameter("rememberMe");
@@ -151,13 +151,10 @@ public class UserController {
 	            saveId.setMaxAge(0); // 쿠키 즉시 삭제
 	            response.addCookie(saveId);
 	        }
-			  
 	    } else {
-		 // model.addAttribute("키","밸류");
-		 mv.addObject("errorMsg","응 안돼!");
+		 mv.addObject("errorMsg","오류발생");
 	     mv.setViewName("common/errorPage");
 	    }
-		
 		
 		return mv;
 	}

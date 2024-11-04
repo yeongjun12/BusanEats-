@@ -30,6 +30,9 @@ public class ChatDao {
 	    }
 	    
 	    public ArrayList<ChatVO> checkNewChat(SqlSessionTemplate sqlSession,ChatVO chat){
+	    	
+	    	System.out.println("Dao : " + chat);
+	    	
 			return (ArrayList)sqlSession.selectList("chatMapper.checkNewChat",chat);
 		}
 	    

@@ -23,17 +23,13 @@ public class KakaoController {
 	    // userId를 이용해 사용자 확인 및 로그인 처리
 		boolean userExists = userService.checkUserExists(user.getUserId());
 
-	    System.out.println(userExists);
-
 	    if (!userExists) {
 	        // 회원가입 로직
 	        userService.registerKakaoUser(user);
 	    }
-
 	    // 로그인 처리 (세션 설정 등)
 	    User loginUser = userService.loginUser(user);
 	    session.setAttribute("loginUser", loginUser);
-
 	    // 성공 메시지를 반환하여 클라이언트에서 페이지 이동 처리
 	    return ResponseEntity.ok("success");
 	}
