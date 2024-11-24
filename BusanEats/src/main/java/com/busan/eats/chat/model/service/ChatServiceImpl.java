@@ -57,8 +57,6 @@ public class ChatServiceImpl implements ChatService {
 	@Override
 	public ArrayList<ChatVO> checkNewChat(ChatVO chat) {
 		
-		System.out.println("Service : " + chat);
-		
 		return chatDao.checkNewChat(sqlSession, chat);
 	}
 

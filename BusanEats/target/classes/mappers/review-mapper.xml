@@ -15,7 +15,6 @@
 		<result column="FILE_PATH" property="filePath"/>
 		<result column="CHANGE_NAME" property="changeName"/>
 		<result column="REVIEW_STATUS" property="reviewStatus"/>
-		<result column="MAIN_TITLE" property="mainTitle"/>
 	</resultMap>
 
 
@@ -51,23 +50,19 @@
 	
 	<select id ="selectReview" parameterType="review" resultMap="reviewResultSet">
 		SELECT
-		    R.REVIEW_NO,
+			R.REVIEW_NO,
 		    R.USER_NO,
 		    U.USER_ID,
 		    R.UC_SEQ,
 		    R.REVIEW_RATING,
 		    R.REVIEW_COMMENT,
-		    TO_CHAR(R.REVIEW_CREATE_DATE, 'YYYY-MM-DD') AS REVIEW_CREATE_DATE,
+		    R.REVIEW_CREATE_DATE,
 		    R.FILE_PATH,
 		    R.CHANGE_NAME,
-		    R.REVIEW_STATUS,
-		    S.MAIN_TITLE 
+		    R.REVIEW_STATUS
 		FROM
 		    REVIEW R
-		JOIN
-		    USERS U ON R.USER_NO = U.USER_NO
-		JOIN
-		    STORE S ON R.UC_SEQ = S.UC_SEQ 
+		    JOIN USERS U ON R.USER_NO = U.USER_NO
 		WHERE
 		    R.REVIEW_STATUS = 'Y'
 		    AND R.UC_SEQ = #{ucSeq}

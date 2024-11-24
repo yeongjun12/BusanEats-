@@ -68,41 +68,13 @@
 		
 	</insert>
 	
-	<select id="selectStoreList" resultMap="storeResultSet" parameterType="Map" >
+	<select id="selectStoreList" resultMap="storeResultSet" parameterType="String" >
 		SELECT
-		    S.*
+				*
 		FROM
-		    STORE S
-		LEFT JOIN (
-		    SELECT 
-		        UC_SEQ,
-		        COUNT(*) AS LIKE_COUNT
-		    FROM 
-		        STORE_LIKE
-		    GROUP BY 
-		        UC_SEQ
-		) L ON S.UC_SEQ = L.UC_SEQ
-		LEFT JOIN (
-		    SELECT 
-		        UC_SEQ,
-		        COUNT(*) AS REVIEW_COUNT
-		    FROM 
-		        REVIEW
-		    WHERE 
-		        REVIEW_STATUS = 'Y'  -- 활성 리뷰만 포함
-		    GROUP BY 
-		        UC_SEQ
-		) R ON S.UC_SEQ = R.UC_SEQ
+			STORE
 		WHERE 
-		    (S.STORE_TYPE = #{storeType} OR #{storeType} IS NULL)
-		    AND (S.GUGUN_NM = #{gugunNm} OR #{gugunNm} IS NULL)
-		ORDER BY 
-		    CASE 
-		        WHEN #{orderBy}  = 'review' THEN (SELECT COUNT(*) FROM REVIEW WHERE UC_SEQ = S.UC_SEQ AND REVIEW_STATUS = 'Y')
-		        WHEN #{orderBy}  = 'like' THEN (SELECT COUNT(*) FROM STORE_LIKE WHERE UC_SEQ = S.UC_SEQ)
-		        WHEN #{orderBy}  = 'count' THEN COUNT
-		        ELSE 0  -- 기본 정렬 기준
-		    END DESC
+			GUGUN_NM= #{gugunNm}
 	</select>
 	
 	<select id="selectStoreLike" parameterType="_int" resultType="int">

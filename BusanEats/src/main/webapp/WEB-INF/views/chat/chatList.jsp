@@ -89,10 +89,9 @@
             // 페이지 로드 시 첫 채팅 목록 가져오기
             loadChatList();
 
-            // 5초마다 새로운 메시지 확인 및 UI 업데이트
+            // 1초마다 새로운 메시지 확인 및 UI 업데이트
             setInterval(loadChatList, 1000);
         });
-
         // AJAX로 채팅 목록을 새로 불러와서 업데이트하는 함수
         function loadChatList() {
             $.ajax({
@@ -111,7 +110,7 @@
 
                         // 채팅 데이터를 반복 처리
                         $.each(response, function (index, chat) {
-                            g_messageCount += chat.unread_count;
+                            g_messageCount = chat.unread_count;
 							
                             const formattedTimestamp = formatChatTimestamp(chat.sentAt);
                             const dateDisplay = formattedTimestamp.date; // e.g., "2024-10-07"

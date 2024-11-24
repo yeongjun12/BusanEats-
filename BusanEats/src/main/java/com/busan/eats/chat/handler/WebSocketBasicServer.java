@@ -35,12 +35,8 @@ public class WebSocketBasicServer extends TextWebSocketHandler {
         int userNo = chatMessage.getUserNo();
         int ucSeq = chatMessage.getUcSeq();
         
-        System.out.println("메시지 : "  + chatMessage.getMessage());
-        System.out.println("payload : " + payload);
-        
         // roomId를 기준으로 해당 방에 있는 세션들에게만 메시지 전송
         String roomId = chatMessage.getRoomId();
-        
         
         // 해당 방의 세션 가져오기
     	Set<WebSocketSession> roomSessions = chatRooms.get(roomId);
@@ -49,17 +45,13 @@ public class WebSocketBasicServer extends TextWebSocketHandler {
             roomSessions = new HashSet<>();
             chatRooms.put(roomId, roomSessions); // 방에 세션 추가
         }
-
         // 현재 세션이 해당 roomId에 없으면 추가
         if (!roomSessions.contains(session)) {
             roomSessions.add(session);
         }
-        
         chatService.getOrCreateRoom(roomId, userNo, ucSeq); //채팅방 먼저 만들고
         // 방이 존재하지 않으면 생성하고 메시지 저장
         if (!"fake".equals(chatMessage.getMessage()) ) { //fake메시지만 거르기
-        	
-        	//!"fake".equals(chatMessage.getMessage())
 
             // 현재 열린 방의 세션 수 확인
             // 서로 채팅방 열려있을떄는 읽은 상태인 메시지 전송

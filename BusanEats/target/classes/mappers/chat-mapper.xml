@@ -50,54 +50,48 @@
 		  온 읽지 않은 메시지의 수를 계산합니다. UC_SEQ(매장 ID)로 필터링합니다.
 		-->
 		WITH LatestChat AS (
-    SELECT 
-        C.MESSAGE_ID,
-        C.ROOM_ID,
-        C.USER_NO,
-        C.MESSAGE,
-        C.SENDER_TYPE,
-        C.SENT_AT,
-        C.UC_SEQ,
-        C.READ,  
-        ROW_NUMBER() OVER (PARTITION BY C.ROOM_ID ORDER BY C.SENT_AT DESC) AS rn
-    FROM 
-        CHAT C
-    <where>
-        <if test="ucSeq != null">
-            C.UC_SEQ = #{ucSeq}
-        </if>
-        <if test="userNo != null">
-            AND C.USER_NO = #{userNo}
-        </if>
-    </where>
-)
-SELECT 
-    L.MESSAGE_ID,
-    L.ROOM_ID,
-    L.USER_NO,
-    CASE 
-        WHEN L.SENDER_TYPE = 'user' THEN U.USER_NAME
-        ELSE '식당'
-    END AS SENDER_NAME,
-    L.MESSAGE,
-    L.SENDER_TYPE,
-    L.SENT_AT,
-    L.UC_SEQ,
-    (
-        SELECT COUNT(*) 
-        FROM CHAT 
-        WHERE ROOM_ID = L.ROOM_ID 
-          AND READ = 0  
-          AND SENDER_TYPE = #{senderType}
-    ) AS unread_count  
-FROM 
-    LatestChat L
-LEFT JOIN 
-    USERS U ON L.USER_NO = U.USER_NO AND L.SENDER_TYPE = 'user'
-WHERE 
-    L.rn = 1  
-ORDER BY 
-    L.SENT_AT DESC
+		    SELECT 
+		        C.MESSAGE_ID,
+		        C.ROOM_ID,
+		        C.USER_NO,
+		        C.MESSAGE,
+		        C.SENDER_TYPE,
+		        C.SENT_AT,
+		        C.UC_SEQ,
+		        C.READ,  <!-- 0: 읽지 않음, 1: 읽음 -->
+		        ROW_NUMBER() OVER (PARTITION BY C.ROOM_ID ORDER BY C.SENT_AT DESC) AS rn
+		    FROM 
+		        CHAT C
+		    WHERE 
+		        C.UC_SEQ = #{ucSeq}  <!-- 특정 매장의 UC_SEQ로 필터링 -->
+		)
+		SELECT 
+		    L.MESSAGE_ID,
+		    L.ROOM_ID,
+		    CASE 
+		        WHEN L.SENDER_TYPE = 'user' THEN U.USER_NAME
+		        ELSE '식당'
+		    END AS SENDER_NAME,
+		    L.MESSAGE,
+		    L.SENDER_TYPE,
+		    L.SENT_AT,
+		    L.UC_SEQ,
+		    <!-- 각 방에서 사용자로부터 온 읽지 않은 메시지의 수를 계산 -->
+		    (
+		        SELECT COUNT(*) 
+		        FROM CHAT 
+		        WHERE ROOM_ID = L.ROOM_ID 
+		          AND READ = 0  <!-- 읽지 않은 메시지만 계산 -->
+		          AND SENDER_TYPE = #{senderType}  <!-- 사용자(SENDER_TYPE = 'user')가 보낸 메시지만 계산 -->
+		    ) AS unread_count  <!-- 읽지 않은 메시지 수 -->
+		FROM 
+		    LatestChat L
+		LEFT JOIN 
+		    USERS U ON L.USER_NO = U.USER_NO AND L.SENDER_TYPE = 'user'
+		WHERE 
+		    L.rn = 1  <!-- 각 채팅방에서 최신 메시지만 선택 -->
+		ORDER BY 
+		    L.SENT_AT DESC
     	
     </select>
     
@@ -114,9 +108,5 @@ ORDER BY
 		 AND  
 		 		ROOM_ID = #{roomId}
     </update>
-    
-    <select id="selectUserName" parameterType="int" resultType="string">
-    SELECT USER_NAME FROM USERS WHERE USER_NO = #{userNo}
-	</select>
 
 </mapper>

@@ -131,7 +131,6 @@
 	    $(document).ready(function() {
 	    	
 	    	var roomIdParam = "${requestScope.roomId}";  // JSP 변수 값을 자바스크립트 변수에 할당
-
 	    	
 	    	$.ajax({
 	    		 url : 'readMessage.do',
@@ -141,16 +140,11 @@
 	    			 senderType : 'store' //일반 유저입장에서는 store가 보낸거만 읽음처리되게
 	    			 },
 	    		 success: function(response) {
-	    				// roomIdParam에 해당하는 알림 수 버블 숨기기
-	    	            //$("#unreadBubble_" + roomIdParam).hide();
 	             },
 	             error: function(xhr, status, error) {
 	                 console.error('오류 발생:', status, error);
 	             }
 	    	 });
-	    	
-	    	
-	    	
 	    });
     
     
